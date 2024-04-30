@@ -19,14 +19,14 @@ class HistoryUserDetailSeeder extends Seeder
                 'id' => 1, 
                 'history_change_id'=>1, 
                 'user_id'=>1, 
-                'technician'=>false,
+                'user_tech_id'=>2,
 
             ],
             [
                 "id" => 2,
                 'history_change_id'=>2, 
                 'user_id'=>2, 
-                'technician'=>true,
+                'user_tech_id'=>2,
 
             ],
             

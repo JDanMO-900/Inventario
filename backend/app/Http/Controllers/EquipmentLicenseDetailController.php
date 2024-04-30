@@ -27,7 +27,7 @@ class EquipmentLicenseDetailController extends Controller
             $skip = 0;
         }
 
-        $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+        $sortBy = (isset($request->sortBy[0])) ? $request->sortBy[0] : 'id';
         $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
@@ -54,9 +54,8 @@ class EquipmentLicenseDetailController extends Controller
     {
         $equipmentlicensedetail = new EquipmentLicenseDetail;
 
-		$equipmentlicensedetail->equipment_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
+		$equipmentlicensedetail->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
 		$equipmentlicensedetail->license_id = License::where('name', $request->name)->first()->id;
-		$equipmentlicensedetail->deleted_at = $request->deleted_at;
 
         $equipmentlicensedetail->save();
 
@@ -88,9 +87,8 @@ class EquipmentLicenseDetailController extends Controller
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $equipmentlicensedetail = EquipmentLicenseDetail::where('id', $data['id'])->first();
-		$equipmentlicensedetail->equipment_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
+		$equipmentlicensedetail->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
 		$equipmentlicensedetail->license_id = License::where('name', $request->name)->first()->id;
-		$equipmentlicensedetail->deleted_at = $request->deleted_at;
 
         $equipmentlicensedetail->save();
 

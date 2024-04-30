@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\DependencyController;
@@ -53,7 +56,12 @@ Route::resource('/dependency', DependencyController::class);
 
 Route::resource('/equipmentType', EquipmentTypeController::class);
 Route::resource('/provider', ProviderController::class);
+
+Route::get('/equipment/{equip}', [EquipmentController::class, 'equipmentSearch']);
 Route::resource('/equipment', EquipmentController::class);
+
+
+
 
 Route::resource('/technicalDescription', TechnicalDescriptionController::class);
 Route::resource('/equipmentDetail', EquipmentDetailController::class);  
@@ -70,7 +78,8 @@ Route::resource('/historyChange', HistoryChangeController::class);
 Route::get('/user/{name}', [UserController::class, 'filter']);
 Route::get('/user', [UserController::class, 'index']);
 
-Route::resource('/historyUserDetail', HistoryUserDetailController::class);
 
-Route::get('/historyUser', [HistoryUserDetailController::class, 'generalUser']);
+Route::resource('/location', LocationController::class);
+
+
 

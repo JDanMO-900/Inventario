@@ -18,7 +18,7 @@ class HistoryUserDetail extends Model
         'id',
         'history_change_id',
         'user_id',
-        'technician',
+        'user_tech_id',
         'created_at',
         'updated_at',
     ];
@@ -51,7 +51,7 @@ class HistoryUserDetail extends Model
             // Datos del history change
             'history_change.description as history_description',
 
-            'history_change.location as location',
+
             'process_state.name as process',
 
             // Datos de la dependencia
@@ -63,15 +63,16 @@ class HistoryUserDetail extends Model
 
         )
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('location', 'location.id', '=', 'history_change.location_id')
             ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->join('dependency', 'equipment.dependency_id', '=', 'dependency.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->where('users.name', 'like', $username)
-            ->where('history_user_detail.technician', 'like', $search)
+            ->where('history_user_detail.user_tech_id', 'like', $search)
 
             ->skip($skip)
             ->take($itemsPerPage)
@@ -117,7 +118,7 @@ class HistoryUserDetail extends Model
 
             // Datos del history change
             'history_change.description as description',
-            'history_change.location as location',
+
             'process_state.name as process',
 
             // Datos de la dependencia
@@ -130,30 +131,37 @@ class HistoryUserDetail extends Model
             'equipment1.number_internal_active as number_internal_active1',
             'equipment2.number_internal_active as number_internal_active2',
 
+            // Location description
+            'location.area as location'
+          
+
+
 
 
 
         )
 
-
-
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('location', 'location.id', '=', 'history_change.location_id')
             ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->join('dependency', 'equipment.dependency_id', '=', 'dependency.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
             ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
          
-            ->where('history_user_detail.technician', 'like', $search)
+            ->where('history_user_detail.user_tech_id', 'like', $search)
+            ->orWhere('equipment_type.name', 'like', $search)
+            ->orWhere('equipment.model', 'like', $search)
 
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("history_user_detail.$sortBy", $sort)
+            
 
             ->get();
 
@@ -175,7 +183,7 @@ class HistoryUserDetail extends Model
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
 
-            ->where('history_user_detail.technician', 'like', $search)
+            ->where('history_user_detail.user_tech_id', 'like', $search)
 
             ->count();
     }

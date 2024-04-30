@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('history_change', function (Blueprint $table) {
             $table->id();
-            $table->string('location');
-            $table->string('description');
+
+            $table->text('description');
             $table->integer('quantity_out')->nullable();
             $table->integer('quantity_in')->nullable();
 
@@ -32,6 +32,12 @@ return new class extends Migration
 
             $table->unsignedBigInteger('state_id');
             $table->foreign('state_id')->references('id')->on('process_state');
+
+            $table->unsignedBigInteger('location_id');
+            $table->foreign('location_id')->references('id')->on('location');
+
+            $table->unsignedBigInteger('dependency_id');
+            $table->foreign('dependency_id')->references('id')->on('dependency');
 
             
 

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\License;
 use Encrypt;
 use App\Models\Brand;
+use App\Models\License;
 use App\Models\Provider;
 use App\Models\Equipment;
 use App\Models\Dependency;
 use Illuminate\Http\Request;
-
 use App\Models\EquipmentType;
+
 use App\Models\EquipmentState;
+use App\Models\EquipmentDetail;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+use App\Models\TechnicalDescription;
 use App\Models\EquipmentLicenseDetail;
 
 class EquipmentController extends Controller
@@ -22,8 +25,17 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    public function equipmentSearch(string $equip)
+    {
+        return Equipment::equipmentFilter($equip);
+
+    }
+
     public function index(Request $request)
     {
+        Log::info($request->all());
         $itemsPerPage = $request->itemsPerPage ?? 10;
         $skip = ($request->page - 1) * $request->itemsPerPage;
 
@@ -34,7 +46,8 @@ class EquipmentController extends Controller
         }
 
         $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
-        $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
+
+        $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
@@ -69,13 +82,12 @@ class EquipmentController extends Controller
         $equipment->invoice_number = $request->invoice_number;
 
         $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-        $equipment->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
-        $equipment->equipment_type_id = EquipmentType::where('name', $request->type)->first()->id;
+
+        $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
         $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
         $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
 
 
-        $equipment->deleted_at = $request->deleted_at;
 
         $equipment->save();
 
@@ -88,6 +100,13 @@ class EquipmentController extends Controller
             $detalleLicencias->save();
 
         }
+
+
+        $detalleEquipment = new EquipmentDetail();
+        $detalleEquipment->attribute = $request->attribute;
+        $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+        $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
+        $detalleEquipment->save();
 
 
 
@@ -127,21 +146,61 @@ class EquipmentController extends Controller
         $equipment->adquisition_date = $request->adquisition_date;
         $equipment->invoice_number = $request->invoice_number;
         $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-        $equipment->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
-        $equipment->equipment_type_id = EquipmentType::where('name', $request->type)->first()->id;
+
+        $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
         $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
         $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
-        $equipment->deleted_at = $request->deleted_at;
+
 
         $equipment->save();
-        // REcibe las licencias
-        foreach ($request->licenses as $licenseName) {
-            $detalleLicencias = new EquipmentLicenseDetail();
-            $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-            $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
-            $detalleLicencias->save();
+
+        // Recibe las licencias
+
+        $equipmentId = $equipment->id;
+
+
+
+        $delete_id_equipment = EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
+
+        if ($delete_id_equipment > 0) {
+            foreach ($request->licenses as $licenseName) {
+                $detalleLicencias = new EquipmentLicenseDetail();
+                $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
+                $detalleLicencias->save();
+
+            }
 
         }
+
+
+
+
+
+        // Revisar esto
+        // Revisar esto
+        // Revisar esto
+        // Revisar esto
+
+        // Recibe las licencias
+
+        $equipmentId = $equipment->id;
+
+
+
+        $delete_id_equipment = EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
+
+        $detalleEquipment = new EquipmentDetail();
+        $detalleEquipment->attribute = $request->attribute;
+        $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+        $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
+        $detalleEquipment->save();
+        // Revisar esto
+        // Revisar esto
+        // Revisar esto
+        // Revisar esto
+
+
 
         return response()->json([
             "message" => "Registro modificado correctamente.",

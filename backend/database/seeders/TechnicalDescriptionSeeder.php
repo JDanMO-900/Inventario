@@ -15,21 +15,25 @@ class TechnicalDescriptionSeeder extends Seeder
     {
         TechnicalDescription::insert([
             [
-                "id" => 1,
-                "name" => "Equipo nuevo de caja",
-                
-                ],
-                [
-                "id" => 2,
-                "name" => "Se realizaron modificaciones",
-                
-                ],
-                [
-                "id" => 3,
-                "name" => "Se devolvio por motivos de garantia",
-                ],
-                
-               
+
+                "name" => "Procesador",
+
+            ],
+            [
+
+                "name" => "Potencia (W)",
+
+            ],
+            [
+
+                "name" => "RAM (GB)",
+            ],
+            [
+
+                "name" => "Disco duro (GB)",
+            ],
+
+
         ]);
     }
 }

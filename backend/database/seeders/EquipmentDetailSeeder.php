@@ -16,14 +16,14 @@ class EquipmentDetailSeeder extends Seeder
         
         EquipmentDetail::insert([
             [
-                "id" => 1,
-                "value" => 100,
+
+                "attribute" => 100,
                 "equipment_id" => 1,
                 "technical_description_id" => 1,
             ],
             [
-                "id" => 2,
-                "value" => 200,
+
+                "attribute" => 200,
                 "equipment_id" => 2,
                 "technical_description_id" => 2,
                 ]

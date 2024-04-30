@@ -17,31 +17,35 @@ class HistoryChangeSeeder extends Seeder
         HistoryChange::insert([
             [
          
-                "location" => "Nivel 2",
-                "description" => "Se entrego en area infantil",
+                
+                "description" => "Se entrego en caja",
                 "quantity_out" => 0,
                 "quantity_in" => 1,
                 "type_action_id" => 1,
                 "equipment_id" => 1,
                 "equipment_used_in_id" => 1,
                 "state_id" => 1,
+                "location_id" => 1,
+                "dependency_id"=>2,
+                
+                
                 
 
                 
                 ],
                 [
                
-                    "location" => "Nivel 3",
-                    "description" => "Se entrego en area braile",
+                    
+                    "description" => "Se entrego sin cargador",
                     "quantity_out" => 0,
                     "quantity_in" => 1,
                     "type_action_id" => 2,
                     "equipment_id" => 2,
                     "equipment_used_in_id" => 1,
                     "state_id" => 2,
-                    
-    
-                    
+                    "location_id" => 2,
+                    "dependency_id"=>1,
+
                     ],
         ]);
     }

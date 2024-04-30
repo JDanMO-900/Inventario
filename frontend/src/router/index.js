@@ -85,8 +85,8 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
     {
-      path: "/historyChange",
-      name: "historyChange",
+      path: "/movements",
+      name: "movements",
       component: () => import("../views/HistoryChangeView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
@@ -99,19 +99,9 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
 
-    {
-      path: "/historyChange",
-      name: "historyChange",
-      component: () => import("../views/HistoryChangeUserView.vue"),
-      meta: { requiresAuth: true }, // add meta field to specify the route requires authentication
-    },
 
-    {
-      path: "/historyChangeAdmin",
-      name: "historyChangeAdmin",
-      component: () => import("../views/HistoryChangeAdminView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
-    },
+
+
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",

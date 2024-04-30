@@ -16,31 +16,36 @@ class EquipmentTypeSeeder extends Seeder
 
         EquipmentType::insert([
             [
-                "id" => 1,
-                "name" => "Laptop",
-                
-                ],
-                [
-                "id" => 2,
-                "name" => "All in one",
-                
-                ],
-                [
-                "id" => 3,
-                "name" => "Pantalla interactiva",
-                ],
-                [
-                "id" => 4,
-                "name" => "UPS",
-                ],
-                [
-                "id" => 5,
-                "name" => "Monitor",
-                ],
-                [
-                "id" => 6,
-                "name" => "Teclado",
-                ],
+                'name' => 'Laptop',
+            ],
+            [
+                'name' => 'All in One',
+            ],
+            [
+                'name' => 'Desktop',
+            ],
+            [
+                'name' => 'Teclado',
+            ],
+            [
+                'name' => 'Mouse',
+            ],
+            [
+                'name' => 'Pantalla interactiva',
+            ],
+            [
+                'name' => 'HDMI',
+            ],
+            [
+                'name' => 'Televisor',
+            ],
+            [
+                'name' => 'Kindle para lectura digital',
+            ],
+            [
+                'name' => 'Tablet',
+            ],
+            
                
         ]);
         

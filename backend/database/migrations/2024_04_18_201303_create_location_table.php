@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('history_user_detail', function (Blueprint $table) {
+        Schema::create('location', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('history_change_id');
-            $table->foreign('history_change_id')->references('id')->on('history_change');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->boolean('technician')->default(false);
+
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('history_user_detail');
+        Schema::dropIfExists('location');
     }
 };

@@ -15,17 +15,17 @@ class ProcessStateSeeder extends Seeder
     {
         ProcessState::insert([
             [
-                "id" => 1,
+
                 "name" => "Pendiente",
 
             ],
             [
-                "id" => 2,
+ 
                 "name" => "En proceso",
 
             ],
             [
-                "id" => 3,
+
                 "name" => "Finalizado",
 
             ],

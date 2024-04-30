@@ -15,7 +15,7 @@ class EquipmentLicenseDetail extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'equipment_id', 'license_id', 'created_at', 'updated_at', 'deleted_at', 
+        'id', 'equipment_id', 'license_id', 'created_at', 'updated_at', 
     ];
 
     public $hidden = [
@@ -32,7 +32,7 @@ class EquipmentLicenseDetail extends Model
         ->join('equipment', 'equipment_license_detail.equipment_id', '=', 'equipment.id')
 ->join('license', 'equipment_license_detail.license_id', '=', 'license.id')
 
-		->where('equipment_license_detail.id', 'like', $search)
+		->where('equipment_license_detail.equipment_id', 'like', $search)
 
         ->skip($skip)
         ->take($itemsPerPage)
@@ -46,7 +46,7 @@ class EquipmentLicenseDetail extends Model
         ->join('equipment', 'equipment_license_detail.equipment_id', '=', 'equipment.id')
 ->join('license', 'equipment_license_detail.license_id', '=', 'license.id')
 
-		->where('equipment_license_detail.id', 'like', $search)
+		->where('equipment_license_detail.equipment_id', 'like', $search)
 
         ->count();
     }

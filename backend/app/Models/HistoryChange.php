@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Encrypt;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,7 +19,7 @@ class HistoryChange extends Model
 
     protected $fillable = [
         'id',
-        'location',
+        
         'description',
         'quantity_out',
         'quantity_in',
@@ -26,6 +27,9 @@ class HistoryChange extends Model
         'equipment_id',
         'equipment_used_in_id',
         'state_id',
+        'location_id',
+        'dependency_id',
+        
         'created_at',
         'updated_at',
         'deleted_at',
@@ -41,36 +45,94 @@ class HistoryChange extends Model
 
 
 
-    public function format()
-    {
-        return [
-            'id' => Encrypt::encryptValue($this->id),
-            'location' => $this->location,
-            'description' => $this->description,
-            'quantity_out' => $this->quantity_out,
-            'quantity_in' => $this->quantity_in,
-            'type_action_id' => $this->type_action_id,
-            'equipment_id' => $this->equipment_id,
-            'equipment_used_in_id' => $this->equipment_id,
-            'state_id' => $this->state_id,
+    // public function format()
+    // {
+    //     return [
+    //         'id' => Encrypt::encryptValue($this->id),
+            
+    //         'description' => $this->description,
+    //         'quantity_out' => $this->quantity_out,
+    //         'quantity_in' => $this->quantity_in,
+    //         'type_action_id' => $this->type_action_id,
+    //         'equipment_id' => $this->equipment_id,
+    //         'equipment_used_in_id' => $this->equipment_id,
+    //         'state_id' => $this->state_id,
+    //         'location_id' => $this->location_id,
+    //         'dependency_id' => $this->location_id,
 
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ];
+    //         'created_at' => $this->created_at,
+    //         'updated_at' => $this->updated_at,
+    //     ];
 
-    }
+    // }
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-        return HistoryChange::select('history_change.*', 'type_action.*', 'equipment1.*', 'equipment2.*', 'process_state.*', 'history_change.id as id')
+        Log::info($search);
+        return HistoryChange::select('history_change.*', 
+        'type_action.*', 
+        'equipment1.*', 
+        'equipment2.*', 
+        'process_state.*', 
+        'location.*', 
+        'dependency.*', 
+        'history_change.id as id',
+        
+
+        // Datos del usuario
+        'user.name as user',
+        'technician.name as technician',
+
+        // Ubicacion
+        'location.name as location_id',
+        'dependency.name as dependency',
+
+        //Equipo1
+        'equipment1.number_active as number_active1',
+        'equipment1.model as model1',
+        'equipment_type1.name as type1',
+        'brand1.name as brand1',
+
+        //Equipo1
+        'equipment2.number_active as number_active2',
+        'equipment2.model as model2',
+        'equipment_type2.name as type2',
+        'brand2.name as brand2',
+
+        'process_state.name as process',
+        'type_action.name as action'
+
+        
+        
+
+        
+        )
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+
+            // Equipo principal
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
+            ->join('equipment_type as equipment_type1', 'equipment1.equipment_type_id', '=', 'equipment_type1.id')
+            ->join('brand as brand1', 'equipment1.brand_id', '=', 'brand1.id')
+            // Equipo secundario
             ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
+            ->join('equipment_type as equipment_type2', 'equipment2.equipment_type_id', '=', 'equipment_type2.id')
+            ->join('brand as brand2', 'equipment2.brand_id', '=', 'brand2.id')
+
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->where('history_change.location', 'like', $search)
-            ->orWhere('history_change.description', 'like', $search)
-            ->orWhere('history_change.quantity_out', 'like', $search)
-            ->orWhere('history_change.quantity_in', 'like', $search)
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+            ->join('history_user_detail', 'history_user_detail.history_change_id','=', 'history_change.id')
+            ->join('users as user', 'history_user_detail.user_id','=', 'user.id')
+            ->join('users as technician', 'history_user_detail.user_tech_id','=', 'technician.id')
+            ->where('location.name', 'like', $search)
+
+
+            // ->where('history_change.location_id', 'like', $search)
+            // ->orWhere('history_change.description', 'like', $search)
+            
+            // ->orWhere('history_change.quantity_out', 'like', $search)
+            // ->orWhere('history_change.quantity_in', 'like', $search)
+
 
             ->skip($skip)
             ->take($itemsPerPage)
@@ -81,13 +143,14 @@ class HistoryChange extends Model
 
     public static function counterPagination($search)
     {
-        return HistoryChange::select('history_change.*', 'type_action.*', 'equipment1.*', 'equipment2.*', 'process_state.*', 'history_change.id as id')
+        return HistoryChange::select('history_change.*', 'type_action.*', 'equipment1.*', 'equipment2.*', 'process_state.*', 'location.*', 'history_change.id as id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
             ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-
-            ->where('history_change.location', 'like', $search)
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+            ->where('history_change.location_id', 'like', $search)
 
             ->count();
     }

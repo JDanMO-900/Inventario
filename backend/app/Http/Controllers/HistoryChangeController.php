@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HistoryChange;
-use App\Models\TypeAction;
-use App\Models\Equipment;
-use App\Models\ProcessState;
-
-use Illuminate\Http\Request;
 use Encrypt;
+use App\Models\User;
+use App\Models\Location;
+use App\Models\Equipment;
+
+use App\Models\Dependency;
+use App\Models\TypeAction;
+use App\Models\ProcessState;
+use Illuminate\Http\Request;
+use App\Models\HistoryChange;
+use App\Models\HistoryUserDetail;
 
 class HistoryChangeController extends Controller
 {
@@ -24,12 +28,12 @@ class HistoryChangeController extends Controller
 
         // Getting all the records
         if (($request->itemsPerPage == -1)) {
-            $itemsPerPage =  HistoryChange::count();
+            $itemsPerPage = HistoryChange::count();
             $skip = 0;
         }
 
         $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
-        $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
+        $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
@@ -39,7 +43,7 @@ class HistoryChangeController extends Controller
         $total = HistoryChange::counterPagination($search);
 
         return response()->json([
-            "message"=>"Registros obtenidos correctamente.",
+            "message" => "Registros obtenidos correctamente.",
             "data" => $historychange,
             "total" => $total,
         ]);
@@ -55,20 +59,43 @@ class HistoryChangeController extends Controller
     {
         $historychange = new HistoryChange;
 
-		$historychange->location = $request->location;
-		$historychange->description = $request->description;
-		$historychange->quantity_out = $request->quantity_out;
-		$historychange->quantity_in = $request->quantity_in;
-		$historychange->type_action_id = TypeAction::where('name', $request->name)->first()->id;
-		$historychange->equipment_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
-		$historychange->equipment_used_in_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
-		$historychange->state_id = ProcessState::where('created_at', $request->created_at)->first()->id;
-		$historychange->deleted_at = $request->deleted_at;
+
+        $historychange->description = $request->description;
+        $historychange->quantity_out = $request->quantity_out;
+        $historychange->quantity_in = $request->quantity_in;
+        $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
+        $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
+
+        if($request->number_active != ""){
+            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+
+        }
+        else {
+            $historychange->equipment_used_in_id = null;
+        }
+        
+        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
+
+
+        $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
+        $historychange->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
 
         $historychange->save();
 
+        $historyuserdetail = new HistoryUserDetail;
+        $lastInsertedRow = HistoryChange::latest()->first();
+        
+
+        $historyuserdetail->history_change_id = $lastInsertedRow->id;//Here I want to get my last row;
+        $historyuserdetail->user_id = User::where('name', $request->user)->first()->id;
+        // Modificar por nuevo valor
+        $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id; 
+
+        $historyuserdetail->save();
+
+
         return response()->json([
-            "message"=>"Registro creado correctamente.",
+            "message" => "Registro creado correctamente.",
         ]);
     }
 
@@ -95,20 +122,39 @@ class HistoryChangeController extends Controller
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $historychange = HistoryChange::where('id', $data['id'])->first();
-		$historychange->location = $request->location;
-		$historychange->description = $request->description;
-		$historychange->quantity_out = $request->quantity_out;
-		$historychange->quantity_in = $request->quantity_in;
-		$historychange->type_action_id = TypeAction::where('name', $request->name)->first()->id;
-		$historychange->equipment_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
-		$historychange->equipment_used_in_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
-		$historychange->state_id = ProcessState::where('created_at', $request->created_at)->first()->id;
-		$historychange->deleted_at = $request->deleted_at;
 
+        $historychange->description = $request->description;
+        $historychange->quantity_out = $request->quantity_out;
+        $historychange->quantity_in = $request->quantity_in;
+        $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
+        $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
+        $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
+        $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
+        $historychange->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
+        
         $historychange->save();
 
+
+
+        // Hacer que por medio de history change encuentre el history user_detail y de esta manera se pueda editar
+        $historyuserdetail = new HistoryUserDetail;
+        $historyuserdetail->history_change_id =  $historychange -> id;
+        $historyuserdetail->user_id = User::where('name', $request->user)->first()->id;
+        // Modificar por nuevo valor
+        $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id; 
+        $historyuserdetail->save();
+
+
+
+
+
+
+
+
+
         return response()->json([
-            "message"=>"Registro modificado correctamente.",
+            "message" => "Registro modificado correctamente.",
         ]);
     }
 
@@ -125,7 +171,7 @@ class HistoryChangeController extends Controller
         HistoryChange::where('id', $id)->delete();
 
         return response()->json([
-            "message"=>"Registro eliminado correctamente.",
+            "message" => "Registro eliminado correctamente.",
         ]);
     }
 }

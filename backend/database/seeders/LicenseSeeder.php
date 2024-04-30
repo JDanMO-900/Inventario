@@ -15,15 +15,30 @@ class LicenseSeeder extends Seeder
     {
         License::insert([
             [
-             
+
                 "name" => "Office 365",
-                
-                ],
-                [
-                    
-                    "name" => "Adobe",
-                    
-                    ],
-                ]);
+
+            ],
+            [
+
+                "name" => "Eset Endpoint Security",
+
+            ],
+            [
+
+                "name" => "Adobe",
+
+            ],
+            [
+
+                "name" => "Autocad",
+
+            ],
+            [
+
+                "name" => "Photoshop",
+
+            ],
+        ]);
     }
 }

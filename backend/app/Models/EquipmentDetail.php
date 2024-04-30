@@ -16,7 +16,7 @@ class EquipmentDetail extends Model
 
     protected $fillable = [
         'id',
-        'value',
+        'attribute',
         'equipment_id',
         'technical_description_id',
         'created_at',
@@ -46,7 +46,7 @@ class EquipmentDetail extends Model
     {
         return [
             'id' => $this->id,
-            'value' => $this->value,
+            'attribute' => $this->attribute,
             'equipment_id' => $this->equipment_id,
             'technical_description' => $this->technical_description_id,
             'created_at' => $this->created_at,
@@ -61,7 +61,7 @@ class EquipmentDetail extends Model
         return EquipmentDetail::select('*')
             ->join('equipment', 'equipment_detail.equipment_id', '=', 'equipment.id')
             ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
-            ->where('equipment_detail.value', 'like', $search)
+            ->where('equipment_detail.attribute', 'like', $search)
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("equipment_detail.$sortBy", $sort)
@@ -75,7 +75,7 @@ class EquipmentDetail extends Model
             ->join('equipment', 'equipment_detail.equipment_id', '=', 'equipment.id')
             ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
 
-            ->where('equipment_detail.value', 'like', $search)
+            ->where('equipment_detail.attribute', 'like', $search)
 
             ->count();
     }

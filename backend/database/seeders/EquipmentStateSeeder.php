@@ -15,16 +15,16 @@ class EquipmentStateSeeder extends Seeder
     {
         EquipmentState::insert([
             [
-                "id" => 1,
+
                 "name" => "Dañado",
                 
                 ],
                 [
-                "id" => 2,
+
                 "name" => "Fuera de uso",
                 ],
                 [
-                "id" => 3,
+
                 "name" => "Buen estado",
                 ],
                 

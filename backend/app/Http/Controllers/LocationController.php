@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EquipmentDetail;
-use App\Models\Equipment;
-use App\Models\TechnicalDescription;
+use App\Models\Location;
+use App\Models\Level;
+use App\Models\Area;
 
 use Illuminate\Http\Request;
 use Encrypt;
 
-class EquipmentDetailController extends Controller
+class LocationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,27 +23,23 @@ class EquipmentDetailController extends Controller
 
         // Getting all the records
         if (($request->itemsPerPage == -1)) {
-            $itemsPerPage =  EquipmentDetail::count();
+            $itemsPerPage =  Location::count();
             $skip = 0;
         }
 
-        $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+        $sortBy = (isset($request->sortBy[0])) ? $request->sortBy[0] : 'id';
         $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
-        $equipmentdetail = EquipmentDetail::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        
+        $location = Location::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
+        $location = Encrypt::encryptObject($location, "id");
 
-
-
-        // $equipmentdetail = Encrypt::encryptObject($equipmentdetail, "id");
-
-        $total = EquipmentDetail::counterPagination($search);
+        $total = Location::counterPagination($search);
 
         return response()->json([
             "message"=>"Registros obtenidos correctamente.",
-            "data" => $equipmentdetail,
+            "data" => $location,
             "total" => $total,
         ]);
     }
@@ -56,19 +52,12 @@ class EquipmentDetailController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $equipment = Equipment::findOrFail( $request->equipment_id );
-        $technicalDescription = TechnicalDescription::findOrFail( $request->technical_description_id );
+        $location = new Location;
 
-   
-		
-		$equipmentDetail = new EquipmentDetail([
-            'attribute' =>$request->attribute,
-            'equipment_id' =>$equipment->id,
-            'technical_description_id' => $technicalDescription->id
-        ]);
 
-        $equipmentDetail->save();
+		$location->deleted_at = $request->deleted_at;
+
+        $location->save();
 
         return response()->json([
             "message"=>"Registro creado correctamente.",
@@ -78,10 +67,10 @@ class EquipmentDetailController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\EquipmentDetail  equipmentdetail
+     * @param  \App\Models\Location  location
      * @return \Illuminate\Http\Response
      */
-    public function show(EquipmentDetail $equipmentdetail)
+    public function show(Location $location)
     {
         //
     }
@@ -90,20 +79,18 @@ class EquipmentDetailController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\EquipmentDetail  $equipmentdetail
+     * @param  \App\Models\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
 
-        $equipmentdetail = EquipmentDetail::where('id', $data['id'])->first();
-		$equipmentdetail->attribute = $request->attribute;
-		$equipmentdetail->equipment_id = Equipment::where('number_internal_active', $request->number_internal_active)->first()->id;
-		$equipmentdetail->technical_description_id = TechnicalDescription::where('name', $request->name)->first()->id;
-		$equipmentdetail->deleted_at = $request->deleted_at;
+        $location = Location::where('id', $data['id'])->first();
 
-        $equipmentdetail->save();
+		$location->deleted_at = $request->deleted_at;
+
+        $location->save();
 
         return response()->json([
             "message"=>"Registro modificado correctamente.",
@@ -113,14 +100,14 @@ class EquipmentDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\EquipmentDetail  $equipmentdetail
+     * @param  \App\Models\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
         $id = Encrypt::decryptValue($request->id);
 
-        EquipmentDetail::where('id', $id)->delete();
+        Location::where('id', $id)->delete();
 
         return response()->json([
             "message"=>"Registro eliminado correctamente.",

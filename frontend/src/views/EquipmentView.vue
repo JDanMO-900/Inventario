@@ -24,7 +24,7 @@
       </v-data-table-server>
     </v-card>
 
-    <v-dialog v-model="dialog" max-width="800px" persistent>
+    <v-dialog v-model="dialog" max-width="800px">
       <v-card>
         <v-card-title>
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
@@ -36,6 +36,12 @@
           <v-container>
             <!-- Form -->
             <v-row class="pt-3">
+
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles de identificación y facturación </b>
+                </p>
+                <hr>
+              </v-col>
 
               <!-- number_active -->
               <v-col cols="12" sm="12" md="6">
@@ -66,22 +72,23 @@
 
               <!-- adquisition_date -->
               <v-col cols="12" sm="12" md="6">
-                <base-input label="Adquisition Date" v-model="v$.editedItem.adquisition_date.$model"
+                <base-input label="Fecha de adquisición" v-model="v$.editedItem.adquisition_date.$model"
                   :rules="v$.editedItem.adquisition_date" type="date" />
               </v-col>
               <!-- adquisition_date -->
 
 
-            </v-row>
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles del dispositivo </b>
+                </p>
+                <hr>
+              </v-col>
 
-
-            <v-row class="pt-3">
               <!-- model -->
               <v-col cols="12" sm="12" md="6">
                 <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" />
               </v-col>
               <!-- model -->
-
 
 
 
@@ -91,58 +98,99 @@
                   :rules="v$.editedItem.serial_number" />
               </v-col>
               <!-- serial_number -->
-            </v-row>
-            <v-row class="pt-3">
 
-              <!-- equipment state -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Estado" :items="this.equipmentstate" item-title="name" item-value="name"
-                  v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
-              </v-col>
-              
-              <!-- equipment state -->
 
-              <!-- equipment state -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Dependencia" :items="this.dependency" item-title="name" item-value="name"
-                  v-model.trim="v$.editedItem.dependency.$model" :rules="v$.editedItem.dependency" />
-              </v-col>
-              <!-- equipment state -->
 
               <!-- Tipo de equipo -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Tipo de equipo" :items="this.equipmenttype" item-title="name"
-                  item-value="name" v-model.trim="v$.editedItem.type.$model"
-                  :rules="v$.editedItem.type" />
+              <v-col cols="12" sm="12" md="6">
+                <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
+                  :items="this.equipmenttype" item-title="name" item-value="name" clearable
+                  :rules="v$.editedItem.equipment_type_id" />
               </v-col>
-              <!-- Tipo de equipo -->
-            </v-row>
 
-            <v-row class="pt-3">
+
+              <!-- Tipo de equipo -->
+
               <!-- brand -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Marcas" :items="this.brand" item-title="name" :value="name"
+              <v-col cols="12" sm="12" md="6">
+                <base-select label="Marcas" :items="brand" item-title="name" item-value="name"
                   v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" />
               </v-col>
               <!-- brand -->
 
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Proveedor que lo entrego </b>
+                </p>
+                <hr>
+              </v-col>
+
+
               <!-- Proveedor -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Proveedor" :items="this.provider" item-title="name" :value="name"
+              <v-col cols="12" sm="12" md="12">
+                <base-select label="Proveedor" :items="this.provider" item-title="name" :value="name"
                   v-model.trim="v$.editedItem.provider.$model" :rules="v$.editedItem.provider">
                 </base-select>
               </v-col>
 
               <!-- Proveedor -->
 
-              <!-- Licencias -->
-              <v-col cols="12" sm="12" md="4">
-                <base-select placeholder="Licencias" :items="this.license" item-title="name" :value="name"
-                  v-model.trim="v$.editedItem.licenses.$model" :rules="v$.editedItem.licenses"   multiple>
-                </base-select>
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de licencias </b>
+                </p>
+                <hr>
               </v-col>
 
               <!-- Licencias -->
+
+              <v-col cols="12" sm="12" md="12">
+                <base-multi-select label="Licencias" :items="this.license" item-title="name"
+                  v-model.trim="v$.editedItem.licenses.$model" :rules="v$.editedItem.licenses">
+                </base-multi-select>
+              </v-col>
+
+              <!-- Licencias -->
+
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Especificaciones técnicas del equipo </b>
+                </p>
+                <hr>
+              </v-col>
+
+              <!-- equipment state -->
+              <v-col cols="12" sm="12" md="12">
+                <base-select label="Estado" :items="this.equipmentstate" item-title="name" item-value="name"
+                  :value="name" v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
+              </v-col>
+
+              <!-- equipment state -->
+
+              <v-col cols="12" sm="12" md="12">
+
+
+                <!-- Descripcion -->
+
+                <base-select label="Especificación" :items="this.technicalDescrip" item-title="name" item-value="name"
+                  :value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
+                  :rules="v$.editedItem.technicalDescription" />
+
+                <!-- Descripcion -->
+
+              </v-col>
+
+              <!-- Cantidad de valor -->
+              <v-col cols="4" sm="12" md="4">
+                <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model" :rules="v$.editedItem.attribute"
+                  type="number" min="0" max="100" />
+              </v-col>
+
+
+              <!-- Cantidad de valor -->
+
+
+
+
+
+
 
 
             </v-row>
@@ -198,11 +246,7 @@
                 <p class="text-grey-darken-4 text-h6 text-center"> <b>Registro del equipo </b></p>
               </v-col>
 
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 "><b class="text-indigo-darken-4">Dependencia: </b>{{
-                  this.equipmentData.dependency }}</p>
 
-              </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de activo fijo: </b>{{
@@ -220,7 +264,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de factura: </b>{{
                   this.equipmentData.invoice_number
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -241,28 +285,28 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Modelo del equipo: </b>{{
                   this.equipmentData.model
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de serie del equipo: </b>{{
                   this.equipmentData.serial_number
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Tipo de equipo: </b>{{
-                  this.equipmentData.type
-                }}</p>
+                  this.equipmentData.equipment_type_id
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Marca: </b>{{
                   this.equipmentData.brand
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -273,16 +317,42 @@
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6 text-center"> <b>Licencias del equipo </b></p>
               </v-col>
-              
 
-                <v-col cols="3" v-for="(license, index) in this.equipmentData.licenses" :key="index">
-                  <p class="text-grey-darken-4 text-h6">{{ license }}</p>
 
-                 
+              <v-col cols="3" v-for="(license, index) in this.equipmentData.licenses" :key="index">
+                <p class="text-grey-darken-4 text-h6">{{ license }}</p>
 
-                </v-col>
 
-                
+
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <hr>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-center"> <b>Detalles técnicos </b></p>
+              </v-col>
+              <v-col cols="12" sm="12" md="6">
+                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Estado del equipo: </b>{{
+                  this.equipmentData.state
+                  }}</p>
+
+              </v-col>
+              <v-col cols="12" sm="12" md="6">
+                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Descripción ténica: </b>{{
+                  this.equipmentData.technicalDescription
+                  }}</p>
+
+              </v-col>
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Valor de a descripción: </b>{{
+                  this.equipmentData.attribute
+                  }}</p>
+
+              </v-col>
+
+
 
 
               <v-col cols="12" sm="12" md="12">
@@ -296,14 +366,14 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Proveedor: </b>{{
                   this.equipmentData.provider
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Contacto del proveedor: </b>{{
                   this.equipmentData.contact_name
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -317,15 +387,19 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dirección: </b>{{
                   this.equipmentData.address
-                }}</p>
+                  }}</p>
 
               </v-col>
 
-              
 
-              
 
-              
+
+
+
+
+
+
+
 
 
             </v-row>
@@ -369,57 +443,62 @@ import backendApi from "@/services/backendApi";
 import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
 import BaseSelect from "../components/base-components/BaseSelect.vue";
+import BaseMultiSelect from "../components/base-components/BaseMultiSelect.vue";
+import BaseTextArea from "../components/base-components/BaseTextArea.vue";
 import useAlert from "../composables/useAlert";
 
 const { alert } = useAlert();
 const langMessages = messages["es"].validations;
 
 export default {
-  components: { BaseButton, BaseInput, BaseSelect },
+  components: { BaseButton, BaseInput, BaseSelect, BaseMultiSelect, BaseTextArea },
   setup() {
     return { v$: useVuelidate() };
   },
   data() {
     return {
+      enabled: false,
       search: "",
       selected: [],
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
       headers: [
+        { title: "Tipo de equipo", key: "equipment_type_id" },
 
-        { title: "Numero de activo fijo", key: "number_active" },
-        { title: "Numero de registro interno", key: "number_internal_active" },
-        { title: "Modelo", key: "model" },
+        { title: "Numero de activo fijo", key: "number_internal_active" },
+        { title: "Numero de registro interno", key: "number_active" },
+
         { title: "Serial", key: "serial_number" },
         { title: "Fecha de adquisición", key: "adquisition_date" },
-        { title: " Código de factura", key: "invoice_number" },
+
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,
-      title: "Listado de equipos",
+      title: "Inventario",
       total: 0,
       options: {},
       editedItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", dependency: "", type: "", brand: "", provider: "", licenses: "",
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: "", technicalDescription: "", attribute: ""
 
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", dependency: "", type: "", brand: "", provider: "", licenses: "",
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: "", technicalDescription: "", attribute: ""
 
       },
       loading: false,
       debounce: 0,
       equipmentstate: [],
-      dependency: [],
+
       equipmenttype: [],
       brand: [],
       provider: [],
       license: [],
-      equipmentData: []
+      equipmentData: [],
+      technicalDescrip: []
 
     };
   },
@@ -457,11 +536,8 @@ export default {
           minLength: minLength(1),
         },
 
-        dependency: {
-          required,
-          minLength: minLength(1),
-        },
-        type: {
+
+        equipment_type_id: {
           required,
           minLength: minLength(1),
         },
@@ -477,6 +553,14 @@ export default {
           required,
           minLength: minLength(1),
         },
+        technicalDescription: {
+          required,
+          minLength: minLength(1),
+        }, attribute: {
+          required,
+          numeric,
+          minLength: minLength(1),
+        },
 
 
       },
@@ -485,7 +569,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Nuevo registro" : "Editar registro";
+      return this.editedIndex === -1 ? "Agregar equipo" : "Editar equipo";
     },
   },
 
@@ -512,7 +596,7 @@ export default {
 
   methods: {
     infoItem(item) {
-    
+
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
       this.dialogInfo = true;
@@ -527,8 +611,6 @@ export default {
         this.getDataFromApi(),
         backendApi.get('/equipmentState', {
           params: { itemsPerPage: -1 },
-        }), backendApi.get('/dependency', {
-          params: { itemsPerPage: -1 },
         }), backendApi.get('/equipmentType', {
           params: { itemsPerPage: -1 },
         }), backendApi.get('/brand', {
@@ -541,6 +623,12 @@ export default {
           params: { itemsPerPage: -1 },
 
         }),
+        backendApi.get('/technicalDescription', {
+          params: { itemsPerPage: -1 },
+
+        }),
+
+
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -549,12 +637,15 @@ export default {
 
       if (responses) {
 
+
+
         this.equipmentstate = responses[1].data.data;
-        this.dependency = responses[2].data.data;
-        this.equipmenttype = responses[3].data.data;
-        this.brand = responses[4].data.data;
-        this.provider = responses[5].data.data;
-        this.license = responses[6].data.data;
+
+        this.equipmenttype = responses[2].data.data;
+        this.brand = responses[3].data.data;
+        this.provider = responses[4].data.data;
+        this.license = responses[5].data.data;
+        this.technicalDescrip = responses[6].data.data;
 
 
       }
@@ -563,11 +654,11 @@ export default {
     },
 
     editItem(item) {
-      console.log(item)      
+      console.log(item)
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-     
+
     },
 
     close() {
@@ -579,7 +670,7 @@ export default {
     },
 
     async save() {
-      console.log(this.editedItem)
+
 
       this.v$.$validate();
       if (this.v$.$invalid) {
@@ -624,7 +715,7 @@ export default {
     },
 
     deleteItem(item) {
-      console.log(item)
+
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
@@ -677,12 +768,13 @@ export default {
           const rol = await backendApi.get(`/user/${user.name}`);
 
 
-
-
+          // const equipment_history = await backendApi.get(`/equipment/${user.name}`);
 
 
 
           this.records = data.data;
+          console.log(this.records)
+          console.log(this.records)
           this.total = data.total;
           this.loading = false;
         } catch (error) {

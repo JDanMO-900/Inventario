@@ -12,21 +12,17 @@
           <span>Inicio</span>
         </RouterLink>
 
-        <RouterLink to="/historyChange" class="d-flex flex-column align-center mb-3">
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Historial personal</span>
-        </RouterLink>
 
 
-        <RouterLink to="/historyChangeAdmin" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Historial completo</span>
+        <RouterLink to="/movements" class="d-flex flex-column align-center mb-3" >
+          <v-icon icon="mdi-home" size="18"></v-icon>
+          <span>Movimientos</span>
         </RouterLink>
         
 
-        <RouterLink to="/Equipment" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Equipos</span>
+        <RouterLink to="/equipment" class="d-flex flex-column align-center mb-3" >
+          <v-icon icon="mdi-home" size="18"></v-icon>
+          <span>Inventario</span>
         </RouterLink>
 
         <RouterLink to="/dependency" class="d-flex flex-column align-center mb-3" >
@@ -34,41 +30,6 @@
           <span>Dependencias</span>
         </RouterLink>
 
-        <RouterLink to="/equipmentState" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Estado de equipos</span>
-        </RouterLink>
-
-        <RouterLink to="/brand" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Marcas</span>
-        </RouterLink>
-
-        <RouterLink to="/equipmentType" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Tipos de equipos</span>
-        </RouterLink>
-
-        
-        <RouterLink to="/equipmentType" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Proveedores</span>
-        </RouterLink>
-
-        <RouterLink to="/license" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Licencias</span>
-        </RouterLink>
-
-        <RouterLink to="/processState" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Estado del proceso</span>
-        </RouterLink>
-
-        <RouterLink to="/typeAction" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Tipo de acción</span>
-        </RouterLink>
 
 
 

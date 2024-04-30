@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('equipment_detail', function (Blueprint $table) {
             $table->id();
-            $table->float('value')->nullable();
+            $table->float('attribute')->nullable();
             $table->unsignedBigInteger('equipment_id');
-            $table->foreign('equipment_id')->references('id')->on('equipment');
+            $table->foreign('equipment_id')->references('id')->on('equipment')->nullable();
             
-            $table->unsignedBigInteger('technical_description_id');
+            $table->unsignedBigInteger('technical_description_id')->nullable();
             $table->foreign('technical_description_id')->references('id')->on('technical_description');
             
             $table->timestamps();

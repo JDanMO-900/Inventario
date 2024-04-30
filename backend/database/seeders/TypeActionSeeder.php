@@ -16,29 +16,25 @@ class TypeActionSeeder extends Seeder
         TypeAction::insert([
             [
       
-                "name" => "Daño",
+                "name" => "mantenimiento",
 
             ],
             [
               
-                "name" => "Asignacion",
+                "name" => "asignación",
 
             ],
             [
             
-                "name" => "Traslado",
+                "name" => "traslado",
 
             ],
             [
                
-                "name" => "Prestamo",
+                "name" => "préstamo",
 
             ],
-            [
-               
-                "name" => "Soporte",
 
-            ],
             
 
         ]);

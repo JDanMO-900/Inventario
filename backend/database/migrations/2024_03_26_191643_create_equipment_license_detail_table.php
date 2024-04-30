@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreign('license_id')->references('id')->on('license');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
