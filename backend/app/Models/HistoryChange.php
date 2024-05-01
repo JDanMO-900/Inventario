@@ -114,9 +114,9 @@ class HistoryChange extends Model
             ->join('equipment_type as equipment_type1', 'equipment1.equipment_type_id', '=', 'equipment_type1.id')
             ->join('brand as brand1', 'equipment1.brand_id', '=', 'brand1.id')
             // Equipo secundario
-            ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
-            ->join('equipment_type as equipment_type2', 'equipment2.equipment_type_id', '=', 'equipment_type2.id')
-            ->join('brand as brand2', 'equipment2.brand_id', '=', 'brand2.id')
+            ->leftJoin('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
+            ->leftJoin('equipment_type as equipment_type2', 'equipment2.equipment_type_id', '=', 'equipment_type2.id')
+            ->leftJoin('brand as brand2', 'equipment2.brand_id', '=', 'brand2.id')
 
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
@@ -146,7 +146,7 @@ class HistoryChange extends Model
         return HistoryChange::select('history_change.*', 'type_action.*', 'equipment1.*', 'equipment2.*', 'process_state.*', 'location.*', 'history_change.id as id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
-            ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
+            ->leftJoin('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')

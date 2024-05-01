@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('equipment_license_detail', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('equipment_id');
+            $table->unsignedBigInteger('equipment_id')->nullable();
             $table->foreign('equipment_id')->references('id')->on('equipment');
             
-            $table->unsignedBigInteger('license_id');
+            $table->unsignedBigInteger('license_id')->nullable();
             $table->foreign('license_id')->references('id')->on('license');
 
             $table->timestamps();
