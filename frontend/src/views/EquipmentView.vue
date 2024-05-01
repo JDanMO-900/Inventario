@@ -17,6 +17,9 @@
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon size="20" class="mr-2" @click="historyItem(item.raw)" icon="mdi-calendar" />
+          <v-icon icon="fa:fas fa-search"></v-icon>
+          <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -104,7 +107,7 @@
               <!-- Tipo de equipo -->
               <v-col cols="12" sm="12" md="6">
                 <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
-                  :items="this.equipmenttype" item-title="name" item-value="name" clearable
+                  :items="this.equipmenttype" item-title="name" item-value="name"
                   :rules="v$.editedItem.equipment_type_id" />
               </v-col>
 
@@ -188,11 +191,6 @@
 
 
 
-
-
-
-
-
             </v-row>
             <!-- Form -->
             <v-row>
@@ -264,7 +262,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de factura: </b>{{
                   this.equipmentData.invoice_number
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -285,28 +283,28 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Modelo del equipo: </b>{{
                   this.equipmentData.model
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de serie del equipo: </b>{{
                   this.equipmentData.serial_number
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Tipo de equipo: </b>{{
                   this.equipmentData.equipment_type_id
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Marca: </b>{{
                   this.equipmentData.brand
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -336,19 +334,19 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Estado del equipo: </b>{{
                   this.equipmentData.state
-                  }}</p>
+                }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Descripción ténica: </b>{{
                   this.equipmentData.technicalDescription
-                  }}</p>
+                }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Valor de a descripción: </b>{{
                   this.equipmentData.attribute
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -366,14 +364,14 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Proveedor: </b>{{
                   this.equipmentData.provider
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Contacto del proveedor: </b>{{
                   this.equipmentData.contact_name
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -387,24 +385,12 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dirección: </b>{{
                   this.equipmentData.address
-                  }}</p>
+                }}</p>
 
               </v-col>
 
 
-
-
-
-
-
-
-
-
-
-
             </v-row>
-
-
 
 
           </v-container>
@@ -413,18 +399,81 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
-
-
-
-
-
-
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-row>
   <!-- Probando modal de visualizar -->
 
+  <!-- Historial de usuario -->
+  <v-row justify="center">
+    <v-dialog v-model="dialogHistory" width="1024">
+      <v-card>
+        <v-card-title>
+          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+            Historial del equipo
+          </h2>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-row class="pt-3">
+              <v-col cols="12" sm="12" md="12">
+                <hr>
+              </v-col>
+
+
+
+              <v-col cols="12" sm="12" md="12">
+
+                <table id="equipos">
+
+
+                  <tr>
+                    <th>Numero de activo interno</th>
+                    <th>Numero de activo fijo</th>
+                    <th>Usuarios que han tenido el equipo</th>
+                    <th>Movimientos del equipo</th>
+                    <th>Estado dele quipo</th>
+
+
+                  </tr>
+                  <tr v-for="data in this.historyData">
+
+              
+                    <td>{{ data.number_active }}</td>
+                    <td>{{ data.number_internal_active }}</td>
+                    <td>{{ data.users }}</td>
+                    <td>{{ data.type_action }}</td>
+                    <td>{{ data.state }}</td>
+
+
+
+                  </tr>
+
+
+                </table>
+
+
+              </v-col>
+
+
+            </v-row>
+
+
+          </v-container>
+
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogHistory = false" />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+  <!-- Probando modal de visualizar -->
+
+  <!-- Historial de usuario -->
 
 
 
@@ -463,6 +512,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
+      dialogHistory: false,
       headers: [
         { title: "Tipo de equipo", key: "equipment_type_id" },
 
@@ -498,7 +548,9 @@ export default {
       provider: [],
       license: [],
       equipmentData: [],
-      technicalDescrip: []
+      technicalDescrip: [],
+
+      historyData: []
 
     };
   },
@@ -550,14 +602,14 @@ export default {
           minLength: minLength(1),
         },
         licenses: {
-          required,
+
           minLength: minLength(1),
         },
         technicalDescription: {
-          required,
+
           minLength: minLength(1),
         }, attribute: {
-          required,
+
           numeric,
           minLength: minLength(1),
         },
@@ -600,6 +652,13 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
       this.dialogInfo = true;
+
+    },
+    async historyItem(item) {
+      const equipment_history = await backendApi.get(`/equipment/${item.number_internal_active}`);
+      this.historyData = equipment_history.data;
+      console.log(this.historyData);
+      this.dialogHistory = true;
 
     },
 
@@ -654,7 +713,7 @@ export default {
     },
 
     editItem(item) {
-      console.log(item)
+
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -762,19 +821,18 @@ export default {
           });
 
 
-          var user = JSON.parse(window.localStorage.getItem("user"));
+          // var user = JSON.parse(window.localStorage.getItem("user"));
 
 
-          const rol = await backendApi.get(`/user/${user.name}`);
+          // const rol = await backendApi.get(`/user/${user.name}`);
 
 
-          // const equipment_history = await backendApi.get(`/equipment/${user.name}`);
+
 
 
 
           this.records = data.data;
-          console.log(this.records)
-          console.log(this.records)
+
           this.total = data.total;
           this.loading = false;
         } catch (error) {
@@ -792,3 +850,29 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+#equipos {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#equipos td,
+#equipos th {
+  border: 1px solid #7b84e467;
+  padding: 8px;
+}
+
+
+
+
+#equipos th {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  text-align: center;
+  background-color: #1a237e;
+  color: white;
+}
+</style>
