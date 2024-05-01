@@ -109,8 +109,8 @@ class Equipment extends Model
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('provider', 'equipment.provider_id', '=', 'provider.id')
-            ->join('equipment_detail', 'equipment_detail.equipment_id','=','equipment.id')
-            ->join('technical_description', 'equipment_detail.technical_description_id','=','technical_description.id')
+            ->leftJoin('equipment_detail', 'equipment_detail.equipment_id','=','equipment.id')
+            ->leftJoin('technical_description', 'equipment_detail.technical_description_id','=','technical_description.id')
             ->where('equipment.number_internal_active', 'like', $search)
             ->orWhere('equipment.number_active','like', $search)
             ->orWhere('equipment.model','like', $search)
@@ -168,9 +168,11 @@ class Equipment extends Model
 
             'equipment_type.name as type',
 
-            // Techcnical descriptions
-            "technical_description.name as technicalDescription",
-            "equipment_detail.attribute as attribute"
+            // Users
+            'users.name as users',
+
+            // Type action
+            'type_action.name as type_action'
 
 
             )
@@ -183,8 +185,9 @@ class Equipment extends Model
             ->join('technical_description', 'equipment_detail.technical_description_id','=','technical_description.id')
             ->join('history_change', 'history_change.equipment_id','=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id','=', 'history_change.id')
+            ->join('type_action', 'type_action.id','=', 'history_change.type_action_id')
             ->join('users', 'users.id','=', 'history_user_detail.user_id')
-            ->where('equipment.number_active', 'like', $equip)
+            ->where('equipment.number_internal_active', 'like', $equip)
 
             ->get();
 

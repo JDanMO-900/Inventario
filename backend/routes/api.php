@@ -17,7 +17,6 @@ use App\Http\Controllers\EquipmentTypeController;
 use App\Http\Controllers\HistoryChangeController;
 use App\Http\Controllers\EquipmentStateController;
 use App\Http\Controllers\EquipmentDetailController;
-use App\Http\Controllers\HistoryUserDetailController;
 use App\Http\Controllers\TechnicalDescriptionController;
 use App\Http\Controllers\EquipmentLicenseDetailController;
 
@@ -57,6 +56,7 @@ Route::resource('/dependency', DependencyController::class);
 Route::resource('/equipmentType', EquipmentTypeController::class);
 Route::resource('/provider', ProviderController::class);
 
+// Get equipment historical based in numer_internal_active
 Route::get('/equipment/{equip}', [EquipmentController::class, 'equipmentSearch']);
 Route::resource('/equipment', EquipmentController::class);
 

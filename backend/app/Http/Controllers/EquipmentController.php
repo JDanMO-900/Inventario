@@ -101,12 +101,17 @@ class EquipmentController extends Controller
 
         }
 
+        if($request->attribute != "" and $request->technical_description_id){
+            $detalleEquipment = new EquipmentDetail();
+            $detalleEquipment->attribute = $request->attribute;
+            $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+            $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
+            $detalleEquipment->save();
 
-        $detalleEquipment = new EquipmentDetail();
-        $detalleEquipment->attribute = $request->attribute;
-        $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-        $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
-        $detalleEquipment->save();
+        }
+
+
+
 
 
 
