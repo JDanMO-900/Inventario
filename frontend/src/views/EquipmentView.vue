@@ -3,6 +3,7 @@
 
     <v-card class="p-3 mt-3">
       <v-container>
+
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
@@ -188,8 +189,44 @@
 
 
               <!-- Cantidad de valor -->
+              <v-col cols="12" sm="12" md="12">
+                <base-button type="primary" title="Agregar especificación" @click="funcionAgregarArreglo" />
+              </v-col>
+
+              <!-- technicalAttributes -->
+
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Especificación</b></td>
+                        <td><b>Capacidad</b></td>
+
+                        <td><b>ACCIONES</b></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="datos in this.editedItem.technicalAttributes" style="height: 60px;">
+                        <td>{{ datos.attribute }}</td>
+                        <td>{{ datos.technicalDescription }}</td>
+
+                        <td>
+                          <v-icon size="20" class="mr-2" @click="funcionEliminarArreglo(datos.technicalDescription)" icon="mdi-delete" />
+                        </td>
+                      </tr>
+                      <tr v-if="this.editedItem.technicalAttributes == 0">
+                        <td colspan="4">
+                          <p class="text-center py-3">Sin datos que mostrar</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </v-col>
 
 
+              <!-- technicalAttributes -->
 
             </v-row>
             <!-- Form -->
@@ -262,7 +299,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de factura: </b>{{
                   this.equipmentData.invoice_number
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -283,28 +320,28 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Modelo del equipo: </b>{{
                   this.equipmentData.model
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de serie del equipo: </b>{{
                   this.equipmentData.serial_number
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Tipo de equipo: </b>{{
                   this.equipmentData.equipment_type_id
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Marca: </b>{{
                   this.equipmentData.brand
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -334,19 +371,19 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Estado del equipo: </b>{{
                   this.equipmentData.state
-                }}</p>
+                  }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Descripción ténica: </b>{{
                   this.equipmentData.technicalDescription
-                }}</p>
+                  }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Valor de a descripción: </b>{{
                   this.equipmentData.attribute
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -364,14 +401,14 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Proveedor: </b>{{
                   this.equipmentData.provider
-                }}</p>
+                  }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Contacto del proveedor: </b>{{
                   this.equipmentData.contact_name
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -385,7 +422,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dirección: </b>{{
                   this.equipmentData.address
-                }}</p>
+                  }}</p>
 
               </v-col>
 
@@ -440,7 +477,7 @@
                   </tr>
                   <tr v-for="data in this.historyData">
 
-              
+
                     <td>{{ data.number_active }}</td>
                     <td>{{ data.number_internal_active }}</td>
                     <td>{{ data.users }}</td>
@@ -506,6 +543,7 @@ export default {
   },
   data() {
     return {
+
       enabled: false,
       search: "",
       selected: [],
@@ -531,12 +569,12 @@ export default {
       options: {},
       editedItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", licenses: "", technicalDescription: "", attribute: ""
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: []
 
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", licenses: "", technicalDescription: "", attribute: ""
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: []
 
       },
       loading: false,
@@ -548,9 +586,10 @@ export default {
       provider: [],
       license: [],
       equipmentData: [],
-      technicalDescrip: [],
 
-      historyData: []
+      historyData: [],
+
+
 
     };
   },
@@ -587,8 +626,6 @@ export default {
           required,
           minLength: minLength(1),
         },
-
-
         equipment_type_id: {
           required,
           minLength: minLength(1),
@@ -647,8 +684,47 @@ export default {
   },
 
   methods: {
-    infoItem(item) {
+    funcionAgregarArreglo() {
+      var isInArray = false;
 
+
+      if (this.editedItem.attribute != "" && this.editedItem.technicalDescription != "") {
+
+
+
+
+
+        this.editedItem.technicalAttributes.forEach(item => {
+
+          if (item.technicalDescription == this.editedItem.technicalDescription) {
+            isInArray = true;
+          }
+        });
+
+        if (!isInArray) {
+          this.editedItem.technicalAttributes.push({ "technicalDescription": this.editedItem.technicalDescription,  "attribute": this.editedItem.attribute });
+        }
+
+
+
+      }
+
+
+
+    },
+    funcionEliminarArreglo(item) {
+
+      this.editedItem.technicalAttributes =  this.editedItem.technicalAttributes.filter(
+        function(obj){
+          return obj.Descripcion !== item
+        }
+      )
+
+
+    }
+    ,
+
+    infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
       this.dialogInfo = true;
@@ -770,6 +846,7 @@ export default {
 
       this.close();
       this.initialize();
+      this.editedItem.technicalAttributes.length = 0;
       return;
     },
 
@@ -826,13 +903,7 @@ export default {
 
           // const rol = await backendApi.get(`/user/${user.name}`);
 
-
-
-
-
-
           this.records = data.data;
-
           this.total = data.total;
           this.loading = false;
         } catch (error) {
