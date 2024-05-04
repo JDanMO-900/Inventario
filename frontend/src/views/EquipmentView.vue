@@ -146,11 +146,56 @@
 
               <!-- Licencias -->
 
+
+
               <v-col cols="12" sm="12" md="12">
-                <base-multi-select label="Licencias" :items="this.license" item-title="name"
-                  v-model.trim="v$.editedItem.licenses.$model" :rules="v$.editedItem.licenses">
-                </base-multi-select>
+
+                <base-select label="Licencias" :items="this.license" item-title="name" item-value="name" :value="name"
+                  v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
+
               </v-col>
+
+
+              <v-col cols="12" sm="12" md="12">
+                <base-button type="primary" title="Agregar especificación" @click="addLicense" />
+              </v-col>
+
+              <!-- technicalAttributes -->
+
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Licencia</b></td>
+
+                        <td><b>ACCIONES</b></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="Licencia in this.editedItem.licenses" style="height: 60px;">
+                        <td>{{ Licencia }}</td>
+
+
+                        <td>
+                          <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)"
+                            icon="mdi-delete" />
+                        </td>
+                      </tr>
+                      <tr v-if="this.editedItem.licenses == 0">
+                        <td colspan="4">
+                          <p class="text-center py-3">Sin datos que mostrar</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </v-col>
+
+
+
+
+
 
               <!-- Licencias -->
 
@@ -168,18 +213,17 @@
 
               <!-- equipment state -->
 
-              <v-col cols="12" sm="12" md="12">
+              <!-- Descripcion -->
 
-
-                <!-- Descripcion -->
+              <v-col cols="12" sm="12" md="8">
 
                 <base-select label="Especificación" :items="this.technicalDescrip" item-title="name" item-value="name"
                   :value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
                   :rules="v$.editedItem.technicalDescription" />
 
-                <!-- Descripcion -->
-
               </v-col>
+
+              <!-- Descripcion -->
 
               <!-- Cantidad de valor -->
               <v-col cols="4" sm="12" md="4">
@@ -189,8 +233,9 @@
 
 
               <!-- Cantidad de valor -->
+
               <v-col cols="12" sm="12" md="12">
-                <base-button type="primary" title="Agregar especificación" @click="funcionAgregarArreglo" />
+                <base-button type="primary" title="Agregar especificación" @click="addTechnicalAttributes" />
               </v-col>
 
               <!-- technicalAttributes -->
@@ -212,7 +257,8 @@
                         <td>{{ datos.technicalDescription }}</td>
 
                         <td>
-                          <v-icon size="20" class="mr-2" @click="funcionEliminarArreglo(datos.technicalDescription)" icon="mdi-delete" />
+                          <v-icon size="20" class="mr-2" @click="deleteTechnicalAttributes(datos.technicalDescription)"
+                            icon="mdi-delete" />
                         </td>
                       </tr>
                       <tr v-if="this.editedItem.technicalAttributes == 0">
@@ -299,7 +345,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de factura: </b>{{
                   this.equipmentData.invoice_number
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -320,28 +366,28 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Modelo del equipo: </b>{{
                   this.equipmentData.model
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de serie del equipo: </b>{{
                   this.equipmentData.serial_number
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Tipo de equipo: </b>{{
                   this.equipmentData.equipment_type_id
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Marca: </b>{{
                   this.equipmentData.brand
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -356,10 +402,8 @@
 
               <v-col cols="3" v-for="(license, index) in this.equipmentData.licenses" :key="index">
                 <p class="text-grey-darken-4 text-h6">{{ license }}</p>
-
-
-
               </v-col>
+
 
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -371,19 +415,19 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Estado del equipo: </b>{{
                   this.equipmentData.state
-                  }}</p>
+                }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Descripción ténica: </b>{{
                   this.equipmentData.technicalDescription
-                  }}</p>
+                }}</p>
 
               </v-col>
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Valor de a descripción: </b>{{
                   this.equipmentData.attribute
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -401,14 +445,14 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Proveedor: </b>{{
                   this.equipmentData.provider
-                  }}</p>
+                }}</p>
 
               </v-col>
 
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Contacto del proveedor: </b>{{
                   this.equipmentData.contact_name
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -422,7 +466,7 @@
               <v-col cols="12" sm="12" md="6">
                 <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dirección: </b>{{
                   this.equipmentData.address
-                  }}</p>
+                }}</p>
 
               </v-col>
 
@@ -574,7 +618,7 @@ export default {
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: []
+        state: "", equipment_type_id: "", brand: "", provider: "", license:"", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], 
 
       },
       loading: false,
@@ -638,7 +682,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        licenses: {
+        license: {
 
           minLength: minLength(1),
         },
@@ -684,7 +728,39 @@ export default {
   },
 
   methods: {
-    funcionAgregarArreglo() {
+    addLicense() {
+      var isInArray = false;
+
+
+      if (this.editedItem.license != "" ) {
+
+        this.editedItem.licenses.forEach(item => {
+          
+
+          if (item == this.editedItem.license) {
+            isInArray = true;
+          }
+        });
+
+        if (!isInArray) {
+          this.editedItem.licenses.push(this.editedItem.license);
+        }
+
+      }
+
+    },
+    deleteLicenses(item) {
+
+      this.editedItem.licenses = this.editedItem.licenses.filter(
+        function (obj) {
+          return obj !== item
+        }
+      )
+
+
+    },
+
+    addTechnicalAttributes() {
       var isInArray = false;
 
 
@@ -702,7 +778,7 @@ export default {
         });
 
         if (!isInArray) {
-          this.editedItem.technicalAttributes.push({ "technicalDescription": this.editedItem.technicalDescription,  "attribute": this.editedItem.attribute });
+          this.editedItem.technicalAttributes.push({ "technicalDescription": this.editedItem.technicalDescription, "attribute": this.editedItem.attribute });
         }
 
 
@@ -712,17 +788,15 @@ export default {
 
 
     },
-    funcionEliminarArreglo(item) {
-
-      this.editedItem.technicalAttributes =  this.editedItem.technicalAttributes.filter(
-        function(obj){
-          return obj.Descripcion !== item
+    deleteTechnicalAttributes(item) {
+      this.editedItem.technicalAttributes = this.editedItem.technicalAttributes.filter(
+        function (obj) {
+          return obj.technicalDescription !== item
         }
       )
 
 
-    }
-    ,
+    },
 
     infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
@@ -846,6 +920,7 @@ export default {
 
       this.close();
       this.initialize();
+      this.editedItem.licenses.length = 0;
       this.editedItem.technicalAttributes.length = 0;
       return;
     },
