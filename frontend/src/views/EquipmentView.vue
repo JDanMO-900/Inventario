@@ -178,8 +178,7 @@
 
 
                         <td>
-                          <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)"
-                            icon="mdi-delete" />
+                          <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" />
                         </td>
                       </tr>
                       <tr v-if="this.editedItem.licenses == 0">
@@ -328,32 +327,81 @@
               </v-col>
 
 
+              <!-- Nuevo Formato -->
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Numero de activo fijo</b></td>
+                        <td><b>Numero de registro interno</b></td>
+                        <td><b>Codigo de factura</b></td>
+                        <td><b>Fecha de adquisición</b></td>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de activo fijo: </b>{{
-                  this.equipmentData.number_internal_active }}</p>
 
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="height: 60px;">
+
+                        <td>{{ this.equipmentData.number_internal_active }}</td>
+                        <td>{{ this.equipmentData.number_internal_active }}</td>
+                        <td>{{ this.equipmentData.invoice_number }}</td>
+                        <td>{{ this.equipmentData.adquisition_date }}</td>
+
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de registro interno: </b>{{
-                  this.equipmentData.number_internal_active }}</p>
+              <!-- Nuevo Formato -->
 
+              <v-col cols="12" sm="12" md="12">
+                <hr>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-center"> <b>Generalidades del equipo </b></p>
               </v-col>
 
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de factura: </b>{{
-                  this.equipmentData.invoice_number
-                }}</p>
+              <!-- Nuevo Formato -->
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Tipo de equipo</b></td>
+                        <td><b>Marca</b></td>
+                        <td><b>Modelo</b></td>
+                        <td><b>Serie</b></td>
+                        <td><b>Estado del equipo</b></td>
 
+
+
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="height: 60px;">
+
+                        <td>{{ this.equipmentData.equipment_type_id }}</td>
+                        <td>{{ this.equipmentData.brand }}</td>
+                        <td>{{ this.equipmentData.model }}</td>
+                        <td>{{ this.equipmentData.serial_number }}</td>
+                        <td>{{ this.equipmentData.state }}</td>
+
+
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Fecha de
-                    adquisición: </b>{{ this.equipmentData.adquisition_date }}</p>
-
-              </v-col>
+              <!-- Nuevo Formato -->
 
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -363,33 +411,35 @@
                 <p class="text-grey-darken-4 text-h6 text-center"> <b>Especificaciones del equipo </b></p>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Modelo del equipo: </b>{{
-                  this.equipmentData.model
-                }}</p>
 
+
+
+
+              <!-- Nuevo formato -->
+
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Especificación</b></td>
+                        <td><b>Capacidad</b></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="datos in this.equipmentData.technicalAttributes" style="height: 60px;">
+                        <td>{{ datos.technicalDescription }}</td>
+                        <td>{{ datos.attribute }}</td>
+
+
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de serie del equipo: </b>{{
-                  this.equipmentData.serial_number
-                }}</p>
-
-              </v-col>
-
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Tipo de equipo: </b>{{
-                  this.equipmentData.equipment_type_id
-                }}</p>
-
-              </v-col>
-
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Marca: </b>{{
-                  this.equipmentData.brand
-                }}</p>
-
-              </v-col>
+              <!-- Nuevo Formato -->
 
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -399,40 +449,25 @@
                 <p class="text-grey-darken-4 text-h6 text-center"> <b>Licencias del equipo </b></p>
               </v-col>
 
+              <table class="table w-100">
+                <thead>
+                  <tr>
+                    <td><b>N</b></td>
+                    <td><b>Nombre licencia</b></td>
 
-              <v-col cols="3" v-for="(license, index) in this.equipmentData.licenses" :key="index">
-                <p class="text-grey-darken-4 text-h6">{{ license }}</p>
-              </v-col>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(license, index) in this.equipmentData.licenses" :key="index" style="height: 60px;">
 
-
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Detalles técnicos </b></p>
-              </v-col>
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Estado del equipo: </b>{{
-                  this.equipmentData.state
-                }}</p>
-
-              </v-col>
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Descripción ténica: </b>{{
-                  this.equipmentData.technicalDescription
-                }}</p>
-
-              </v-col>
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Valor de a descripción: </b>{{
-                  this.equipmentData.attribute
-                }}</p>
-
-              </v-col>
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ license }}</td>
 
 
+                  </tr>
 
+                </tbody>
+              </table>
 
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -442,33 +477,30 @@
                 <p class="text-grey-darken-4 text-h6 text-center"> <b>Datos proveedor </b></p>
               </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Proveedor: </b>{{
-                  this.equipmentData.provider
-                }}</p>
+              <table class="table w-100">
+                <thead>
+                  <tr>
+                    <td><b>Proveedor</b></td>
+                    <td><b>Contacto del proveedor</b></td>
+                    <td><b>Numero de contacto del proveedor</b></td>
+                    <td><b>Fecha de adquisición</b></td>
 
-              </v-col>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Contacto del proveedor: </b>{{
-                  this.equipmentData.contact_name
-                }}</p>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="height: 60px;">
 
-              </v-col>
+                    <td>{{ this.equipmentData.provider }}</td>
+                    <td>{{ this.equipmentData.contact_name }}</td>
+                    <td>{{ this.equipmentData.contact_phone }}</td>
+                    <td>{{ this.equipmentData.adquisition_date }}</td>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Numero de contacto del proveedor:
-                  </b>{{ this.equipmentData.contact_phone
-                  }}</p>
+                  </tr>
 
-              </v-col>
+                </tbody>
+              </table>
 
-              <v-col cols="12" sm="12" md="6">
-                <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dirección: </b>{{
-                  this.equipmentData.address
-                }}</p>
-
-              </v-col>
 
 
             </v-row>
@@ -507,7 +539,7 @@
 
               <v-col cols="12" sm="12" md="12">
 
-                <table id="equipos">
+                <table>
 
 
                   <tr>
@@ -515,8 +547,6 @@
                     <th>Numero de activo fijo</th>
                     <th>Usuarios que han tenido el equipo</th>
                     <th>Movimientos del equipo</th>
-                    <th>Estado dele quipo</th>
-
 
                   </tr>
                   <tr v-for="data in this.historyData">
@@ -526,10 +556,12 @@
                     <td>{{ data.number_internal_active }}</td>
                     <td>{{ data.users }}</td>
                     <td>{{ data.type_action }}</td>
-                    <td>{{ data.state }}</td>
 
-
-
+                  </tr>
+                  <tr v-if="this.historyData == 0">
+                    <td colspan="4">
+                      <p class="text-center py-3">Sin datos que mostrar</p>
+                    </td>
                   </tr>
 
 
@@ -618,7 +650,7 @@ export default {
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", license:"", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], 
+        state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [],
 
       },
       loading: false,
@@ -732,10 +764,10 @@ export default {
       var isInArray = false;
 
 
-      if (this.editedItem.license != "" ) {
+      if (this.editedItem.license != "") {
 
         this.editedItem.licenses.forEach(item => {
-          
+
 
           if (item == this.editedItem.license) {
             isInArray = true;
@@ -999,26 +1031,31 @@ export default {
 
 
 <style scoped>
-#equipos {
+table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
+  margin: 1.562rem 0;
   width: 100%;
+  text-align: left;
 }
 
-#equipos td,
-#equipos th {
+td,
+th {
   border: 1px solid #7b84e467;
-  padding: 8px;
+  padding: 0.75rem 0.9375rem;
 }
 
+tbody,
+tr {
+  border-bottom: 1px solid #fce8e8;
 
+}
 
+tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3e6;
+}
 
-#equipos th {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  text-align: center;
-  background-color: #1a237e;
-  color: white;
+tbody tr:last-of-type {
+  border-bottom: 2px solid #6856dbc7;
 }
 </style>
