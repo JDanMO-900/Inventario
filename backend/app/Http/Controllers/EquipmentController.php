@@ -35,7 +35,7 @@ class EquipmentController extends Controller
 
     public function index(Request $request)
     {
-        Log::info($request->all());
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
         $skip = ($request->page - 1) * $request->itemsPerPage;
 
@@ -73,6 +73,8 @@ class EquipmentController extends Controller
     {
 
 
+
+
         $equipment = new Equipment;
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
@@ -92,21 +94,30 @@ class EquipmentController extends Controller
         $equipment->save();
 
 
-        // REcibe las licencias
-        foreach ($request->licenses as $licenseName) {
-            $detalleLicencias = new EquipmentLicenseDetail();
-            $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-            $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
-            $detalleLicencias->save();
+        if ($request->licenses) {
+            foreach ($request->licenses as $licenseName) {
+                $detalleLicencias = new EquipmentLicenseDetail();
+                $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
+                $detalleLicencias->save();
+
+            }
 
         }
+        // REcibe las licencias
 
-        if($request->attribute != "" and $request->technical_description_id){
-            $detalleEquipment = new EquipmentDetail();
-            $detalleEquipment->attribute = $request->attribute;
-            $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-            $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
-            $detalleEquipment->save();
+
+
+
+        if ($request->technicalAttributes) {
+            foreach ($request->technicalAttributes as $technicalAttributes) {
+                $detalleEquipment = new EquipmentDetail();
+                $detalleEquipment->attribute = $technicalAttributes['attribute'];
+                $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
+                $detalleEquipment->save();
+
+            }
 
         }
 
@@ -178,33 +189,31 @@ class EquipmentController extends Controller
 
         }
 
-
-
-
-
-        // Revisar esto
-        // Revisar esto
-        // Revisar esto
-        // Revisar esto
-
-        // Recibe las licencias
-
-        $equipmentId = $equipment->id;
-
-
-
         $delete_id_equipment = EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
 
-        $detalleEquipment = new EquipmentDetail();
-        $detalleEquipment->attribute = $request->attribute;
-        $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-        $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $request->technicalDescription)->first()->id;
-        $detalleEquipment->save();
-        // Revisar esto
-        // Revisar esto
-        // Revisar esto
-        // Revisar esto
+        // Prueba
+        if ($request->technicalAttributes) {
+            foreach ($request->technicalAttributes as $technicalAttributes) {
+                $detalleEquipment = new EquipmentDetail();
+                $detalleEquipment->attribute = $technicalAttributes['attribute'];
+                $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
+                $detalleEquipment->save();
 
+            }
+
+        }
+
+
+
+
+        // Prueba
+
+
+
+
+
+    
 
 
         return response()->json([
