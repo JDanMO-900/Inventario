@@ -181,7 +181,8 @@ class Equipment extends Model
             'users.name as users',
 
             // Type action
-            'type_action.name as type_action'
+            'type_action.name as type_action',
+
 
 
         )
