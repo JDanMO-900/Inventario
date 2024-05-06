@@ -20,7 +20,7 @@ class UsersSeeder extends Seeder
   
                 'email' => 'a@gmail.com',
                 'password' => 'atol',
-                'role_id' => 3
+                'role_id' => 1
 
             ],
             [

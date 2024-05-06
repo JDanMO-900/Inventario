@@ -76,7 +76,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     }
 
     public  static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage){
-        return User::select('users.*', 'users.id as id',  'users.name as name')
+        return User::select('users.*', 'users.id as id',  'users.name as name', 'role.name as role')
+        ->join('role', 'users.role_id', '=','role.id')
         ->where('users.name','like', $search)
         ->skip($skip)
         ->take($itemsPerPage)
