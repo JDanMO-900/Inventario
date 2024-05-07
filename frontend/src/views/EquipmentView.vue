@@ -614,7 +614,7 @@ export default {
       dialogHistory: false,
       headers: [
         { title: "Tipo de equipo", key: "equipment_type_id" },
-
+        { title: "Disponibilidad", key: "availability" },
         { title: "Numero de activo fijo", key: "number_internal_active" },
         { title: "Numero de registro interno", key: "number_active" },
 

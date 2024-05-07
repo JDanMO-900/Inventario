@@ -46,7 +46,7 @@
                 </p>
                 <hr>
               </v-col>
-              
+
 
               <!-- name -->
 
@@ -74,15 +74,10 @@
 
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
-                  v-model.trim="v$.editedItem.dependency.$model" :rules="v$.editedItem.dependency">
+                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id">
                 </base-select>
               </v-col>
               <!-- name -->
-
-
-
-
-
 
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6 text-left"> <b>Registro de movimientos y equipos </b>
@@ -92,17 +87,42 @@
 
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
-                <base-select label="Procedimiento" :items="this.typeAction" item-title="name" :value="name"
+                <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name" :value="name"
                   v-model.trim="v$.editedItem.action.$model" :rules="v$.editedItem.action">
                 </base-select>
 
               </v-col>
               <!-- Accion realizada -->
 
+              <!-- Fecha de inicio de movimiento -->
+
+              <v-col cols="12" sm="12" md="12">
+                <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
+                  :rules="v$.editedItem.start_date" type="date" />
+              </v-col>
+
+              <!-- Fecha de inicio de movimiento -->
+
+              <v-col cols="12" sm="12" md="12">
+                <template
+                  v-if="v$.editedItem.action.$model == 'préstamo' || v$.editedItem.action.$model == 'mantenimiento'">
+                  <div>
+                    <!-- Fecha de finalización de movimiento -->
+
+                    <base-input label="Fecha de finalización" v-model="v$.editedItem.end_date.$model"
+                      :rules="v$.editedItem.end_date" type="date" />
+
+                    <!-- Fecha de finalización de movimiento -->
+
+                  </div>
+                </template>
+              </v-col>
+
               <!-- Numero de activo fijo 1 -->
 
 
               <v-col cols="4" sm="12" md="12">
+
                 <base-select :value="v$.editedItem.number_active1.$model" label="Equipo asignado principal"
                   :items="this.equipment" item-title="number_active" item-value="number_active"
                   v-model.trim="v$.editedItem.number_active1.$model" :rules="v$.editedItem.number_active1">
@@ -125,13 +145,20 @@
               <!-- Numero de activo fijo 2 -->
 
               <v-col cols="4" sm="12" md="12">
-                <base-select label="Equipo asignado complementario" :items="this.equipment" item-title="number_active"
-                  item-value="number_active" v-model.trim="v$.editedItem.number_active2.$model"
-                  :rules="v$.editedItem.number_active2" :disabled="!enabled">
-                </base-select>
+
+                <template v-if="enabled">
+                  <div>
+                    <base-select label="Equipo asignado complementario" :items="this.equipment"
+                      item-title="number_active" item-value="number_active"
+                      v-model.trim="v$.editedItem.number_active2.$model" :rules="v$.editedItem.number_active2"
+                      :disabled="!enabled">
+                    </base-select>
+
+                  </div>
+                </template>
+
               </v-col>
               <!-- Numero de activo fijo 2 -->
-
 
 
 
@@ -141,8 +168,6 @@
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
                   :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
               </v-col>
-
-
 
               <!-- Cantidad de salida -->
 
@@ -155,6 +180,10 @@
 
 
               <!-- Cantidad de entrada -->
+
+
+
+
 
 
               <v-col cols="12" sm="12" md="12">
@@ -254,37 +283,32 @@
                   <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del usuario </b></p>
                 </v-col>
 
-                
-              <!-- Nuevo Formato -->
-              <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Equipo asignado a</b></td>
-                        <td><b>Dependencia</b></td>
-                        <td><b>Ubicación</b></td>
 
+                <!-- Nuevo Formato -->
+                <v-col cols="12" sm="12" md="12">
+                  <div class="w-100">
+                    <table class="table w-100">
+                      <thead>
+                        <tr>
+                          <td><b>Equipo asignado a</b></td>
+                          <td><b>Dependencia</b></td>
+                          <td><b>Ubicación</b></td>
 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="height: 60px;">
 
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style="height: 60px;">
+                          <td>{{ this.editedItem.user }}</td>
+                          <td>{{ this.editedItem.dependency_id }}</td>
+                          <td>{{ this.editedItem.location_id }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </v-col>
 
-                        <td>{{ this.editedItem.user }}</td>
-                        <td>{{ this.editedItem.dependency }}</td>
-                        <td>{{ this.editedItem.location_id }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </v-col>
-
-              <!-- Nuevo Formato -->
-
-
-
+                <!-- Nuevo Formato -->
 
                 <v-col cols="12" sm="12" md="12">
                   <hr>
@@ -299,7 +323,7 @@
 
                     <tr>
                       <th colspan="4" class="text-h6 text-center"><b>Principal</b></th>
-                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.number_active2 != '' ">
+                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.number_active2 != ''">
                         <b>Complementario</b>
                       </th>
                     </tr>
@@ -334,17 +358,11 @@
 
                   </table>
 
-
-
-
                 </v-col>
-
 
                 <v-col cols="12" sm="12" md="12">
                   <hr>
                 </v-col>
-
-
 
                 <v-col cols="12" sm="12" md="12">
                   <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.action }}: </b>{{
@@ -357,17 +375,7 @@
                   </p>
                 </v-col>
 
-
-
-
-
               </v-row>
-
-
-
-
-
-
             </v-container>
 
           </v-card-text>
@@ -425,14 +433,13 @@ export default {
       enabled: false,
       headers: [
 
-        { title: "Depdendencia", key: "dependency" },
+        { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
         { title: "Usuario", key: "user" },
         { title: "Equipo principal", key: "type1" },
         { title: "Modelo", key: "model1" },
-
-        { title: "Proceso", key: "process" },
-        { title: "Estado", key: "action" },
+        { title: "Estado", key: "process" },
+        { title: "Movimiento", key: "action" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -442,12 +449,12 @@ export default {
       options: {},
 
       editedItem: {
-        location_id: "", dependency: "", technician: "", user: "", description: "", quantity_out: 0,
-        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: "",
+        location_id: "", dependency_id: "", technician: "", user: "", description: "", quantity_out: 0,
+        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: "", start_date: "", end_date: "",
       },
       defaultItem: {
-        location_id: "", dependency: "", technician: "", user: "", description: "", quantity_out: 0,
-        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: ""
+        location_id: "", dependency_id: "", technician: "", user: "", description: "", quantity_out: 0,
+        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -480,7 +487,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        dependency: {
+        dependency_id: {
           required,
           minLength: minLength(1),
         },
@@ -529,6 +536,13 @@ export default {
           minLength: minLength(1),
 
         },
+        start_date: {
+          required,
+          minLength: minLength(1)
+        },
+        end_date: {
+          minLength: minLength(1)
+        }
 
       },
     };
@@ -625,7 +639,7 @@ export default {
           if (this.users[i].role === "Tecnico")
             this.userTech.push(this.users[i].name);
         }
- 
+
 
 
 
@@ -658,6 +672,13 @@ export default {
     },
 
     async save() {
+
+      if (this.editedItem.action != 'préstamo' || this.editedItem.action != 'mantenimiento') {
+        this.editedItem.end_date = this.editedItem.start_date
+
+      }
+
+
       this.v$.$validate();
       if (this.v$.$invalid) {
         alert.error("Campos obligatorios");
