@@ -28,7 +28,7 @@
       </v-data-table-server>
     </v-card>
 
-    <v-dialog v-model="dialog" max-width="800px">
+    <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
@@ -500,11 +500,7 @@
 
                 </tbody>
               </table>
-
-
-
             </v-row>
-
 
           </v-container>
 
@@ -547,33 +543,23 @@
                     <th>Numero de activo fijo</th>
                     <th>Usuarios que han tenido el equipo</th>
                     <th>Movimientos del equipo</th>
-
                   </tr>
                   <tr v-for="data in this.historyData">
-
-
                     <td>{{ data.number_active }}</td>
                     <td>{{ data.number_internal_active }}</td>
                     <td>{{ data.users }}</td>
                     <td>{{ data.type_action }}</td>
-
+                    <!-- <td>{{ data.movement_date  }}</td> -->
                   </tr>
                   <tr v-if="this.historyData == 0">
                     <td colspan="4">
                       <p class="text-center py-3">Sin datos que mostrar</p>
                     </td>
                   </tr>
-
-
                 </table>
 
-
               </v-col>
-
-
             </v-row>
-
-
           </v-container>
 
         </v-card-text>
@@ -584,7 +570,6 @@
       </v-card>
     </v-dialog>
   </v-row>
-  <!-- Probando modal de visualizar -->
 
   <!-- Historial de usuario -->
 
@@ -839,7 +824,6 @@ export default {
     async historyItem(item) {
       const equipment_history = await backendApi.get(`/equipment/${item.number_internal_active}`);
       this.historyData = equipment_history.data;
-      console.log(this.historyData);
       this.dialogHistory = true;
 
     },
@@ -907,6 +891,9 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+        this.editedItem.licenses.length = 0;
+        this.editedItem.technicalAttributes.length = 0;
+
       });
     },
 

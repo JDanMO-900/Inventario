@@ -2,6 +2,7 @@
   <div data-app>
     <v-card class="p-3 mt-3">
       <v-container>
+
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
@@ -45,6 +46,7 @@
                 </p>
                 <hr>
               </v-col>
+              
 
               <!-- name -->
 
@@ -113,7 +115,9 @@
 
 
               <v-col cols="4" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h10 "><b class="text-black-darken-4">Seleccione el checkbox para agregar un dispositivo complementario: </b></p>
+                <p class="text-grey-darken-4 text-h10 "><b class="text-black-darken-4">Seleccione el checkbox para
+                    agregar
+                    un dispositivo complementario: </b></p>
                 <v-checkbox-btn v-model="enabled" class="pe-2"></v-checkbox-btn>
               </v-col>
 
@@ -153,17 +157,6 @@
               <!-- Cantidad de entrada -->
 
 
-
-
-
-
-
-
-
-
-
-
-
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6 text-left"> <b>Gestión de acciones y estados </b>
                 </p>
@@ -185,7 +178,7 @@
               <!-- technician -->
 
               <v-col cols="6" sm="12" md="12">
-                <base-select label="Técnico asignado" :items="this.users" item-title="name" :value="name"
+                <base-select label="Técnico asignado" :items="this.userTech" item-title="name" :value="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-select>
               </v-col>
@@ -208,8 +201,6 @@
               <!-- Descripcion -->
 
             </v-row>
-
-
 
 
             <!-- Form -->
@@ -263,32 +254,37 @@
                   <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del usuario </b></p>
                 </v-col>
 
+                
+              <!-- Nuevo Formato -->
+              <v-col cols="12" sm="12" md="12">
+                <div class="w-100">
+                  <table class="table w-100">
+                    <thead>
+                      <tr>
+                        <td><b>Equipo asignado a</b></td>
+                        <td><b>Dependencia</b></td>
+                        <td><b>Ubicación</b></td>
 
 
 
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 "><b class="text-indigo-darken-4">Equipo asignado a: </b>{{
-                    this.editedItem.user }}</p>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="height: 60px;">
 
-                </v-col>
+                        <td>{{ this.editedItem.user }}</td>
+                        <td>{{ this.editedItem.dependency }}</td>
+                        <td>{{ this.editedItem.location_id }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </v-col>
 
-                <v-col cols="12" sm="12" md="5">
-                  <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Dependencia: </b>{{
-                    this.editedItem.dependency }}</p>
+              <!-- Nuevo Formato -->
 
-                </v-col>
 
-                <v-col cols="12" sm="12" md="5">
-                  <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Ubicación:</b> {{
-                    this.editedItem.location_id }}</p>
 
-                </v-col>
-
-                <v-col cols="12" sm="12" md="2">
-                  <p class="text-grey-darken-4 text-h6"><b class="text-indigo-darken-4">Nivel:</b> {{
-                    this.editedItem.floor }}</p>
-
-                </v-col>
 
                 <v-col cols="12" sm="12" md="12">
                   <hr>
@@ -303,7 +299,7 @@
 
                     <tr>
                       <th colspan="4" class="text-h6 text-center"><b>Principal</b></th>
-                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.number_active2 != ''">
+                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.number_active2 != '' ">
                         <b>Complementario</b>
                       </th>
                     </tr>
@@ -465,6 +461,8 @@ export default {
 
       location: [],
 
+      userTech: [],
+
     };
   },
 
@@ -567,6 +565,10 @@ export default {
       this.loading = true;
       this.records = [];
 
+      var user = JSON.parse(window.localStorage.getItem("user"));
+
+
+
       let requests = [
         this.getDataFromApi(),
         backendApi.get('/typeAction', {
@@ -590,6 +592,7 @@ export default {
         backendApi.get('/dependency', {
           params: { itemsPerPage: -1 },
         }),
+
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -601,8 +604,13 @@ export default {
 
 
 
+
         this.typeAction = responses[1].data.data;
+
         this.users = responses[2].data.data;
+
+
+
         this.equipment = responses[3].data.data;
         this.processState = responses[4].data.data;
 
@@ -610,6 +618,18 @@ export default {
         this.location = responses[5].data.data;
 
         this.dependency = responses[6].data.data;
+
+
+
+        for (let i = 0; i < this.users.length; i++) {
+          if (this.users[i].role === "Tecnico")
+            this.userTech.push(this.users[i].name);
+        }
+ 
+
+
+
+
 
       }
 
@@ -723,7 +743,7 @@ export default {
           });
 
           this.records = data.data;
-          console.log(this.records)
+
           this.total = data.total;
           this.loading = false;
         } catch (error) {
@@ -743,26 +763,31 @@ export default {
 </script>
 
 <style scoped>
-#equipos {
+table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
+  margin: 1.562rem 0;
   width: 100%;
+  text-align: left;
 }
 
-#equipos td,
-#equipos th {
+td,
+th {
   border: 1px solid #7b84e467;
-  padding: 8px;
+  padding: 0.75rem 0.9375rem;
 }
 
+tbody,
+tr {
+  border-bottom: 1px solid #fce8e8;
 
+}
 
+tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3e6;
+}
 
-#equipos th {
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-  text-align: center;
-  background-color: #1a237e;
-  color: white;
+tbody tr:last-of-type {
+  border-bottom: 2px solid #6856dbc7;
 }
 </style>

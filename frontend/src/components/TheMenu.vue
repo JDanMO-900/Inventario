@@ -30,12 +30,6 @@
           <span>Dependencias</span>
         </RouterLink>
 
-
-
-
-
-
-
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center mb-4" @click="logout()">
           <v-icon icon="mdi-logout" size="25"></v-icon>
