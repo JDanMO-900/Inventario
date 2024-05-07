@@ -617,10 +617,8 @@ export default {
         { title: "Disponibilidad", key: "availability" },
         { title: "Numero de activo fijo", key: "number_internal_active" },
         { title: "Numero de registro interno", key: "number_active" },
-
         { title: "Serial", key: "serial_number" },
         { title: "Fecha de adquisición", key: "adquisition_date" },
-
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -630,12 +628,12 @@ export default {
       options: {},
       editedItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: []
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: false
 
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [],
+        state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: false
 
       },
       loading: false,
