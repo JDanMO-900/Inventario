@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('description');
             $table->integer('quantity_out')->nullable();
             $table->integer('quantity_in')->nullable();
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
+ 
 
 
             $table->unsignedBigInteger('type_action_id');

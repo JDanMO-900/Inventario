@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('equipment', function (Blueprint $table) {
             $table->id()->autoIncrement();
+
             $table->string('number_active');
             $table->string('number_internal_active');
             $table->string('model');
             $table->string('serial_number');
             $table->date('adquisition_date');
             $table->string('invoice_number');
+            $table->boolean('availability');
             
             $table->unsignedBigInteger('equipment_state_id');
             $table->foreign('equipment_state_id')->references('id')->on('equipment_state');

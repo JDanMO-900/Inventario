@@ -35,6 +35,7 @@ class TypeActionSeeder extends Seeder
 
             ],
 
+
             
 
         ]);

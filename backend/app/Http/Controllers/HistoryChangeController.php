@@ -63,6 +63,7 @@ class HistoryChangeController extends Controller
         $historychange->description = $request->description;
         $historychange->quantity_out = $request->quantity_out;
         $historychange->quantity_in = $request->quantity_in;
+        $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
         $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
 
@@ -73,12 +74,20 @@ class HistoryChangeController extends Controller
         else {
             $historychange->equipment_used_in_id = null;
         }
+
+        if($request->end_date != ""){
+            $historychange->end_date = $request->end_date;
+
+        }
+        else {
+            $historychange-> end_date = null;
+        }
         
         $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
 
 
         $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
-        $historychange->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
+        $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
 
         $historychange->save();
 
@@ -126,12 +135,29 @@ class HistoryChangeController extends Controller
         $historychange->description = $request->description;
         $historychange->quantity_out = $request->quantity_out;
         $historychange->quantity_in = $request->quantity_in;
+        $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
         $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
-        $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+        
+        if($request->number_active != ""){
+            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+
+        }
+        else {
+            $historychange->equipment_used_in_id = null;
+        }
+
+        if($request->end_date != ""){
+            $historychange->end_date = $request->end_date;
+
+        }
+        else {
+            $historychange-> end_date = null;
+        }
+
         $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
         $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
-        $historychange->dependency_id = Dependency::where('name', $request->dependency)->first()->id;
+        $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
         
         $historychange->save();
 

@@ -23,6 +23,9 @@ class HistoryChange extends Model
         'description',
         'quantity_out',
         'quantity_in',
+        'start_date',
+        'end_date',
+   
         'type_action_id',
         'equipment_id',
         'equipment_used_in_id',
@@ -68,7 +71,6 @@ class HistoryChange extends Model
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-        Log::info($search);
         return HistoryChange::select('history_change.*', 
         'type_action.*', 
         'equipment1.*', 
@@ -77,7 +79,6 @@ class HistoryChange extends Model
         'location.*', 
         'dependency.*', 
         'history_change.id as id',
-        
 
         // Datos del usuario
         'user.name as user',
@@ -85,7 +86,7 @@ class HistoryChange extends Model
 
         // Ubicacion
         'location.name as location_id',
-        'dependency.name as dependency',
+        'dependency.name as dependency_id',
 
         //Equipo1
         'equipment1.number_active as number_active1',
@@ -93,7 +94,7 @@ class HistoryChange extends Model
         'equipment_type1.name as type1',
         'brand1.name as brand1',
 
-        //Equipo1
+        //Equipo2
         'equipment2.number_active as number_active2',
         'equipment2.model as model2',
         'equipment_type2.name as type2',
@@ -108,7 +109,6 @@ class HistoryChange extends Model
         
         )
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
-
             // Equipo principal
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
             ->join('equipment_type as equipment_type1', 'equipment1.equipment_type_id', '=', 'equipment_type1.id')
@@ -125,13 +125,8 @@ class HistoryChange extends Model
             ->join('users as user', 'history_user_detail.user_id','=', 'user.id')
             ->join('users as technician', 'history_user_detail.user_tech_id','=', 'technician.id')
             ->where('location.name', 'like', $search)
+            ->orWhere('dependency.name', 'like', $search)
 
-
-            // ->where('history_change.location_id', 'like', $search)
-            // ->orWhere('history_change.description', 'like', $search)
-            
-            // ->orWhere('history_change.quantity_out', 'like', $search)
-            // ->orWhere('history_change.quantity_in', 'like', $search)
 
 
             ->skip($skip)

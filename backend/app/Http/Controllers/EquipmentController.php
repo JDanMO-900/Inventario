@@ -71,10 +71,7 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-
-
-
-
+        // availability
         $equipment = new Equipment;
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
@@ -82,15 +79,10 @@ class EquipmentController extends Controller
         $equipment->serial_number = $request->serial_number;
         $equipment->adquisition_date = $request->adquisition_date;
         $equipment->invoice_number = $request->invoice_number;
-
         $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-
         $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
         $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
         $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
-
-
-
         $equipment->save();
 
 
@@ -100,15 +92,10 @@ class EquipmentController extends Controller
                 $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
                 $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
                 $detalleLicencias->save();
-
             }
-
         }
-        // REcibe las licencias
 
-
-
-
+        // Recibe las licencias
         if ($request->technicalAttributes) {
             foreach ($request->technicalAttributes as $technicalAttributes) {
                 $detalleEquipment = new EquipmentDetail();
@@ -120,12 +107,7 @@ class EquipmentController extends Controller
             }
 
         }
-
-
-
-
-
-
+        // Recibe las licencias
 
         return response()->json([
             "message" => "Registro creado correctamente.",

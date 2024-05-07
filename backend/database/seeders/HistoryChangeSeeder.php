@@ -16,8 +16,8 @@ class HistoryChangeSeeder extends Seeder
 
         HistoryChange::insert([
             [
-
-
+                'start_date' => "2024-04-26",
+                'end_date' => "2024-04-26",
                 "description" => "Se entrego en caja",
                 "quantity_out" => 0,
                 "quantity_in" => 1,
@@ -34,8 +34,8 @@ class HistoryChangeSeeder extends Seeder
 
             ],
             [
-
-
+                'start_date' => "2024-02-27",
+                'end_date' => "2024-02-28",
                 "description" => "Se entrego sin cargador",
                 "quantity_out" => 0,
                 "quantity_in" => 1,
@@ -48,8 +48,8 @@ class HistoryChangeSeeder extends Seeder
 
             ],
             [
-
-
+                'start_date' => "2024-01-02",
+                'end_date' => "2024-01-03",
                 "description" => "Se realizo un procedimiento",
                 "quantity_out" => 0,
                 "quantity_in" => 1,
@@ -67,6 +67,8 @@ class HistoryChangeSeeder extends Seeder
             ],
             [
 
+                'start_date' => "2024-01-04",
+                'end_date' => "2024-01-04",
 
                 "description" => "Se coloco sobre la mesa",
                 "quantity_out" => 0,

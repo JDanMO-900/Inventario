@@ -24,8 +24,8 @@ class Equipment extends Model
         'serial_number',
         'adquisition_date',
         'invoice_number',
+        'availability',
         'equipment_state_id',
-
         'equipment_type_id',
         'brand_id',
         'provider_id',
@@ -99,8 +99,7 @@ class Equipment extends Model
             'equipment_state.name as state',
 
             'equipment_type.name as equipment_type_id',
-
-            // Techcnical descriptions
+            'equipment.availability'
 
 
 
@@ -123,15 +122,16 @@ class Equipment extends Model
             ->get();
 
         $data->each(function ($item) {
+            $availability = $item->availability ? 'Disponible' : 'En uso';
+            $item->availability = $availability;
+
             $licenses = License::join('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
                 ->where('equipment_license_detail.equipment_id', $item->id)
                 ->pluck('license.name')
                 ->toArray();
 
             $item->licenses = $licenses;
-        });
 
-        $data->each(function ($item) {
             $technicalAttributes = EquipmentDetail::leftJoin('technical_description', 'technical_description.id', '=', 'equipment_detail.technical_description_id')
                 ->where('equipment_detail.equipment_id', $item->id)
                 ->select('technical_description.name as technicalDescription', 'equipment_detail.attribute as attribute')
