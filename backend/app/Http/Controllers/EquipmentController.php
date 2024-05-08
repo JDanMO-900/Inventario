@@ -33,6 +33,11 @@ class EquipmentController extends Controller
 
     }
 
+    public function availableEquipment(){
+        return Equipment::availableEquipments();
+
+    }
+
     public function index(Request $request)
     {
 
@@ -73,6 +78,7 @@ class EquipmentController extends Controller
     {
         // availability
         $equipment = new Equipment;
+        $equipment->availability = $request->availability;
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
         $equipment->model = $request->model;
@@ -135,8 +141,13 @@ class EquipmentController extends Controller
     public function update(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
+        
 
         $equipment = Equipment::where('id', $data['id'])->first();
+        if($request->availability == "En uso"){
+            $equipment->availability = 0;
+        }
+        
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
         $equipment->model = $request->model;

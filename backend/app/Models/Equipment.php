@@ -43,44 +43,6 @@ class Equipment extends Model
     public $timestamps = true;
 
 
-    // Creando funcion que relaciona los modelos
-
-    public function historyChange()
-    {
-        return $this->hasMany(HistoryChange::class);
-    }
-
-    public function equipmentDetail()
-    {
-        return $this->hasMany(EquipmentDetail::class);
-    }
-
-
-
-
-
-    // public function format(){
-    //     return [
-    //         'id' => Encrypt::encryptValue($this->id),
-    //         'number_active' => $this->number_active,
-    //         'number_internal_active' => $this->number_internal_active,
-    //         'model' => $this->model,
-    //         'serial_number' => $this->serial_number,
-    //         'adquisition_date' => $this->adquisition_date,
-    //         'invoice_number' => $this->invoice_number,
-    //         'equipment_state_id' => $this->equipment_state_id,
-
-    //         'equipment_type_id' => $this->equipment_type_id,
-    //         'brand_id' => $this->brand_id,
-    //         'equipmentDetails' => $this->equipmentDetail()->get()->map(fn($detail) => $detail->format()),
-    //         'historyChanges' =>  $this->historyChange()->get()->map(fn($eq) => $eq->format()),
-    //         'provider_id' => $this->provider_id,
-    //         'created_at' => $this->created_at,
-    //         'updated_at' => $this->updated_at,
-    //     ];
-    // }
-
-
 
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
@@ -191,8 +153,6 @@ class Equipment extends Model
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('provider', 'equipment.provider_id', '=', 'provider.id')
-            // ->join('equipment_detail', 'equipment_detail.equipment_id', '=', 'equipment.id')
-            // ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
             ->join('history_change', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
@@ -213,4 +173,49 @@ class Equipment extends Model
         return $data;
     }
 
+
+    public static function availableEquipments()
+    {
+
+        $data = Equipment::select(
+            'equipment.*',
+            'equipment_state.*',
+
+            'equipment_type.*',
+            'brand.*',
+            'provider.*',
+            'equipment.id as id',
+            'brand.name as brand',
+            'provider.name as provider',
+            'equipment_state.name as state',
+
+            'equipment_type.name as equipment_type_id',
+            'equipment.availability'
+
+
+
+        )
+            ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
+            ->join('provider', 'equipment.provider_id', '=', 'provider.id')
+            ->where('equipment.availability', 'like', 1)
+            ->get();
+
+            $data->each(function ($item) {
+                $availability = $item->availability ? 'Disponible' : 'En uso';
+                $item->availability = $availability;
+            });
+
+
+
+        return $data;
+    }
+
+
+
+
+
 }
+
+

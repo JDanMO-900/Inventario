@@ -58,7 +58,10 @@ Route::resource('/provider', ProviderController::class);
 
 // Get equipment historical based in numer_internal_active
 Route::get('/equipment/{equip}', [EquipmentController::class, 'equipmentSearch']);
+Route::get('/equipment-available', [EquipmentController::class, 'availableEquipment']);
 Route::resource('/equipment', EquipmentController::class);
+
+
 
 
 
