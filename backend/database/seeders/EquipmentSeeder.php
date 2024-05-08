@@ -45,7 +45,7 @@ class EquipmentSeeder extends Seeder
                 "equipment_type_id"=> 3,
                 "brand_id"=> 2,
                 "provider_id"=> 2,
-                "availability"=>0
+                "availability"=>1
                 
 
                 
@@ -81,7 +81,7 @@ class EquipmentSeeder extends Seeder
                 "equipment_type_id"=> 10,
                 "brand_id"=> 4,
                 "provider_id"=> 4,
-                "availability"=>0
+                "availability"=>1
                 
 
                 
