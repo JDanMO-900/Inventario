@@ -464,6 +464,7 @@ export default {
       typeAction: [],
       users: [],
       equipment: [],
+      available_equipment: [],
       processState: [],
 
       location: [],
@@ -591,7 +592,7 @@ export default {
         backendApi.get('/user', {
           params: { itemsPerPage: -1 },
         }),
-        backendApi.get('/equipment', {
+        backendApi.get('/equipment-available', {
           params: { itemsPerPage: -1 },
         }),
         backendApi.get('/processState', {
@@ -623,9 +624,7 @@ export default {
 
         this.users = responses[2].data.data;
 
-
-
-        this.equipment = responses[3].data.data;
+        this.equipment = responses[3].data;
         this.processState = responses[4].data.data;
 
 
@@ -639,6 +638,11 @@ export default {
           if (this.users[i].role === "Tecnico")
             this.userTech.push(this.users[i].name);
         }
+
+ 
+
+        console.log(this.equipment);
+
 
 
 

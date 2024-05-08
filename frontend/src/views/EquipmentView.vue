@@ -628,12 +628,12 @@ export default {
       options: {},
       editedItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: false
+        state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
 
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
-        state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: false
+        state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
 
       },
       loading: false,
