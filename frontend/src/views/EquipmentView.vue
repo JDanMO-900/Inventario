@@ -7,7 +7,9 @@
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
+         
         </div>
+
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
@@ -522,10 +524,13 @@
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
             Historial del equipo
           </h2>
+
         </v-card-title>
 
         <v-card-text>
           <v-container>
+            
+  
             <v-row class="pt-3">
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -615,8 +620,8 @@ export default {
       headers: [
         { title: "Tipo de equipo", key: "equipment_type_id" },
         { title: "Disponibilidad", key: "availability" },
-        { title: "Numero de activo fijo", key: "number_internal_active" },
-        { title: "Numero de registro interno", key: "number_active" },
+        { title: "Numero de activo fijo", key: "number_active" },
+        { title: "Numero de registro interno", key: "number_internal_active" },
         { title: "Serial", key: "serial_number" },
         { title: "Fecha de adquisición", key: "adquisition_date" },
         { title: "ACCIONES", key: "actions", sortable: false },
@@ -647,6 +652,7 @@ export default {
       equipmentData: [],
 
       historyData: [],
+      allowable: "",
 
 
 
@@ -820,8 +826,12 @@ export default {
 
     },
     async historyItem(item) {
+      
       const equipment_history = await backendApi.get(`/equipment/${item.number_internal_active}`);
       this.historyData = equipment_history.data;
+      
+      this.allowable = item.availability;
+      console.log(this.allowable);
       this.dialogHistory = true;
 
     },

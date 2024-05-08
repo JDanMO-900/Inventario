@@ -6,6 +6,7 @@
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
+          
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
@@ -632,20 +633,16 @@ export default {
 
         this.dependency = responses[6].data.data;
 
+        let uniqueTechNames = new Set();
+
 
 
         for (let i = 0; i < this.users.length; i++) {
           if (this.users[i].role === "Tecnico")
-            this.userTech.push(this.users[i].name);
+            uniqueTechNames.add(this.users[i].name);
         }
 
- 
-
-        console.log(this.equipment);
-
-
-
-
+        this.userTech = Array.fron(uniqueTechNames)
 
 
 
