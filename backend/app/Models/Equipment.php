@@ -110,11 +110,9 @@ class Equipment extends Model
     {
         return Equipment::select('equipment.*', 'equipment_state.*', 'equipment_type.*', 'brand.*', 'provider.*', 'equipment.id as id')
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
-
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('provider', 'equipment.provider_id', '=', 'provider.id')
-
             ->where('equipment.number_internal_active', 'like', $search)
 
             ->count();
@@ -128,7 +126,6 @@ class Equipment extends Model
         $data = Equipment::select(
             'equipment.*',
             'equipment_state.*',
-
             'equipment_type.*',
             'brand.*',
             'provider.*',
@@ -136,7 +133,6 @@ class Equipment extends Model
             'brand.name as brand',
             'provider.name as provider',
             'equipment_state.name as state',
-
             'equipment_type.name as type',
 
             // Users
@@ -144,6 +140,8 @@ class Equipment extends Model
 
             // Type action
             'type_action.name as type_action',
+
+            "history_change.start_date as start_date"
 
 
 

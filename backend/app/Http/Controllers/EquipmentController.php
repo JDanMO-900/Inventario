@@ -33,7 +33,8 @@ class EquipmentController extends Controller
 
     }
 
-    public function availableEquipment(){
+    public function availableEquipment()
+    {
         return Equipment::availableEquipments();
 
     }
@@ -141,13 +142,9 @@ class EquipmentController extends Controller
     public function update(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
-        
+
 
         $equipment = Equipment::where('id', $data['id'])->first();
-        if($request->availability == "En uso"){
-            $equipment->availability = 0;
-        }
-        
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
         $equipment->model = $request->model;
@@ -169,20 +166,20 @@ class EquipmentController extends Controller
 
 
 
-        $delete_id_equipment = EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
+        EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
 
-        if ($delete_id_equipment > 0) {
-            foreach ($request->licenses as $licenseName) {
-                $detalleLicencias = new EquipmentLicenseDetail();
-                $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-                $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
-                $detalleLicencias->save();
 
-            }
+        foreach ($request->licenses as $licenseName) {
+            $detalleLicencias = new EquipmentLicenseDetail();
+            $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+            $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
+            $detalleLicencias->save();
 
         }
 
-        $delete_id_equipment = EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
+
+
+        EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
 
         // Prueba
         if ($request->technicalAttributes) {
@@ -200,14 +197,25 @@ class EquipmentController extends Controller
 
 
 
-        // Prueba
+        return response()->json([
+            "message" => "Registro modificado correctamente.",
+        ]);
+    }
 
-
-
-
-
+    public function updateAvailability(Request $request)
+    {
+        
     
-
+        $equipment = Equipment::where('number_active', $request->number_active)->first();;
+        Log::info($request->number_active);
+        if ($request->availability == "En uso") {
+            $equipment->availability = 1;
+        }
+        else{
+            $equipment->availability = 0;
+        }
+        
+        $equipment->save();
 
         return response()->json([
             "message" => "Registro modificado correctamente.",
