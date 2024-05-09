@@ -622,29 +622,19 @@ export default {
 
 
         this.typeAction = responses[1].data.data;
-
         this.users = responses[2].data.data;
-
         this.equipment = responses[3].data;
         this.processState = responses[4].data.data;
-
-
         this.location = responses[5].data.data;
-
         this.dependency = responses[6].data.data;
 
         let uniqueTechNames = new Set();
-
-
-
         for (let i = 0; i < this.users.length; i++) {
+           console.log(this.users[i].role);
           if (this.users[i].role === "Tecnico")
             uniqueTechNames.add(this.users[i].name);
         }
-
-        this.userTech = Array.fron(uniqueTechNames)
-
-
+        this.userTech = Array.from(uniqueTechNames)
 
       }
 

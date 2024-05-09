@@ -7,7 +7,7 @@
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
-         
+
         </div>
 
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
@@ -20,7 +20,7 @@
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon size="20" class="mr-2" @click="historyItem(item.raw)" icon="mdi-calendar" />
+          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-calendar" />
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -159,7 +159,7 @@
 
 
               <v-col cols="12" sm="12" md="12">
-                <base-button type="primary" title="Agregar especificación" @click="addLicense" />
+                <base-button type="primary" title="Agregar licencia" @click="addLicense" />
               </v-col>
 
               <!-- technicalAttributes -->
@@ -254,8 +254,8 @@
                     </thead>
                     <tbody>
                       <tr v-for="datos in this.editedItem.technicalAttributes" style="height: 60px;">
-                        <td>{{ datos.attribute }}</td>
                         <td>{{ datos.technicalDescription }}</td>
+                        <td>{{ datos.attribute }}</td>
 
                         <td>
                           <v-icon size="20" class="mr-2" @click="deleteTechnicalAttributes(datos.technicalDescription)"
@@ -303,6 +303,25 @@
         </v-container>
       </v-card>
     </v-dialog>
+    
+
+    <!-- Probando cambio de disponibilidad -->
+    <v-dialog v-model="dialogAvailability" max-width="400px">
+      <v-card class="h-100">
+        <v-container>
+          <h1 class="black-secondary text-center mt-3 mb-3">
+            Cambiar estado
+          </h1>
+          <v-row>
+            <v-col align="center">
+              <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeAvailability" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-dialog>
+
   </div>
 
 
@@ -319,6 +338,15 @@
 
         <v-card-text>
           <v-container>
+            <v-col cols="12" sm="12" md="12">
+              <hr>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">
+              <p><b>Disponibilidad del equipo:</b> <span
+                  :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">{{
+                    this.allowable }}</span></p>
+
+            </v-col>
             <v-row class="pt-3">
               <v-col cols="12" sm="12" md="12">
                 <hr>
@@ -401,6 +429,10 @@
                     </tbody>
                   </table>
                 </div>
+
+
+
+
               </v-col>
 
               <!-- Nuevo Formato -->
@@ -502,6 +534,40 @@
 
                 </tbody>
               </table>
+
+              <v-col cols="12" sm="12" md="12">
+                <hr>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <p class="text-grey-darken-4 text-h6 text-center"> <b>Historial del equipo </b></p>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <table>
+                  <tr>
+                    <th>Numero de activo interno</th>
+                    <th>Numero de activo fijo</th>
+                    <th>Usuarios que han tenido el equipo</th>
+                    <th>Movimientos del equipo</th>
+                    <th>Fecha en que se realizo el movimiento</th>
+                  </tr>
+                  <tr v-for="data in this.historyData">
+                    <td>{{ data.number_active }}</td>
+                    <td>{{ data.number_internal_active }}</td>
+                    <td>{{ data.users }}</td>
+                    <td>{{ data.type_action }}</td>
+                    <td>{{ data.start_date }}</td>
+                  </tr>
+                  <tr v-if="this.historyData == 0">
+                    <td colspan="5">
+                      <p class="text-center py-3">Sin datos que mostrar</p>
+                    </td>
+                  </tr>
+                </table>
+              </v-col>
+
+
             </v-row>
 
           </v-container>
@@ -516,67 +582,7 @@
   </v-row>
   <!-- Probando modal de visualizar -->
 
-  <!-- Historial de usuario -->
-  <v-row justify="center">
-    <v-dialog v-model="dialogHistory" width="1024">
-      <v-card>
-        <v-card-title>
-          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-            Historial del equipo
-          </h2>
 
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            
-  
-            <v-row class="pt-3">
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
-
-
-
-              <v-col cols="12" sm="12" md="12">
-
-                <table>
-
-
-                  <tr>
-                    <th>Numero de activo interno</th>
-                    <th>Numero de activo fijo</th>
-                    <th>Usuarios que han tenido el equipo</th>
-                    <th>Movimientos del equipo</th>
-                  </tr>
-                  <tr v-for="data in this.historyData">
-                    <td>{{ data.number_active }}</td>
-                    <td>{{ data.number_internal_active }}</td>
-                    <td>{{ data.users }}</td>
-                    <td>{{ data.type_action }}</td>
-                    <!-- <td>{{ data.movement_date  }}</td> -->
-                  </tr>
-                  <tr v-if="this.historyData == 0">
-                    <td colspan="4">
-                      <p class="text-center py-3">Sin datos que mostrar</p>
-                    </td>
-                  </tr>
-                </table>
-
-              </v-col>
-            </v-row>
-          </v-container>
-
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogHistory = false" />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
-
-  <!-- Historial de usuario -->
 
 
 
@@ -616,7 +622,8 @@ export default {
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
-      dialogHistory: false,
+      dialogAvailability: false,
+
       headers: [
         { title: "Tipo de equipo", key: "equipment_type_id" },
         { title: "Disponibilidad", key: "availability" },
@@ -725,6 +732,14 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "Agregar equipo" : "Editar equipo";
     },
+    allowableColor() {
+      if (this.allowable == "Disponible") {
+        return 'green';
+      }
+      else {
+        return 'red';
+      }
+    }
   },
 
   watch: {
@@ -749,6 +764,35 @@ export default {
   },
 
   methods: {
+    // Prueba cambiar estado
+    availabilityItem(item) {
+      this.editedIndex = this.records.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogAvailability = true;
+    },
+
+    closeAvailability() {
+      this.dialogAvailability = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    async changeAvailabilityItemConfirm() {
+      console.log(this.editedItem)
+      try {
+        const { data } = await backendApi.put(`/equipment-available/${this.editedItem.number_active}`);
+        
+        alert.success(data.message);
+      } catch (error) {
+        this.close();
+      }
+
+      this.initialize();
+      this.closeAvailability();
+    },
+
+    // Prueba cambiar estado
     addLicense() {
       var isInArray = false;
 
@@ -785,11 +829,7 @@ export default {
       var isInArray = false;
 
 
-      if (this.editedItem.attribute != "" && this.editedItem.technicalDescription != "") {
-
-
-
-
+      if (this.editedItem.attribute != "" && this.editedItem.technicalDescription != "" && this.editedItem.attribute != undefined) {
 
         this.editedItem.technicalAttributes.forEach(item => {
 
@@ -802,11 +842,7 @@ export default {
           this.editedItem.technicalAttributes.push({ "technicalDescription": this.editedItem.technicalDescription, "attribute": this.editedItem.attribute });
         }
 
-
-
       }
-
-
 
     },
     deleteTechnicalAttributes(item) {
@@ -819,22 +855,20 @@ export default {
 
     },
 
-    infoItem(item) {
+    async infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
-      this.dialogInfo = true;
 
-    },
-    async historyItem(item) {
-      
       const equipment_history = await backendApi.get(`/equipment/${item.number_internal_active}`);
       this.historyData = equipment_history.data;
-      
       this.allowable = item.availability;
-      console.log(this.allowable);
-      this.dialogHistory = true;
+
+      this.dialogInfo = true;
+
+
 
     },
+
 
     async initialize() {
       this.loading = true;
@@ -899,8 +933,11 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+
         this.editedItem.licenses.length = 0;
+
         this.editedItem.technicalAttributes.length = 0;
+
 
       });
     },
@@ -1032,6 +1069,7 @@ table {
   margin: 1.562rem 0;
   width: 100%;
   text-align: left;
+
 }
 
 td,
@@ -1039,6 +1077,8 @@ th {
   border: 1px solid #7b84e467;
   padding: 0.75rem 0.9375rem;
 }
+
+
 
 tbody,
 tr {
@@ -1052,5 +1092,13 @@ tbody tr:nth-of-type(even) {
 
 tbody tr:last-of-type {
   border-bottom: 2px solid #6856dbc7;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
 }
 </style>
