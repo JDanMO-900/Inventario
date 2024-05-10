@@ -17,7 +17,9 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" /> 
+          <v-icon v-if="(item.raw.action == 'préstamo' )"  size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -392,6 +394,69 @@
       </v-dialog>
     </v-row>
 
+    <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
+    
+      <v-card>
+        <v-card-title>
+          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+            Finalizar {{this.editedItem.action}}
+          </h2>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <!-- Form -->
+
+            <v-row class="pt-3">
+
+
+              <!-- Fecha de inicio de movimiento -->
+
+              <v-col cols="12" sm="12" md="12">
+                
+                <base-input label="Fecha de inicio del movimiento" v-model="v$.editedItem.start_date.$model"
+                  :rules="v$.editedItem.start_date" type="date"/>
+              </v-col>
+
+              <!-- Fecha de inicio de movimiento -->
+
+              <v-col cols="12" sm="12" md="12">
+                <template
+                  v-if="v$.editedItem.action.$model == 'préstamo' || v$.editedItem.action.$model == 'mantenimiento'">
+                  <div>
+                    <!-- Fecha de finalización de movimiento -->
+
+                    <base-input label="Fecha de finalización del movimiento" v-model="v$.editedItem.end_date.$model"
+                      :rules="v$.editedItem.end_date" type="date"/>
+
+                    <!-- Fecha de finalización de movimiento -->
+
+                  </div>
+                </template>
+              </v-col>
+
+              <!-- Numero de activo fijo 1 -->
+
+
+            
+
+            </v-row>
+
+
+            <!-- Form -->
+            <v-row>
+              <v-col align="center">
+                <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
+                <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+
+
+    </v-dialog>
+
 
 
 
@@ -431,6 +496,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
+      dialogMovementFinishDate: false,
       enabled: false,
       headers: [
 
@@ -577,13 +643,48 @@ export default {
   },
 
   methods: {
+    movementFinishDateItem(item) {
+      this.editedIndex = this.records.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogMovementFinishDate = true;
+
+    },
+
+    closeMovementFinishDate() {
+      this.dialogMovementFinishDate = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    async changeMovementFinishDate() {
+      const edited = Object.assign(
+        this.records[this.editedIndex],
+        this.editedItem
+      );
+
+
+      try {
+        const endStatus = await backendApi.put(`/changeStatus/`, edited);
+
+
+        alert.success(endStatus.data.message);
+      } catch (error) {
+        this.close();
+      }
+
+      this.initialize();
+      this.closeMovementFinishDate();
+    },
+
+
+
+    // Cambiando fecha de prestamo
     async initialize() {
       this.loading = true;
       this.records = [];
 
       var user = JSON.parse(window.localStorage.getItem("user"));
-
-
 
       let requests = [
         this.getDataFromApi(),
@@ -599,16 +700,12 @@ export default {
         backendApi.get('/processState', {
           params: { itemsPerPage: -1 },
         }),
-
-
         backendApi.get('/location', {
           params: { itemsPerPage: -1 },
         }),
-
         backendApi.get('/dependency', {
           params: { itemsPerPage: -1 },
         }),
-
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -617,10 +714,6 @@ export default {
 
 
       if (responses) {
-
-
-
-
         this.typeAction = responses[1].data.data;
         this.users = responses[2].data.data;
         this.equipment = responses[3].data;
@@ -635,7 +728,6 @@ export default {
             uniqueTechNames.add(this.users[i].name);
         }
         this.userTech = Array.from(uniqueTechNames)
-
       }
 
       this.loading = false;
@@ -645,7 +737,6 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogInfo = true;
-
     },
 
     editItem(item) {
@@ -666,9 +757,7 @@ export default {
 
       if (this.editedItem.action != 'préstamo' || this.editedItem.action != 'mantenimiento') {
         this.editedItem.end_date = this.editedItem.start_date
-
       }
-
 
       this.v$.$validate();
       if (this.v$.$invalid) {
@@ -685,7 +774,6 @@ export default {
 
         try {
           const { data } = await backendApi.put(`/historyChange/${edited.id}`, edited);
-
           alert.success(data.message);
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
@@ -699,12 +787,10 @@ export default {
       //Creating record
       try {
         const { data } = await backendApi.post('/historyChange', this.editedItem);
-
         alert.success(data.message);
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-
       this.close();
       this.initialize();
       return;
@@ -713,7 +799,6 @@ export default {
     deleteItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
-
       this.dialogDelete = true;
     },
 

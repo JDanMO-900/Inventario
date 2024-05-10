@@ -320,9 +320,6 @@
             <span v-if="this.editedItem.availability == 'Disponible'"> a "en uso"?</span>
             <span v-if="this.editedItem.availability == 'En uso'"> a "disponible"?</span>
 
-
-
-
           </h1>
           <v-row>
             <v-col align="center">
