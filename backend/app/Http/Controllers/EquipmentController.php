@@ -202,25 +202,42 @@ class EquipmentController extends Controller
         ]);
     }
 
+
     public function updateAvailability(Request $request)
     {
-        
-    
-        $equipment = Equipment::where('number_active', $request->number_active)->first();;
-        Log::info($request->number_active);
-        if ($request->availability == "En uso") {
-            $equipment->availability = 1;
+        $data = Encrypt::decryptArray($request->all(), 'id');
+
+
+        $equipment = Equipment::where('id', $data['id'])->first();
+
+
+        if($request->availability == "Disponible"){
+            $equipment->availability = 0;
+
         }
         else{
-            $equipment->availability = 0;
+            $equipment->availability = 1;
         }
-        
+ 
+  
+    
+
         $equipment->save();
+
+
+
+
+
 
         return response()->json([
             "message" => "Registro modificado correctamente.",
         ]);
     }
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
