@@ -303,14 +303,25 @@
         </v-container>
       </v-card>
     </v-dialog>
-    
+
 
     <!-- Probando cambio de disponibilidad -->
-    <v-dialog v-model="dialogAvailability" max-width="400px">
+    <v-dialog v-model="dialogAvailability" max-width="45rem">
       <v-card class="h-100">
         <v-container>
           <h1 class="black-secondary text-center mt-3 mb-3">
-            Cambiar estado
+
+            <b>¿Quieres cambiar la disponibilidad del equipo</b>
+            <span
+              :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }"> {{
+                this.editedItem.availability }}</span>
+
+            <span v-if="this.editedItem.availability == 'Disponible'"> a "En uso"?</span>
+            <span v-if="this.editedItem.availability == 'En uso'"> a "Disponible"?</span>
+
+
+
+
           </h1>
           <v-row>
             <v-col align="center">
@@ -769,9 +780,11 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogAvailability = true;
+      console.log(this.editedItem)
     },
 
     closeAvailability() {
+
       this.dialogAvailability = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -779,11 +792,19 @@ export default {
       });
     },
     async changeAvailabilityItemConfirm() {
-      console.log(this.editedItem)
+
+      const edited = Object.assign(
+        this.records[this.editedIndex],
+        this.editedItem
+      );
+
+
       try {
-        const { data } = await backendApi.put(`/equipment-available/${this.editedItem.number_active}`);
-        
-        alert.success(data.message);
+        const availabilityStatus = await backendApi.put(`/available/`, edited);
+
+
+
+        alert.success(availabilityStatus.message);
       } catch (error) {
         this.close();
       }
@@ -1006,6 +1027,7 @@ export default {
     },
 
     async deleteItemConfirm() {
+
       try {
         const { data } = await backendApi.delete(`/equipment/${this.editedItem.id}`, {
           params: {
