@@ -311,13 +311,14 @@
         <v-container>
           <h1 class="black-secondary text-center mt-3 mb-3">
 
-            <b>¿Quieres cambiar la disponibilidad del equipo</b>
+            <b>¿Quieres cambiar la disponibilidad del equipo de </b>
             <span
-              :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }"> {{
-                this.editedItem.availability }}</span>
+              :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }">
+              {{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() : this.editedItem.availability }}
+            </span>
 
-            <span v-if="this.editedItem.availability == 'Disponible'"> a "En uso"?</span>
-            <span v-if="this.editedItem.availability == 'En uso'"> a "Disponible"?</span>
+            <span v-if="this.editedItem.availability == 'Disponible'"> a "en uso"?</span>
+            <span v-if="this.editedItem.availability == 'En uso'"> a "disponible"?</span>
 
 
 
@@ -780,7 +781,7 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogAvailability = true;
-      console.log(this.editedItem)
+
     },
 
     closeAvailability() {
@@ -804,7 +805,8 @@ export default {
 
 
 
-        alert.success(availabilityStatus.message);
+
+        alert.success(availabilityStatus.data.message);
       } catch (error) {
         this.close();
       }
