@@ -137,18 +137,18 @@ class HistoryChangeController extends Controller
      */
     public function update(Request $request)
     {
+
         $data = Encrypt::decryptArray($request->all(), 'id');
-
         $historychange = HistoryChange::where('id', $data['id'])->first();
-
         $historychange->description = $request->description;
         $historychange->quantity_out = $request->quantity_out;
         $historychange->quantity_in = $request->quantity_in;
         $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
+        
         $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
-
-        if ($request->number_active != "") {
+        
+        if ($request->number_active2 != "") {
             $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
 
         } else {
@@ -211,4 +211,37 @@ class HistoryChangeController extends Controller
             "message" => "Registro eliminado correctamente.",
         ]);
     }
+
+    public function updateEndDate(Request $request)
+    {
+        Log::info($request);
+        $data = Encrypt::decryptArray($request->all(), 'id');
+        $historychange = HistoryChange::where('id', $data['id'])->first();
+        $historychange->start_date = $request->start_date;
+        $historychange->end_date = $request->end_date;
+        $historychange->save();
+
+
+        $available1 = Equipment::where('number_active', $request->number_active1)->first();
+        $available1->availability = true;
+        $available1->save();
+
+        if ($request->number_active2 != "") {
+            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+            $available2 = Equipment::where('number_active', $request->number_active2)->first();
+            $available2->availability = true;
+            $available2->save();
+
+        } else {
+            $historychange->equipment_used_in_id = null;
+        }
+
+        return response()->json([
+            "message" => "Movimiento terminado, equipo disponible de nuevo",
+        ]);
+    }
+
+
+
+
 }

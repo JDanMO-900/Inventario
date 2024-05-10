@@ -220,17 +220,10 @@ class EquipmentController extends Controller
         }
  
   
-    
-
         $equipment->save();
 
-
-
-
-
-
         return response()->json([
-            "message" => "Registro modificado correctamente.",
+            "message" => "Disponibilidad cambiada con exito",
         ]);
     }
 

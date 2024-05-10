@@ -70,6 +70,7 @@ Route::resource('/equipment', EquipmentController::class);
 
 
 
+
 Route::resource('/technicalDescription', TechnicalDescriptionController::class);
 Route::resource('/equipmentDetail', EquipmentDetailController::class);  
 
@@ -80,6 +81,7 @@ Route::resource('/typeAction', TypeActionController::class);
 Route::resource('/processState', ProcessStateController::class);
 
 Route::resource('/historyChange', HistoryChangeController::class);
+Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndDate']);
 
 // To get role of the user
 Route::get('/user/{name}', [UserController::class, 'filter']);
