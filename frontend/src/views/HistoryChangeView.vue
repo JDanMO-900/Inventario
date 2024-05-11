@@ -126,8 +126,7 @@
 
               <v-col cols="4" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h10 "><b class="text-black-darken-4">Seleccione el checkbox para
-                    agregar
-                    un dispositivo complementario: </b></p>
+                    agregar un dispositivo complementario: </b></p>
                 <v-checkbox-btn v-model="enabled" class="pe-2"></v-checkbox-btn>
               </v-col>
 
@@ -138,7 +137,7 @@
 
                 <template v-if="enabled">
                   <div>
-                    <base-select label="Equipo asignado complementario" :items="this.equipment"
+                    <base-select label="Equipo asignado complementario" :items="filterEquipment"
                       item-title="number_active" item-value="number_active"
                       v-model.trim="v$.editedItem.number_active2.$model" :rules="v$.editedItem.number_active2"
                       :disabled="!enabled">
@@ -608,6 +607,14 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo movimiento" : "Editar movimiento";
     },
+    filterEquipment(){
+      if(!this.editedItem.number_active1){
+        return [];
+      }
+      else{
+        return this.equipment.filter(item => item.number_active !== this.editedItem.number_active1);
+      }
+    }
   },
 
   watch: {
