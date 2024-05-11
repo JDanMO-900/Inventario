@@ -6,7 +6,7 @@
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
-          
+
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
@@ -17,8 +17,9 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" /> 
-          <v-icon v-if="(item.raw.action == 'préstamo' )"  size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon v-if="(item.raw.action == 'préstamo')" size="20" class="mr-2"
+            @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
 
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
@@ -106,20 +107,6 @@
 
               <!-- Fecha de inicio de movimiento -->
 
-              <v-col cols="12" sm="12" md="12">
-                <template
-                  v-if="v$.editedItem.action.$model == 'préstamo' || v$.editedItem.action.$model == 'mantenimiento'">
-                  <div>
-                    <!-- Fecha de finalización de movimiento -->
-
-                    <base-input label="Fecha de finalización" v-model="v$.editedItem.end_date.$model"
-                      :rules="v$.editedItem.end_date" type="date" />
-
-                    <!-- Fecha de finalización de movimiento -->
-
-                  </div>
-                </template>
-              </v-col>
 
               <!-- Numero de activo fijo 1 -->
 
@@ -198,12 +185,12 @@
 
 
               <!-- Estado de proceso -->
-
-              <v-col cols="4" sm="12" md="12">
+              <!-- Atol -->
+              <!-- <v-col cols="4" sm="12" md="12">
                 <base-select label="Estado del proceso" :items="this.processState" item-title="name" :value="name"
                   v-model.trim="v$.editedItem.process.$model" :rules="v$.editedItem.process">
                 </base-select>
-              </v-col>
+              </v-col> -->
               <!-- Estado de proceso -->
 
 
@@ -395,11 +382,11 @@
     </v-row>
 
     <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
-    
+
       <v-card>
         <v-card-title>
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-            Finalizar {{this.editedItem.action}}
+            Finalizar {{ this.editedItem.action }}
           </h2>
         </v-card-title>
 
@@ -413,9 +400,9 @@
               <!-- Fecha de inicio de movimiento -->
 
               <v-col cols="12" sm="12" md="12">
-                
+
                 <base-input label="Fecha de inicio del movimiento" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="date"/>
+                  :rules="v$.editedItem.start_date" type="date" />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -427,7 +414,7 @@
                     <!-- Fecha de finalización de movimiento -->
 
                     <base-input label="Fecha de finalización del movimiento" v-model="v$.editedItem.end_date.$model"
-                      :rules="v$.editedItem.end_date" type="date"/>
+                      :rules="v$.editedItem.end_date" type="date" />
 
                     <!-- Fecha de finalización de movimiento -->
 
@@ -438,7 +425,7 @@
               <!-- Numero de activo fijo 1 -->
 
 
-            
+
 
             </v-row>
 
@@ -599,11 +586,12 @@ export default {
 
           minLength: minLength(1),
 
-        }, process: {
-          required,
-          minLength: minLength(1),
-
         },
+        // process: {
+        //   required,
+        //   minLength: minLength(1),
+
+        // },
         start_date: {
           required,
           minLength: minLength(1)
@@ -658,6 +646,8 @@ export default {
       });
     },
     async changeMovementFinishDate() {
+      // Atol
+      this.editedItem.process ="Finalizado";
       const edited = Object.assign(
         this.records[this.editedIndex],
         this.editedItem
@@ -723,7 +713,7 @@ export default {
 
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
-           console.log(this.users[i].role);
+
           if (this.users[i].role === "Tecnico")
             uniqueTechNames.add(this.users[i].name);
         }
@@ -754,9 +744,17 @@ export default {
     },
 
     async save() {
+   
+      if (this.editedItem.action == 'préstamo' || this.editedItem.action == 'mantenimiento') {
+        
+        this.editedItem.process = "En proceso";
+        console.log(this.editedItem.end_date)
 
-      if (this.editedItem.action != 'préstamo' || this.editedItem.action != 'mantenimiento') {
-        this.editedItem.end_date = this.editedItem.start_date
+      }
+      else {
+        this.editedItem.process = "Finalizado";
+        this.editedItem.end_date = this.editedItem.start_date;
+        
       }
 
       this.v$.$validate();
