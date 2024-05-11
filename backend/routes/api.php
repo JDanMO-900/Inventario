@@ -81,7 +81,7 @@ Route::resource('/typeAction', TypeActionController::class);
 Route::resource('/processState', ProcessStateController::class);
 
 Route::resource('/historyChange', HistoryChangeController::class);
-Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndDate']);
+Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndProcess']);
 
 // To get role of the user
 Route::get('/user/{name}', [UserController::class, 'filter']);

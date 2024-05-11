@@ -212,13 +212,15 @@ class HistoryChangeController extends Controller
         ]);
     }
 
-    public function updateEndDate(Request $request)
+    public function updateEndProcess(Request $request)
     {
-        Log::info($request);
+
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->start_date = $request->start_date;
         $historychange->end_date = $request->end_date;
+        $historychange->end_date = $request->end_date;
+        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
         $historychange->save();
 
 
