@@ -2,43 +2,41 @@
   <div class="menu-sidebar d-flex flex-column align-center" :class="stateSideBar">
     <div class="menu-button mt-5 mb-4">
       <a href="#" @click="stateSideBar = 'inactive'">
-        <v-icon icon="mdi-menu mt-1" :size="45"></v-icon>
+        <v-icon icon="mdi-menu mt-1" :size="40"></v-icon>
       </a>
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
-        <RouterLink to="/" class="d-flex flex-column align-center mb-3">
+        <RouterLink to="/" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-home" size="20"></v-icon>
           <span>Inicio</span>
         </RouterLink>
 
-
-
-        <RouterLink to="/movements" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="18"></v-icon>
-          <span>Movimientos</span>
-        </RouterLink>
-        
-
-        <RouterLink to="/equipment" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="18"></v-icon>
+        <RouterLink to="/equipment" class="d-flex flex-column align-center mb-3 p-1">
+          <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
           <span>Inventario</span>
         </RouterLink>
 
-        <RouterLink to="/dependency" class="d-flex flex-column align-center mb-3" >
-          <v-icon icon="mdi-home" size="20"></v-icon>
+        <RouterLink to="/movements" class="d-flex flex-column align-center mb-3 p-1">
+          <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
+          <span>Movimientos</span>
+        </RouterLink>               
+
+        <RouterLink to="/dependency" class="d-flex flex-column align-center mb-3 p-1">
+          <v-icon icon="mdi-shield-home" size="20"></v-icon>
           <span>Dependencias</span>
         </RouterLink>
 
         <!-- Cerrar sesion -->
-        <RouterLink to="/" class="d-flex flex-column align-center mb-4" @click="logout()">
-          <v-icon icon="mdi-logout" size="25"></v-icon>
+        <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1" @click="logout()">
+          <v-icon icon="mdi-logout" size="20"></v-icon>
           <span>Cerrar sesión</span>
         </RouterLink>
+        
       </template>
       <template v-else>
-        <RouterLink to="/" class="d-flex flex-column align-center mb-4">
-          <v-icon icon="mdi-login" size="25"></v-icon>
+        <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1">
+          <v-icon icon="mdi-login" size="20"></v-icon>
           <span>Iniciar sesión</span>
         </RouterLink>
         <!-- <RouterLink to="/register" class="d-flex flex-column align-center mb-4">
@@ -68,7 +66,7 @@ const { isLoggedIn, logout } = useAuth();
 @import "@/assets/styles/variables.scss";
 
 .menu-sidebar {
-  width: 6rem;
+  width: 8rem;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -81,8 +79,15 @@ const { isLoggedIn, logout } = useAuth();
   color: white;
 }
 
+.menu-options a:hover{
+  color: #E0E5F1;
+  background-color: #474F7A;
+  border-radius: 20px;
+  // opacity: 50%;
+}
+
 .inactive {
-  left: -6rem;
+  left: -8rem;
   animation: linear;
   animation-name: hideMenu;
   animation-duration: 0.4s;

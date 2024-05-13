@@ -40,243 +40,216 @@
 
         <v-card-text>
           <v-container>
-            <!-- Form -->
-            <v-row class="pt-3">
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles de identificación y facturación </b>
-                </p>
-                <hr>
-              </v-col>
-
-              <!-- number_active -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Numero de activo fijo" v-model="v$.editedItem.number_active.$model"
-                  :rules="v$.editedItem.number_active" />
-              </v-col>
-              <!-- number_active -->
-
-
-              <!-- number_internal_active -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Numero de registro interno" v-model="v$.editedItem.number_internal_active.$model"
-                  :rules="v$.editedItem.number_internal_active" />
-              </v-col>
-              <!-- number_internal_active -->
-
-            </v-row>
-
-
-            <v-row class="pt-3">
-
-              <!-- invoice_number -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Numero de factura" v-model="v$.editedItem.invoice_number.$model"
-                  :rules="v$.editedItem.invoice_number" />
-              </v-col>
-              <!-- invoice_number -->
-
-              <!-- adquisition_date -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Fecha de adquisición" v-model="v$.editedItem.adquisition_date.$model"
-                  :rules="v$.editedItem.adquisition_date" type="date" />
-              </v-col>
-              <!-- adquisition_date -->
-
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles del dispositivo </b>
-                </p>
-                <hr>
-              </v-col>
-
-              <!-- model -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" />
-              </v-col>
-              <!-- model -->
-
-
-
-              <!-- serial_number -->
-              <v-col cols="12" sm="12" md="6">
-                <base-input label="Serial Number" v-model="v$.editedItem.serial_number.$model"
-                  :rules="v$.editedItem.serial_number" />
-              </v-col>
-              <!-- serial_number -->
-
-
-
-              <!-- Tipo de equipo -->
-              <v-col cols="12" sm="12" md="6">
-                <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
-                  :items="this.equipmenttype" item-title="name" item-value="name"
-                  :rules="v$.editedItem.equipment_type_id" />
-              </v-col>
-
-
-              <!-- Tipo de equipo -->
-
-              <!-- brand -->
-              <v-col cols="12" sm="12" md="6">
-                <base-select label="Marcas" :items="brand" item-title="name" item-value="name"
-                  v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" />
-              </v-col>
-              <!-- brand -->
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Proveedor que lo entrego </b>
-                </p>
-                <hr>
-              </v-col>
-
-
-              <!-- Proveedor -->
-              <v-col cols="12" sm="12" md="12">
-                <base-select label="Proveedor" :items="this.provider" item-title="name" :value="name"
-                  v-model.trim="v$.editedItem.provider.$model" :rules="v$.editedItem.provider">
-                </base-select>
-              </v-col>
-
-              <!-- Proveedor -->
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de licencias </b>
-                </p>
-                <hr>
-              </v-col>
-
-              <!-- Licencias -->
-
-
-
-              <v-col cols="12" sm="12" md="12">
-
-                <base-select label="Licencias" :items="this.license" item-title="name" item-value="name" :value="name"
-                  v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
-
-              </v-col>
-
-
-              <v-col cols="12" sm="12" md="12">
-                <base-button type="primary" title="Agregar licencia" @click="addLicense" />
-              </v-col>
-
-              <!-- technicalAttributes -->
-
-              <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Licencia</b></td>
-
-                        <td><b>ACCIONES</b></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="Licencia in this.editedItem.licenses" style="height: 60px;">
-                        <td>{{ Licencia }}</td>
-
-
-                        <td>
-                          <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" />
-                        </td>
-                      </tr>
-                      <tr v-if="this.editedItem.licenses == 0">
-                        <td colspan="4">
-                          <p class="text-center py-3">Sin datos que mostrar</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </v-col>
-
-
-
-
-
-
-              <!-- Licencias -->
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Especificaciones técnicas del equipo </b>
-                </p>
-                <hr>
-              </v-col>
-
-              <!-- equipment state -->
-              <v-col cols="12" sm="12" md="12">
-                <base-select label="Estado" :items="this.equipmentstate" item-title="name" item-value="name"
-                  :value="name" v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
-              </v-col>
-
-              <!-- equipment state -->
-
-              <!-- Descripcion -->
-
-              <v-col cols="12" sm="12" md="8">
-
-                <base-select label="Especificación" :items="this.technicalDescrip" item-title="name" item-value="name"
-                  :value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
-                  :rules="v$.editedItem.technicalDescription" />
-
-              </v-col>
-
-              <!-- Descripcion -->
-
-              <!-- Cantidad de valor -->
-              <v-col cols="4" sm="12" md="4">
-                <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model" :rules="v$.editedItem.attribute"
-                  type="number" min="0" max="100" />
-              </v-col>
-
-
-              <!-- Cantidad de valor -->
-
-              <v-col cols="12" sm="12" md="12">
-                <base-button type="primary" title="Agregar especificación" @click="addTechnicalAttributes" />
-              </v-col>
-
-              <!-- technicalAttributes -->
-
-              <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Especificación</b></td>
-                        <td><b>Capacidad</b></td>
-
-                        <td><b>ACCIONES</b></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="datos in this.editedItem.technicalAttributes" style="height: 60px;">
-                        <td>{{ datos.technicalDescription }}</td>
-                        <td>{{ datos.attribute }}</td>
-
-                        <td>
-                          <v-icon size="20" class="mr-2" @click="deleteTechnicalAttributes(datos.technicalDescription)"
-                            icon="mdi-delete" />
-                        </td>
-                      </tr>
-                      <tr v-if="this.editedItem.technicalAttributes == 0">
-                        <td colspan="4">
-                          <p class="text-center py-3">Sin datos que mostrar</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </v-col>
-
-
-              <!-- technicalAttributes -->
-
-            </v-row>
-            <!-- Form -->
+            <!-- tabs -->
+            <v-tabs v-model="tab" grow color="blue-accent-4">
+              <v-tab value="1" prepend-icon="mdi-laptop">Equipo</v-tab>
+              <v-tab value="2" prepend-icon="mdi-application-brackets">Licencias</v-tab>
+              <v-tab value="3" prepend-icon="mdi-account-tie">Proveedor</v-tab>
+            </v-tabs>
+
+            <v-card-text>
+              <v-window v-model="tab" class="mt-2 mb-6">                
+                <!-- tab de equipo -->
+                <v-window-item value="1">
+                  <v-row>
+                    <v-col cols="12">
+                      <v-chip color="primary" variant="flat" label>
+                        <v-icon icon="mdi-numeric-1-circle" start></v-icon>
+                        Información general
+                      </v-chip>
+                      <v-divider class="mt-2"></v-divider>
+                    </v-col>
+
+                    <!-- number_active -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Número de activo fijo" v-model="v$.editedItem.number_active.$model"
+                        :rules="v$.editedItem.number_active" />
+                    </v-col>
+                    <!-- number_active -->
+
+                    <!-- number_internal_active -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Número de registro interno" v-model="v$.editedItem.number_internal_active.$model"
+                        :rules="v$.editedItem.number_internal_active" />
+                    </v-col>
+                    <!-- number_internal_active -->
+
+                    <!-- brand -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-select label="Marca" :items="brand" item-title="name" item-value="name"
+                        v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" />
+                    </v-col>
+                    <!-- brand -->
+
+                    <!-- model -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" />
+                    </v-col>
+                    <!-- model -->                      
+
+                    <!-- serial_number -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Número de serie" v-model="v$.editedItem.serial_number.$model"
+                        :rules="v$.editedItem.serial_number" />
+                    </v-col>
+                    <!-- serial_number -->
+
+                    <!-- equipment state -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-select label="Estado del equipo" :items="this.equipmentstate" item-title="name" item-value="name"
+                        :value="name" v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
+                    </v-col>
+                    <!-- equipment state -->
+
+                    <!-- tipo de equipo -->
+                    <v-col cols="12" sm="12" md="12" lg="12">
+                      <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
+                        :items="this.equipmenttype" item-title="name" item-value="name"
+                        :rules="v$.editedItem.equipment_type_id" />
+                    </v-col>
+                    <!-- tipo de equipo -->                      
+                    
+                    <v-col cols="12">
+                      <v-chip color="primary" variant="flat" label>
+                        <v-icon icon="mdi-numeric-2-circle" start></v-icon>
+                        Especificaciones técnicas
+                      </v-chip>
+                      <v-divider class="mt-2"></v-divider>
+                    </v-col>    
+                    
+                    <!-- característica -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-select label="Característica" :items="this.technicalDescrip" item-title="name" item-value="name"
+                        :value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
+                        :rules="v$.editedItem.technicalDescription" />
+                    </v-col>
+                    <!-- característica -->
+
+                    <!-- valor -->
+                    <v-col cols="4" sm="12" md="6" lg="6">
+                      <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model" :rules="v$.editedItem.attribute" type="number" min="0" max="100" />
+                    </v-col>
+                    <!-- valor -->
+
+                    <v-col cols="12" sm="12" md="12" lg="12">
+                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick"/>
+                    </v-col>
+
+                    <v-col cols="12" sm="12" md="12">
+                      <div class="w-100">
+                        <v-table density="compact">
+                          <thead>
+                            <tr>
+                              <td><b>Característica</b></td>
+                              <td><b>Capacidad</b></td>
+                              <td><b>Acción</b></td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="datos in this.editedItem.technicalAttributes">
+                              <td>{{ datos.technicalDescription }}</td>
+                              <td>{{ datos.attribute }}</td>
+                              <td>
+                                <v-icon size="20" class="mr-2" @click="deleteTechnicalAttributes(datos.technicalDescription)" color="red-darken-4" icon="mdi-delete" />
+                              </td>
+                            </tr>
+                            <tr v-if="this.editedItem.technicalAttributes == 0">
+                              <td colspan="4">
+                                <p class="text-center py-3">Sin datos que mostrar</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </v-table>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-window-item>
+                <!-- tab de equipo -->
+
+                <!-- tab de licencias -->
+                <v-window-item value="2">
+                  <v-col cols="12">
+                    <v-chip color="primary" variant="flat" label>
+                      <v-icon icon="mdi-numeric-3-circle" start></v-icon>
+                      Licencias instaladas
+                    </v-chip>
+                    <v-divider class="mt-2"></v-divider>
+                  </v-col>
+
+                  <!-- licencias -->
+                  <v-col cols="12" sm="12" md="12">
+                    <base-select label="Licencias" :items="this.license" item-title="name" item-value="name" :value="name"
+                      v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="12">
+                    <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addLicense" block prepend-icon="mdi-plus-thick"/>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="12">
+                    <div class="w-100">
+                      <v-table density="compact">
+                        <thead>
+                          <tr>
+                            <td><b>Licencia</b></td>
+                            <td><b>Acción</b></td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="Licencia in this.editedItem.licenses">
+                            <td>{{ Licencia }}</td>
+                            <td>
+                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" color="red-darken-4"/>
+                            </td>
+                          </tr>
+                          <tr v-if="this.editedItem.licenses == 0">
+                            <td colspan="4">
+                              <p class="text-center py-3">Sin datos que mostrar</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </v-table>
+                    </div>
+                  </v-col>
+                </v-window-item>
+                <!-- tab de licencias -->
+
+                <!-- tab de proveedor -->
+                <v-window-item value="3">
+                  <v-row>
+                    <v-col cols="12">
+                      <v-chip color="primary" variant="flat" label>
+                        <v-icon icon="mdi-numeric-4-circle" start></v-icon>
+                        Información del proveedor
+                      </v-chip>
+                      <v-divider class="mt-2"></v-divider>
+                    </v-col>
+
+                    <!-- invoice_number -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Número de factura" v-model="v$.editedItem.invoice_number.$model" :rules="v$.editedItem.invoice_number" />
+                    </v-col>
+                    <!-- invoice_number -->
+
+                    <!-- adquisition_date -->
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                      <base-input label="Fecha de adquisición" v-model="v$.editedItem.adquisition_date.$model" :rules="v$.editedItem.adquisition_date" type="date" />
+                    </v-col>
+                    <!-- adquisition_date -->    
+
+                    <!-- proveedor -->
+                    <v-col cols="12" sm="12" md="12" lg="12">
+                      <base-select label="Nombre" :items="this.provider" item-title="name" :value="name"
+                        v-model.trim="v$.editedItem.provider.$model" :rules="v$.editedItem.provider">
+                      </base-select>
+                    </v-col>
+                    <!-- proveedor -->  
+                  </v-row>
+                </v-window-item>
+                <!-- tab de proveedor -->
+              </v-window>
+            </v-card-text>
+            <!-- tabs -->    
             <v-row>
               <v-col align="center">
                 <base-button type="primary" title="Guardar" @click="save" />
@@ -602,11 +575,7 @@
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
 import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
-
-
 import backendApi from "@/services/backendApi";
-
-
 import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
 import BaseSelect from "../components/base-components/BaseSelect.vue";
@@ -624,7 +593,7 @@ export default {
   },
   data() {
     return {
-
+      tab: null,
       enabled: false,
       search: "",
       selected: [],
@@ -632,12 +601,11 @@ export default {
       dialogDelete: false,
       dialogInfo: false,
       dialogAvailability: false,
-
       headers: [
         { title: "Tipo de equipo", key: "equipment_type_id" },
         { title: "Disponibilidad", key: "availability" },
-        { title: "Numero de activo fijo", key: "number_active" },
-        { title: "Numero de registro interno", key: "number_internal_active" },
+        { title: "Número de activo fijo", key: "number_active" },
+        { title: "Número de registro interno", key: "number_internal_active" },
         { title: "Serial", key: "serial_number" },
         { title: "Fecha de adquisición", key: "adquisition_date" },
         { title: "ACCIONES", key: "actions", sortable: false },
@@ -983,6 +951,7 @@ export default {
 
 
           alert.success(data.message);
+          this.tab = null
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
@@ -998,6 +967,7 @@ export default {
         const { data } = await backendApi.post('/equipment', this.editedItem);
 
         alert.success(data.message);
+        this.tab = null
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }

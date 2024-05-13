@@ -4,7 +4,7 @@
       <v-row class="text-center">
         <v-col cols="12" sm="12" md="4" class="my-auto">
           <a href="https://cultura.gob.sv" target="__blank"
-            ><b>Ministerio de Cultura</b></a
+            ><b>Biblioteca Nacional de El Salvador</b></a
           >
         </v-col>
         <v-col cols="12" sm="12" md="4">
@@ -16,7 +16,7 @@
           />
         </v-col>
         <v-col cols="12" sm="12" md="4" class="my-auto">
-          <b>Bases de datos de desarrollo</b>
+          <b>Inventario</b>
         </v-col>
       </v-row>
     </v-container>

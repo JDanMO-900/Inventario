@@ -8,7 +8,7 @@
               ><v-icon icon="mdi-menu" size="39"
             /></a>
           </div>
-          <div class="ms-5 ps-3 me-2 d-none d-xs-flex d-sm-flex">
+          <div class="ms-16 ps-3 me-2 d-none d-xs-flex d-sm-flex">
             <h1>Inventario</h1>
           </div>
         </div>
@@ -16,9 +16,7 @@
           class="ms-2 me-2 my-auto d-flex flex-column text-right"
           v-if="isLoggedIn"
         >
-          <span
-            >{{ user.name }} <v-icon icon="mdi-account" color="#2D52A8"
-          /></span>
+          <span>{{ user.name }} <v-icon icon="mdi-account" color="#2D52A8"/></span>
           <a href="#" @click="logout()"><b>Cerrar sesión</b></a>
         </div>
       </div>

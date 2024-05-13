@@ -14,5 +14,5 @@ const { title, type } = props;
 </script>
 
 <template>
-  <v-btn :class="'btn btn-' + type">{{ title }}</v-btn>
+  <v-btn :class="'btn btn-' + type" >{{ title }}</v-btn>
 </template>

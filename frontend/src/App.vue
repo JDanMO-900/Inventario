@@ -30,9 +30,13 @@ onMounted(async () => {
   <the-menu />
 
   <main>
-    <v-container>
-      <Alert class="mb-3" />
-      <RouterView />
+    <v-container fluid>
+      <v-row justify="center">
+        <v-col cols="10">
+          <Alert class="mb-3" />
+          <RouterView />
+        </v-col>
+      </v-row> 
     </v-container>
   </main>
 
