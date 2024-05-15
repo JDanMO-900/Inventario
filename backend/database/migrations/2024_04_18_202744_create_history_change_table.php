@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('history_change', function (Blueprint $table) {
             $table->id();
 
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('quantity_out')->nullable();
             $table->integer('quantity_in')->nullable();
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->dateTime('start_date');
+            $table->dateTime('end_date')->nullable();
  
 
 

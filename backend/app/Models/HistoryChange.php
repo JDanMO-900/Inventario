@@ -81,7 +81,7 @@ class HistoryChange extends Model
         'history_change.id as id',
 
         // Datos del usuario
-        'user.name as user',
+        'users.name as users',
         'technician.name as technician',
 
         // Ubicacion
@@ -100,8 +100,8 @@ class HistoryChange extends Model
         'equipment_type2.name as type2',
         'brand2.name as brand2',
 
-        'process_state.name as process',
-        'type_action.name as action'
+        'process_state.name as state_id',
+        'type_action.name as type_action_id'
 
         
         
@@ -122,10 +122,16 @@ class HistoryChange extends Model
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id','=', 'history_change.id')
-            ->join('users as user', 'history_user_detail.user_id','=', 'user.id')
+            ->join('users', 'history_user_detail.user_id','=', 'users.id')
             ->join('users as technician', 'history_user_detail.user_tech_id','=', 'technician.id')
             ->where('location.name', 'like', $search)
             ->orWhere('dependency.name', 'like', $search)
+            ->orWhere('process_state.name', 'like', $search)
+            ->orWhere('type_action.name', 'like', $search)
+            ->orWhere(function($query) use ($search){
+                $query->where('users.name', 'like', $search);
+            })
+
 
 
 

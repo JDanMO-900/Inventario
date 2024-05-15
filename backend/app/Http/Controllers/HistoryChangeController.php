@@ -65,7 +65,7 @@ class HistoryChangeController extends Controller
         $historychange->quantity_out = $request->quantity_out;
         $historychange->quantity_in = $request->quantity_in;
         $historychange->start_date = $request->start_date;
-        $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
+        $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
 
         $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
         $available1 = Equipment::where('number_active', $request->number_active1)->first();
@@ -89,7 +89,7 @@ class HistoryChangeController extends Controller
             $historychange->end_date = null;
         }
 
-        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
+        $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
 
 
         $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
@@ -105,7 +105,7 @@ class HistoryChangeController extends Controller
 
 
         $historyuserdetail->history_change_id = $lastInsertedRow->id;//Here I want to get my last row;
-        $historyuserdetail->user_id = User::where('name', $request->user)->first()->id;
+        $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
         // Modificar por nuevo valor
         $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id;
 
@@ -144,7 +144,7 @@ class HistoryChangeController extends Controller
         $historychange->quantity_out = $request->quantity_out;
         $historychange->quantity_in = $request->quantity_in;
         $historychange->start_date = $request->start_date;
-        $historychange->type_action_id = TypeAction::where('name', $request->action)->first()->id;
+        $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
         
         $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
         
@@ -162,31 +162,19 @@ class HistoryChangeController extends Controller
             $historychange->end_date = null;
         }
 
-        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
+        $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
         $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
 
         $historychange->save();
 
 
-
-
-
-
-
         // Hacer que por medio de history change encuentre el history user_detail y de esta manera se pueda editar
-        $historyuserdetail = new HistoryUserDetail;
-        $historyuserdetail->history_change_id = $historychange->id;
-        $historyuserdetail->user_id = User::where('name', $request->user)->first()->id;
+        $historyuserdetail = HistoryUserDetail::where('history_change_id', $historychange->id)->first();
+        $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
         // Modificar por nuevo valor
         $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id;
         $historyuserdetail->save();
-
-
-
-
-
-
 
 
 
@@ -215,12 +203,11 @@ class HistoryChangeController extends Controller
     public function updateEndProcess(Request $request)
     {
 
+
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
-        $historychange->start_date = $request->start_date;
-        $historychange->end_date = $request->end_date;
-        $historychange->end_date = $request->end_date;
-        $historychange->state_id = ProcessState::where('name', $request->process)->first()->id;
+        $historychange->end_date = $request->finish_date;
+        $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->save();
 
 
