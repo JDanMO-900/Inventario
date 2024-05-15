@@ -18,7 +18,7 @@
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon v-if="(item.raw.action == 'préstamo')" size="20" class="mr-2"
+          <v-icon v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo')" size="20" class="mr-2"
             @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
 
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -56,7 +56,7 @@
 
               <v-col cols="6" sm="12" md="12">
                 <base-select label="Usuarios" :items="this.users" item-title="name" :value="name"
-                  v-model.trim="v$.editedItem.user.$model" :rules="v$.editedItem.user">
+                  v-model.trim="v$.editedItem.users.$model" :rules="v$.editedItem.users">
                 </base-select>
               </v-col>
               <!-- name -->
@@ -92,7 +92,7 @@
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name" :value="name"
-                  v-model.trim="v$.editedItem.action.$model" :rules="v$.editedItem.action">
+                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
                 </base-select>
 
               </v-col>
@@ -102,7 +102,7 @@
 
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="date" />
+                  :rules="v$.editedItem.start_date" type="datetime-local" />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -114,7 +114,7 @@
               <v-col cols="4" sm="12" md="12">
 
                 <base-select :value="v$.editedItem.number_active1.$model" label="Equipo asignado principal"
-                  :items="this.equipment" item-title="number_active" item-value="number_active"
+                  :items="this.equipment" item-title="format" item-value="number_active"
                   v-model.trim="v$.editedItem.number_active1.$model" :rules="v$.editedItem.number_active1">
                 </base-select>
               </v-col>
@@ -153,7 +153,7 @@
 
 
               <!-- Cantidad de salida -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.action.$model == 'Mantenimiento'">
+              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
                   :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
               </v-col>
@@ -161,7 +161,7 @@
               <!-- Cantidad de salida -->
 
               <!-- Cantidad de entrada -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.action.$model == 'Mantenimiento'">
+              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
                   :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" />
               </v-col>
@@ -209,7 +209,7 @@
               <!-- Descripcion -->
 
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Descripción" v-model="v$.editedItem.description.$model"
+                <base-text-area label="Comentarios" v-model="v$.editedItem.description.$model"
                   :rules="v$.editedItem.description" />
 
               </v-col>
@@ -257,7 +257,7 @@
           <v-card-title>
             <h2 class="mx-auto pt-3 p  text-center black-secondary">
               <b>Datos de equipo que se realizo: <i class="text-indigo-darken-4">{{
-                this.editedItem.action }} </i></b>
+                this.editedItem.type_action_id }} </i></b>
             </h2>
           </v-card-title>
 
@@ -288,7 +288,7 @@
                       <tbody>
                         <tr style="height: 60px;">
 
-                          <td>{{ this.editedItem.user }}</td>
+                          <td>{{ this.editedItem.users }}</td>
                           <td>{{ this.editedItem.dependency_id }}</td>
                           <td>{{ this.editedItem.location_id }}</td>
                         </tr>
@@ -354,12 +354,12 @@
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.action }}: </b>{{
-                    this.editedItem.process }}</p>
+                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.type_action_id }}: </b>{{
+                    this.editedItem.state_id }}</p>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Técnico que Realizo el {{ this.editedItem.action
+                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Técnico que Realizo el {{ this.editedItem.type_action_id
                       }}:</b> <i>{{ this.editedItem.technician }} </i>
                   </p>
                 </v-col>
@@ -380,74 +380,61 @@
       </v-dialog>
     </v-row>
 
-    <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
-
-      <v-card>
-        <v-card-title>
-          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-            Finalizar {{ this.editedItem.action }}
-          </h2>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <!-- Form -->
-
-            <v-row class="pt-3">
-
-
-              <!-- Fecha de inicio de movimiento -->
-
-              <v-col cols="12" sm="12" md="12">
-
-                <base-input label="Fecha de inicio del movimiento" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="date" />
-              </v-col>
-
-              <!-- Fecha de inicio de movimiento -->
-
-              <v-col cols="12" sm="12" md="12">
-                <template
-                  v-if="v$.editedItem.action.$model == 'préstamo' || v$.editedItem.action.$model == 'mantenimiento'">
-                  <div>
-                    <!-- Fecha de finalización de movimiento -->
-
-                    <base-input label="Fecha de finalización del movimiento" v-model="v$.editedItem.end_date.$model"
-                      :rules="v$.editedItem.end_date" type="date" />
-
-                    <!-- Fecha de finalización de movimiento -->
-
-                  </div>
-                </template>
-              </v-col>
-
-              <!-- Numero de activo fijo 1 -->
-
-
-
-
-            </v-row>
-
-
-            <!-- Form -->
-            <v-row>
-              <v-col align="center">
-                <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
-                <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-
-
-    </v-dialog>
+    
 
 
 
 
 
   </div>
+
+  <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
+
+<v-card>
+  <v-card-title>
+    <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+      Finalizar {{ this.editedItem.type_action_id }}
+    </h2>
+  </v-card-title>
+
+  <v-card-text>
+    <v-container>
+      <!-- Form -->
+
+      <v-row class="pt-3">
+
+
+        <v-col cols="12" sm="12" md="12">
+          <template
+            v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
+            <div>
+              <!-- Fecha de finalización de movimiento -->
+
+              <base-input label="Fecha de finalización del movimiento" v-model="v$.finishMovement.finish_date.$model"
+                :rules="v$.finishMovement.finish_date" type="datetime-local" />
+
+              <!-- Fecha de finalización de movimiento -->
+
+            </div>
+          </template>
+        </v-col>
+
+
+      </v-row>
+
+      <!-- Form -->
+      <v-row>
+        <v-col align="center">
+          <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
+          <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card-text>
+</v-card>
+
+
+</v-dialog>
 </template>
 
 <script>
@@ -491,8 +478,8 @@ export default {
         { title: "Usuario", key: "user" },
         { title: "Equipo principal", key: "type1" },
         { title: "Modelo", key: "model1" },
-        { title: "Estado", key: "process" },
-        { title: "Movimiento", key: "action" },
+        { title: "Estado", key: "state_id" },
+        { title: "Movimiento", key: "type_action_id" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -502,12 +489,12 @@ export default {
       options: {},
 
       editedItem: {
-        location_id: "", dependency_id: "", technician: "", user: "", description: "", quantity_out: 0,
-        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: "", start_date: "", end_date: "",
+        location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", number_active1: "", number_active2: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
-        location_id: "", dependency_id: "", technician: "", user: "", description: "", quantity_out: 0,
-        quantity_in: 1, action: "", number_active1: "", number_active2: "", process: "", start_date: "", end_date: ""
+        location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", number_active1: "", number_active2: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -523,6 +510,16 @@ export default {
       location: [],
 
       userTech: [],
+
+      endProcessDate: {
+        finishProcess: ""
+      },
+      finishMovement: {
+        id: "",
+        finish_date: "",
+        number_active1: "",
+        number_active2: "",
+      }
 
     };
   },
@@ -545,7 +542,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        user: {
+        users: {
           required,
           minLength: minLength(1),
         },
@@ -561,36 +558,23 @@ export default {
         quantity_out: {
           required,
           minLength: minLength(1),
-
           numeric
-
         },
         quantity_in: {
           required,
           minLength: minLength(1),
-
           numeric
-
         },
-        action: {
+        type_action_id: {
           required,
           minLength: minLength(1),
-
-
         }, number_active1: {
           required,
           minLength: minLength(1),
-
         }, number_active2: {
-
           minLength: minLength(1),
-
         },
-        // process: {
-        //   required,
-        //   minLength: minLength(1),
 
-        // },
         start_date: {
           required,
           minLength: minLength(1)
@@ -600,18 +584,26 @@ export default {
         }
 
       },
+      finishMovement: {
+        finish_date: {
+          required,
+        },
+      }
+
     };
   },
+
+  // rulesChangeStatus: {}
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Nuevo movimiento" : "Editar movimiento";
     },
-    filterEquipment(){
-      if(!this.editedItem.number_active1){
+    filterEquipment() {
+      if (!this.editedItem.number_active1) {
         return [];
       }
-      else{
+      else {
         return this.equipment.filter(item => item.number_active !== this.editedItem.number_active1);
       }
     }
@@ -653,19 +645,30 @@ export default {
       });
     },
     async changeMovementFinishDate() {
-      // Atol
-      this.editedItem.process ="Finalizado";
-      const edited = Object.assign(
-        this.records[this.editedIndex],
-        this.editedItem
-      );
+
+
+      this.finishMovement.id = this.editedItem.id;
+      this.finishMovement.number_active1 = this.editedItem.number_active1;
+      this.finishMovement.number_active2 = this.editedItem.number_active2;
+
+      this.v$.finishMovement.$validate();
+      if (this.v$.finishMovement.$invalid) {
+        alert.error("Campos obligatorios");
+        return;
+      }
+  
+      this.finishMovement.state_id = "Finalizado";
+
 
 
       try {
-        const endStatus = await backendApi.put(`/changeStatus/`, edited);
+        if (this.finishMovement.finish_date != null) {
+          
+          const endStatus = await backendApi.put(`/changeStatus/`, this.finishMovement);
 
 
-        alert.success(endStatus.data.message);
+          alert.success(endStatus.data.message);
+        }
       } catch (error) {
         this.close();
       }
@@ -718,6 +721,8 @@ export default {
         this.location = responses[5].data.data;
         this.dependency = responses[6].data.data;
 
+        console.log(this.equipment)
+
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
 
@@ -751,21 +756,17 @@ export default {
     },
 
     async save() {
-   
-      if (this.editedItem.action == 'préstamo' || this.editedItem.action == 'mantenimiento') {
-        
-        this.editedItem.process = "En proceso";
-        console.log(this.editedItem.end_date)
 
+      if (this.editedItem.type_action_id == 'préstamo' || this.editedItem.type_action_id == 'mantenimiento') {
+        this.editedItem.state_id = "En proceso";
       }
       else {
-        this.editedItem.process = "Finalizado";
+        this.editedItem.state_id = "Finalizado";
         this.editedItem.end_date = this.editedItem.start_date;
-        
       }
 
-      this.v$.$validate();
-      if (this.v$.$invalid) {
+      this.v$.editedItem.$validate();
+      if (this.v$.editedItem.$invalid) {
         alert.error("Campos obligatorios");
         return;
       }
@@ -863,6 +864,9 @@ export default {
   },
 };
 </script>
+
+
+
 
 <style scoped>
 table {
