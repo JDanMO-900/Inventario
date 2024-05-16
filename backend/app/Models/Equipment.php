@@ -61,7 +61,8 @@ class Equipment extends Model
             'equipment_state.name as state',
 
             'equipment_type.name as equipment_type_id',
-            'equipment.availability'
+            'equipment.availability',
+            
 
 
 
