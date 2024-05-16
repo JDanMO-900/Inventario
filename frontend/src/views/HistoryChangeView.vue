@@ -113,9 +113,9 @@
 
               <v-col cols="4" sm="12" md="12">
 
-                <base-select :value="v$.editedItem.serial_number1.$model" label="Equipo asignado principal"
+                <base-select :value="v$.editedItem.equipment_id.$model" label="Equipo asignado principal"
                   :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.serial_number1.$model" :rules="v$.editedItem.serial_number1">
+                  v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
                 </base-select>
               </v-col>
 
@@ -332,7 +332,7 @@
                       <td>{{ this.editedItem.type1 }}</td>
                       <td>{{ this.editedItem.brand1 }}</td>
                       <td>{{ this.editedItem.model1 }}</td>
-                      <td>{{ this.editedItem.serial_number1 }}</td>
+                      <td>{{ this.editedItem.equipment_id }}</td>
 
 
 
@@ -482,7 +482,7 @@ export default {
         { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
         { title: "Usuario", key: "users" },
-        { title: "Equipo principal", key: "type1" },
+        { title: "Equipo principal", key: "equipment_id" },
         { title: "Modelo", key: "model1" },
         { title: "Estado", key: "state_id" },
         { title: "Movimiento", key: "type_action_id" },
@@ -496,11 +496,11 @@ export default {
 
       editedItem: {
         location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", serial_number1: "", serial_number2: "", state_id: "", start_date: "", end_date: "",
+        quantity_in: 1, type_action_id: "", equipment_id: "", serial_number2: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
         location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", serial_number1: "", serial_number2: "", state_id: "", start_date: "", end_date: ""
+        quantity_in: 1, type_action_id: "", equipment_id: "", serial_number2: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -523,7 +523,7 @@ export default {
       finishMovement: {
         id: "",
         finish_date: "",
-        serial_number1: "",
+        equipment_id: "",
         serial_number2: "",
         description: ""
       }
@@ -572,7 +572,7 @@ export default {
         type_action_id: {
           required,
           minLength: minLength(1),
-        }, serial_number1: {
+        }, equipment_id: {
           required,
           minLength: minLength(1),
         }, serial_number2: {
@@ -607,11 +607,11 @@ export default {
       return this.editedIndex === -1 ? "Nuevo movimiento" : "Editar movimiento";
     },
     filterEquipment() {
-      if (!this.editedItem.serial_number1) {
+      if (!this.editedItem.equipment_id) {
         return [];
       }
       else {
-        return this.equipment.filter(item => item.serial_number !== this.editedItem.serial_number1);
+        return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
     }
   },
@@ -658,7 +658,7 @@ export default {
 
 
       this.finishMovement.id = this.editedItem.id;
-      this.finishMovement.serial_number1 = this.editedItem.serial_number1;
+      this.finishMovement.equipment_id = this.editedItem.equipment_id;
       this.finishMovement.serial_number2 = this.editedItem.serial_number2;
       console.log(this.editedItem.description);
 
