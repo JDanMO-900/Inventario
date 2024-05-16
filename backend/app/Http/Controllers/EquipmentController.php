@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Encrypt;
 use App\Models\Brand;
 use App\Models\License;
@@ -11,6 +12,7 @@ use App\Models\Dependency;
 use Illuminate\Http\Request;
 use App\Models\EquipmentType;
 
+use App\Models\HistoryChange;
 use App\Models\EquipmentState;
 use App\Models\EquipmentDetail;
 use Illuminate\Routing\Controller;
@@ -221,6 +223,22 @@ class EquipmentController extends Controller
  
   
         $equipment->save();
+
+        $changeEndUseDate = HistoryChange::where('equipment_id', $equipment->id)
+        ->latest()
+        ->first();
+
+        $changeEndUseDate -> end_date = Carbon::now();
+        $changeEndUseDate->save();
+
+
+
+
+
+
+
+
+
 
         return response()->json([
             "message" => "Disponibilidad cambiada con exito",

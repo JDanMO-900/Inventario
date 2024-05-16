@@ -55,7 +55,7 @@ class LocationController extends Controller
         $location = new Location;
 
 
-		$location->deleted_at = $request->deleted_at;
+		$location->name = $request->name;
 
         $location->save();
 
@@ -88,7 +88,7 @@ class LocationController extends Controller
 
         $location = Location::where('id', $data['id'])->first();
 
-		$location->deleted_at = $request->deleted_at;
+		$location->name = $request->name;
 
         $location->save();
 

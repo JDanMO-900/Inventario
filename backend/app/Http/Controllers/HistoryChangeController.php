@@ -58,6 +58,7 @@ class HistoryChangeController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info($request);
         $historychange = new HistoryChange;
 
 
@@ -66,15 +67,14 @@ class HistoryChangeController extends Controller
         $historychange->quantity_in = $request->quantity_in;
         $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
-
-        $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
-        $available1 = Equipment::where('number_active', $request->number_active1)->first();
+        $historychange->equipment_id = Equipment::where('serial_number', $request->serial_number1)->first()->id;
+        $available1 = Equipment::where('serial_number', $request->serial_number1)->first();
         $available1->availability = false;
         $available1->save();
 
-        if ($request->number_active2 != "") {
-            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
-            $available2 = Equipment::where('number_active', $request->number_active2)->first();
+        if ($request->serial_number2 != "") {
+            $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
+            $available2 = Equipment::where('serial_number', $request->serial_number2)->first();
             $available2->availability = false;
             $available2->save();
 
@@ -146,10 +146,10 @@ class HistoryChangeController extends Controller
         $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
         
-        $historychange->equipment_id = Equipment::where('number_active', $request->number_active1)->first()->id;
+        $historychange->equipment_id = Equipment::where('serial_number', $request->serial_number1)->first()->id;
         
-        if ($request->number_active2 != "") {
-            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
+        if ($request->serial_number2 != "") {
+            $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
 
         } else {
             $historychange->equipment_used_in_id = null;
@@ -214,13 +214,13 @@ class HistoryChangeController extends Controller
         $historychange->save();
 
 
-        $available1 = Equipment::where('number_active', $request->number_active1)->first();
+        $available1 = Equipment::where('serial_number', $request->serial_number1)->first();
         $available1->availability = true;
         $available1->save();
 
-        if ($request->number_active2 != "") {
-            $historychange->equipment_used_in_id = Equipment::where('number_active', $request->number_active2)->first()->id;
-            $available2 = Equipment::where('number_active', $request->number_active2)->first();
+        if ($request->serial_number2 != "") {
+            $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
+            $available2 = Equipment::where('serial_number', $request->serial_number2)->first();
             $available2->availability = true;
             $available2->save();
 

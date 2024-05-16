@@ -89,13 +89,13 @@ class HistoryChange extends Model
         'dependency.name as dependency_id',
 
         //Equipo1
-        'equipment1.number_active as number_active1',
+        'equipment1.serial_number as serial_number1',
         'equipment1.model as model1',
         'equipment_type1.name as type1',
         'brand1.name as brand1',
 
         //Equipo2
-        'equipment2.number_active as number_active2',
+        'equipment2.serial_number as serial_number2',
         'equipment2.model as model2',
         'equipment_type2.name as type2',
         'brand2.name as brand2',
