@@ -141,7 +141,8 @@ class Equipment extends Model
             // Type action
             'type_action.name as type_action',
 
-            "history_change.start_date as start_date"
+            "history_change.start_date as start_date",
+            "history_change.end_date as end_date"
 
 
 
@@ -151,7 +152,7 @@ class Equipment extends Model
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('provider', 'equipment.provider_id', '=', 'provider.id')
-            ->join('history_change', 'history_change.equipment_id', '=', 'equipment.id')
+            ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
             ->join('users', 'users.id', '=', 'history_user_detail.user_id')
