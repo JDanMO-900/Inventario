@@ -113,9 +113,9 @@
 
               <v-col cols="4" sm="12" md="12">
 
-                <base-select :value="v$.editedItem.number_active1.$model" label="Equipo asignado principal"
-                  :items="this.equipment" item-title="format" item-value="number_active"
-                  v-model.trim="v$.editedItem.number_active1.$model" :rules="v$.editedItem.number_active1">
+                <base-select :value="v$.editedItem.serial_number1.$model" label="Equipo asignado principal"
+                  :items="this.equipment" item-title="format" item-value="serial_number"
+                  v-model.trim="v$.editedItem.serial_number1.$model" :rules="v$.editedItem.serial_number1">
                 </base-select>
               </v-col>
 
@@ -138,8 +138,8 @@
                 <template v-if="enabled">
                   <div>
                     <base-select label="Equipo asignado complementario" :items="filterEquipment"
-                      item-title="number_active" item-value="number_active"
-                      v-model.trim="v$.editedItem.number_active2.$model" :rules="v$.editedItem.number_active2"
+                      item-title="format" item-value="serial_number"
+                      v-model.trim="v$.editedItem.serial_number2.$model" :rules="v$.editedItem.serial_number2"
                       :disabled="!enabled">
                     </base-select>
 
@@ -209,8 +209,8 @@
               <!-- Descripcion -->
 
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" />
+                <base-text-area label="Comentarios(Opcional)" v-model="editedItem.description"
+                  />
 
               </v-col>
 
@@ -312,7 +312,7 @@
 
                     <tr>
                       <th colspan="4" class="text-h6 text-center"><b>Principal</b></th>
-                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.number_active2 != ''">
+                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.serial_number2 != ''">
                         <b>Complementario</b>
                       </th>
                     </tr>
@@ -326,21 +326,21 @@
                       <th v-if="this.editedItem.type2 != ''">Tipo</th>
                       <th v-if="this.editedItem.brand2 != ''">Marca</th>
                       <th v-if="this.editedItem.model2 != ''">Modelo</th>
-                      <th v-if="this.editedItem.number_active2 != ''">Serial</th>
+                      <th v-if="this.editedItem.serial_number2 != ''">Serial</th>
                     </tr>
                     <tr>
                       <td>{{ this.editedItem.type1 }}</td>
                       <td>{{ this.editedItem.brand1 }}</td>
                       <td>{{ this.editedItem.model1 }}</td>
-                      <td>{{ this.editedItem.number_active1 }}</td>
+                      <td>{{ this.editedItem.serial_number1 }}</td>
 
 
 
                       <td v-if="this.editedItem.type2 != ''">{{ this.editedItem.type2 }}</td>
                       <td v-if="this.editedItem.brand2 != ''">{{ this.editedItem.brand2 }}</td>
                       <td v-if="this.editedItem.model2 != ''">{{ this.editedItem.model2 }}</td>
-                      <td v-if="this.editedItem.number_active2 != ''">{{
-                        this.editedItem.number_active2 }}
+                      <td v-if="this.editedItem.serial_number2 != ''">{{
+                        this.editedItem.serial_number2 }}
                       </td>
                     </tr>
 
@@ -481,7 +481,7 @@ export default {
 
         { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
-        { title: "Usuario", key: "user" },
+        { title: "Usuario", key: "users" },
         { title: "Equipo principal", key: "type1" },
         { title: "Modelo", key: "model1" },
         { title: "Estado", key: "state_id" },
@@ -496,11 +496,11 @@ export default {
 
       editedItem: {
         location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", number_active1: "", number_active2: "", state_id: "", start_date: "", end_date: "",
+        quantity_in: 1, type_action_id: "", serial_number1: "", serial_number2: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
         location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", number_active1: "", number_active2: "", state_id: "", start_date: "", end_date: ""
+        quantity_in: 1, type_action_id: "", serial_number1: "", serial_number2: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -523,8 +523,8 @@ export default {
       finishMovement: {
         id: "",
         finish_date: "",
-        number_active1: "",
-        number_active2: "",
+        serial_number1: "",
+        serial_number2: "",
         description: ""
       }
 
@@ -558,10 +558,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        description: {
-          required,
-          minLength: minLength(1),
-        },
+      
         quantity_out: {
           required,
           minLength: minLength(1),
@@ -575,10 +572,10 @@ export default {
         type_action_id: {
           required,
           minLength: minLength(1),
-        }, number_active1: {
+        }, serial_number1: {
           required,
           minLength: minLength(1),
-        }, number_active2: {
+        }, serial_number2: {
           minLength: minLength(1),
         },
 
@@ -610,11 +607,11 @@ export default {
       return this.editedIndex === -1 ? "Nuevo movimiento" : "Editar movimiento";
     },
     filterEquipment() {
-      if (!this.editedItem.number_active1) {
+      if (!this.editedItem.serial_number1) {
         return [];
       }
       else {
-        return this.equipment.filter(item => item.number_active !== this.editedItem.number_active1);
+        return this.equipment.filter(item => item.serial_number !== this.editedItem.serial_number1);
       }
     }
   },
@@ -661,8 +658,8 @@ export default {
 
 
       this.finishMovement.id = this.editedItem.id;
-      this.finishMovement.number_active1 = this.editedItem.number_active1;
-      this.finishMovement.number_active2 = this.editedItem.number_active2;
+      this.finishMovement.serial_number1 = this.editedItem.serial_number1;
+      this.finishMovement.serial_number2 = this.editedItem.serial_number2;
       console.log(this.editedItem.description);
 
       this.v$.finishMovement.$validate();
@@ -776,7 +773,6 @@ export default {
       }
       else {
         this.editedItem.state_id = "Finalizado";
-        this.editedItem.end_date = this.editedItem.start_date;
       }
 
       this.v$.editedItem.$validate();

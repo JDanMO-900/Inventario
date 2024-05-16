@@ -99,6 +99,13 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
 
+        {
+      path: "/location",
+      name: "location",
+      component: () => import("../views/LocationView.vue"),
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+    },
+
 
 
 

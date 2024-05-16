@@ -526,7 +526,7 @@
               </v-col>
 
               <v-col cols="12" sm="12" md="12">
-                {{this.historyData}}
+
                 <table>
                   <tr>
                     <th>Numero de activo interno</th>

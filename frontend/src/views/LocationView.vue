@@ -7,37 +7,14 @@
           <base-button type="primary" title="Agregar" @click="addRecord()" />
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field
-            class="mt-3"
-            variant="outlined"
-            label="Buscar"
-            type="text"
-            v-model="search"
-          ></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
-      <v-data-table-server
-        :headers="headers"
-        :items-length="total"
-        :items="records"
-        :loading="loading"
-        item-title="id"
-        item-value="id"
-        @update:options="getDataFromApi"
-      >
+      <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
+        item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            size="20"
-            class="mr-2"
-            @click="editItem(item.raw)"
-            icon="mdi-pencil"
-          />
-          <v-icon
-            size="20"
-            class="mr-2"
-            @click="deleteItem(item.raw)"
-            icon="mdi-delete"
-          />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -45,7 +22,7 @@
       </v-data-table-server>
     </v-card>
 
-    <v-dialog v-model="dialog" max-width="800px" persistent>
+    <v-dialog v-model="dialog" max-width="800px" >
       <v-card>
         <v-card-title>
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
@@ -57,29 +34,21 @@
           <v-container>
             <!-- Form -->
             <v-row class="pt-3">
-               
-        <!-- name -->
-            <v-col cols="12" sm="12" md="12">
-                <base-input
-                label="Nombre de la licencia"
-                v-model="v$.editedItem.name.$model"
-                :rules="v$.editedItem.name"
-                />
-            </v-col>
-        <!-- name -->
 
-        
+              <!-- name -->
+              <v-col cols="12" sm="12" md="12">
+                <base-input label="Nombre de la ubicación" v-model="v$.editedItem.name.$model"
+                  :rules="v$.editedItem.name" />
+              </v-col>
+              <!-- name -->
+
+
             </v-row>
             <!-- Form -->
             <v-row>
               <v-col align="center">
                 <base-button type="primary" title="Guardar" @click="save" />
-                <base-button
-                  class="ms-1"
-                  type="secondary"
-                  title="Cancelar"
-                  @click="close"
-                />
+                <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
           </v-container>
@@ -95,17 +64,8 @@
           </h1>
           <v-row>
             <v-col align="center">
-              <base-button
-                type="primary"
-                title="Confirmar"
-                @click="deleteItemConfirm"
-              />
-              <base-button
-                class="ms-1"
-                type="secondary"
-                title="Cancelar"
-                @click="closeDelete"
-              />
+              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
             </v-col>
           </v-row>
         </v-container>
@@ -113,14 +73,15 @@
     </v-dialog>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
-import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
+import { helpers, minLength, required, email } from "@vuelidate/validators";
 
 
 import backendApi from "@/services/backendApi";
+
 
 
 import BaseButton from "../components/base-components/BaseButton.vue";
@@ -143,24 +104,24 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        
-		{ title: "Licencia", key: "name" },
+        { title: "Ubicación", key: "name" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,
-      title: "Listado de licencias",
+      title: "Ubicaciones",
       total: 0,
       options: {},
       editedItem: {
-        		name: "",
+        name: "",
       },
       defaultItem: {
-        		name: "",
+        name: "",
       },
       loading: false,
       debounce: 0,
-      
+
+
     };
   },
 
@@ -175,9 +136,14 @@ export default {
     return {
       editedItem: {
         name: {
-		required,
-		minLength: minLength(1),
-},
+          required,
+          minLength: minLength(1),
+        },
+        name: {
+          required,
+          minLength: minLength(1),
+        },
+
       },
     };
   },
@@ -215,7 +181,7 @@ export default {
 
       let requests = [
         this.getDataFromApi(),
-        
+
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -223,7 +189,8 @@ export default {
       });
 
       if (responses) {
-        
+
+
       }
 
       this.loading = false;
@@ -258,7 +225,7 @@ export default {
         );
 
         try {
-          const { data } = await backendApi.put(`/license/${edited.id}`, edited);
+          const { data } = await backendApi.put(`/location/${edited.id}`, edited);
 
           alert.success(data.message);
         } catch (error) {
@@ -272,7 +239,7 @@ export default {
 
       //Creating record
       try {
-        const { data } = await backendApi.post('/license', this.editedItem);
+        const { data } = await backendApi.post('/location', this.editedItem);
 
         alert.success(data.message);
       } catch (error) {
@@ -301,7 +268,7 @@ export default {
 
     async deleteItemConfirm() {
       try {
-        const { data } = await backendApi.delete(`/license/${this.editedItem.id}`, {
+        const { data } = await backendApi.delete(`/location/${this.editedItem.id}`, {
           params: {
             id: this.editedItem.id,
           },
@@ -324,7 +291,7 @@ export default {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(async () => {
         try {
-          const { data } = await backendApi.get('/license', {
+          const { data } = await backendApi.get('/location', {
             params: { ...options, search: this.search },
           });
 
