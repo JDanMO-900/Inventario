@@ -209,7 +209,7 @@
               <!-- Descripcion -->
 
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios(Opcional)" v-model="editedItem.description"
+                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model" :rules="v$.editedItem.description"
                   />
 
               </v-col>
@@ -482,7 +482,7 @@ export default {
         { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
         { title: "Usuario", key: "users" },
-        { title: "Equipo principal", key: "equipment_id" },
+        { title: "Serial equipo principal", key: "equipment_id" },
         { title: "Modelo", key: "model1" },
         { title: "Estado", key: "state_id" },
         { title: "Movimiento", key: "type_action_id" },
@@ -585,6 +585,9 @@ export default {
         },
         end_date: {
           minLength: minLength(1)
+        },
+        description: {
+         
         }
 
       },
