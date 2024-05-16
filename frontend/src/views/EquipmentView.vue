@@ -356,7 +356,7 @@
                     <tbody>
                       <tr style="height: 60px;">
 
-                        <td>{{ this.equipmentData.number_internal_active }}</td>
+                        <td>{{ this.equipmentData.number_active }}</td>
                         <td>{{ this.equipmentData.number_internal_active }}</td>
                         <td>{{ this.equipmentData.invoice_number }}</td>
                         <td>{{ this.equipmentData.adquisition_date }}</td>
@@ -526,13 +526,15 @@
               </v-col>
 
               <v-col cols="12" sm="12" md="12">
+                {{this.historyData}}
                 <table>
                   <tr>
                     <th>Numero de activo interno</th>
                     <th>Numero de activo fijo</th>
                     <th>Usuarios que han tenido el equipo</th>
                     <th>Movimientos del equipo</th>
-                    <th>Fecha en que se realizo el movimiento</th>
+                    <th>Fecha de inicio de </th>
+                    <th>Fecha de finalización el movimiento</th>
                   </tr>
                   <tr v-for="data in this.historyData">
                     <td>{{ data.number_active }}</td>
@@ -540,9 +542,11 @@
                     <td>{{ data.users }}</td>
                     <td>{{ data.type_action }}</td>
                     <td>{{ data.start_date }}</td>
+                    <td v-if="data.end_date!=null">{{ data.end_date }}</td>
+                    <td v-else>Actividad sin terminar</td>
                   </tr>
                   <tr v-if="this.historyData == 0">
-                    <td colspan="5">
+                    <td colspan="6">
                       <p class="text-center py-3">Sin datos que mostrar</p>
                     </td>
                   </tr>

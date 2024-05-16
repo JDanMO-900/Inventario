@@ -419,6 +419,12 @@
           </template>
         </v-col>
 
+        <v-col cols="12" sm="12" md="12">
+                <base-text-area label="Comentarios" v-model="v$.finishMovement.description.$model"
+                  :rules="v$.finishMovement.description" />
+
+              </v-col>
+
 
       </v-row>
 
@@ -519,6 +525,7 @@ export default {
         finish_date: "",
         number_active1: "",
         number_active2: "",
+        description: ""
       }
 
     };
@@ -588,6 +595,9 @@ export default {
         finish_date: {
           required,
         },
+        description: {
+          required
+        }
       }
 
     };
@@ -631,6 +641,9 @@ export default {
 
   methods: {
     movementFinishDateItem(item) {
+      
+      this.finishMovement.description = item.description;
+      console.log(this.finishMovement.description);
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogMovementFinishDate = true;
@@ -650,6 +663,7 @@ export default {
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.number_active1 = this.editedItem.number_active1;
       this.finishMovement.number_active2 = this.editedItem.number_active2;
+      console.log(this.editedItem.description);
 
       this.v$.finishMovement.$validate();
       if (this.v$.finishMovement.$invalid) {
