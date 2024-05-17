@@ -71,7 +71,7 @@ class Equipment extends Model
 
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
-            ->join('provider', 'equipment.provider_id', '=', 'provider.id')
+            ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
             ->where('equipment.number_internal_active', 'like', $search)
             ->orWhere('equipment.number_active', 'like', $search)
             ->orWhere('equipment.model', 'like', $search)

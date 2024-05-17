@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HistoryUserDetailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
@@ -89,6 +90,9 @@ Route::get('/user', [UserController::class, 'index']);
 
 
 Route::resource('/location', LocationController::class);
+
+
+Route::resource('/historyUserDetail', HistoryUserDetailController::class);
 
 
 

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('number_internal_active');
             $table->string('model');
             $table->string('serial_number');
-            $table->date('adquisition_date');
-            $table->string('invoice_number');
+            $table->date('adquisition_date')->nullable();
+            $table->string('invoice_number')->nullable();
             $table->boolean('availability');
             
             $table->unsignedBigInteger('equipment_state_id');
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->unsignedBigInteger('brand_id');
             $table->foreign('brand_id')->references('id')->on('brand');
 
-            $table->unsignedBigInteger('provider_id');
+            $table->unsignedBigInteger('provider_id')->nullable();
             $table->foreign('provider_id')->references('id')->on('provider');
             
             $table->timestamps();

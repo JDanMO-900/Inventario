@@ -132,12 +132,7 @@ class HistoryUserDetail extends Model
             'equipment2.number_internal_active as number_internal_active2',
 
             // Location description
-            'location.area as location'
-          
-
-
-
-
+   
 
         )
 
