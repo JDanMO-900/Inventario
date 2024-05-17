@@ -58,7 +58,7 @@ class HistoryChangeController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request);
+
         $historychange = new HistoryChange;
 
 
@@ -100,16 +100,28 @@ class HistoryChangeController extends Controller
 
 
 
-        $historyuserdetail = new HistoryUserDetail;
-        $lastInsertedRow = HistoryChange::latest()->first();
+     
+
+        foreach ($request->users as $user) {
+            $historyuserdetail = new HistoryUserDetail;
+            $lastInsertedRow = HistoryChange::latest()->first();
+            $historyuserdetail->history_change_id = $lastInsertedRow->id;
+            $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+            if(count($request->technician) >0){
+                foreach ($request->technician as $tech) {
+                    $historyuserdetail->user_tech_id = User::where('name', $tech)->first()->id;
+                    $historyuserdetail->save();
+            }
+            }
+            else{
+                $historyuserdetail->save();
+            }
+        }
+        
+        
+        
 
 
-        $historyuserdetail->history_change_id = $lastInsertedRow->id;//Here I want to get my last row;
-        $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
-        // Modificar por nuevo valor
-        $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id;
-
-        $historyuserdetail->save();
 
 
         return response()->json([
