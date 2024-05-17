@@ -18,8 +18,8 @@
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo')" size="20" class="mr-2"
-            @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+          <v-icon v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo')" size="20"
+            class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
 
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
@@ -48,16 +48,16 @@
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles del usuario </b>
                 </p>
-                <hr>
+                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
               </v-col>
 
 
               <!-- name -->
-
+              <!-- atol -->
               <v-col cols="6" sm="12" md="12">
-                <base-select label="Usuarios" :items="this.users" item-title="name" 
+                <base-multi-select label="Usuarios" :items="this.users" item-title="name"
                   v-model.trim="v$.editedItem.users.$model" :rules="v$.editedItem.users">
-                </base-select>
+                </base-multi-select>
               </v-col>
               <!-- name -->
 
@@ -86,12 +86,12 @@
               <v-col cols="12" sm="12" md="12">
                 <p class="text-grey-darken-4 text-h6 text-left"> <b>Registro de movimientos y equipos </b>
                 </p>
-                <hr>
+                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
               </v-col>
 
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
-                <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name" 
+                <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name"
                   v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
                 </base-select>
 
@@ -113,11 +113,11 @@
 
               <v-col cols="4" sm="12" md="12">
 
-                <base-select  label="Equipo asignado principal"
-                  :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
+                <base-select label="Equipo asignado principal" :items="this.equipment" item-title="format"
+                  item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
+                  :rules="v$.editedItem.equipment_id">
                 </base-select>
-                
+
               </v-col>
 
 
@@ -138,10 +138,9 @@
 
                 <template v-if="enabled">
                   <div>
-                    <base-select label="Equipo asignado complementario" :items="filterEquipment"
-                      item-title="format" item-value="serial_number"
-                      v-model.trim="v$.editedItem.serial_number2.$model" :rules="v$.editedItem.serial_number2"
-                      :disabled="!enabled">
+                    <base-select label="Equipo asignado complementario" :items="filterEquipment" item-title="format"
+                      item-value="serial_number" v-model.trim="v$.editedItem.serial_number2.$model"
+                      :rules="v$.editedItem.serial_number2" :disabled="!enabled">
                     </base-select>
 
                   </div>
@@ -173,24 +172,28 @@
 
 
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de ténico y comentarios sobre movimiento </b>
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de ténico y comentarios sobre movimiento
+                  </b>
                 </p>
-                <hr>
+                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
               </v-col>
 
               <!-- technician -->
               <v-col cols="6" sm="12" md="12">
-                <base-select label="Técnico asignado" :items="this.userTech" item-title="name" 
+                <!-- <base-select label="Técnicos asignados" :items="this.userTech" item-title="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
-                </base-select>
+                </base-select> -->
+                <base-multi-select label="Técnicos asignados" :items="this.userTech" item-title="name"
+                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
+                </base-multi-select>
               </v-col>
               <!-- technician -->
 
               <!-- Descripcion -->
 
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model" :rules="v$.editedItem.description"
-                  />
+                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
+                  :rules="v$.editedItem.description" />
 
               </v-col>
 
@@ -245,7 +248,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="12" md="12">
-                  <hr>
+                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
@@ -256,90 +259,91 @@
                 <!-- Nuevo Formato -->
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
-                    <table class="table w-100">
+                    <v-table density="compact">
                       <thead>
                         <tr>
-                          <td><b>Equipo asignado a</b></td>
-                          <td><b>Dependencia</b></td>
-                          <td><b>Ubicación</b></td>
-
+                          <th><b>Equipo asignado a</b></th>
+                          <th><b>Dependencia</b></th>
+                          <th><b>Ubicación</b></th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr style="height: 60px;">
-
+                        <tr>
                           <td>{{ this.editedItem.users }}</td>
                           <td>{{ this.editedItem.dependency_id }}</td>
                           <td>{{ this.editedItem.location_id }}</td>
                         </tr>
+                        <tr v-if="this.editedItem.technicalAttributes == 0">
+                          <td colspan="4">
+                            <p class="text-center py-3">Sin datos que mostrar</p>
+                          </td>
+                        </tr>
                       </tbody>
-                    </table>
+                    </v-table>
                   </div>
                 </v-col>
 
                 <!-- Nuevo Formato -->
 
                 <v-col cols="12" sm="12" md="12">
-                  <hr>
+                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
                   <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del equipo </b></p>
                 </v-col>
-
                 <v-col cols="12" sm="12" md="12">
-                  <table id="equipos">
-
-                    <tr>
-                      <th colspan="4" class="text-h6 text-center"><b>Principal</b></th>
-                      <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.serial_number2 != ''">
-                        <b>Complementario</b>
-                      </th>
-                    </tr>
-
-                    <tr>
-                      <th>Tipo</th>
-                      <th>Marca</th>
-                      <th>Modelo</th>
-                      <th>Serial</th>
-
-                      <th v-if="this.editedItem.type2 != ''">Tipo</th>
-                      <th v-if="this.editedItem.brand2 != ''">Marca</th>
-                      <th v-if="this.editedItem.model2 != ''">Modelo</th>
-                      <th v-if="this.editedItem.serial_number2 != ''">Serial</th>
-                    </tr>
-                    <tr>
-                      <td>{{ this.editedItem.type1 }}</td>
-                      <td>{{ this.editedItem.brand1 }}</td>
-                      <td>{{ this.editedItem.model1 }}</td>
-                      <td>{{ this.editedItem.equipment_id }}</td>
-
-
-
-                      <td v-if="this.editedItem.type2 != ''">{{ this.editedItem.type2 }}</td>
-                      <td v-if="this.editedItem.brand2 != ''">{{ this.editedItem.brand2 }}</td>
-                      <td v-if="this.editedItem.model2 != ''">{{ this.editedItem.model2 }}</td>
-                      <td v-if="this.editedItem.serial_number2 != ''">{{
-                        this.editedItem.serial_number2 }}
-                      </td>
-                    </tr>
-
-
-                  </table>
-
+                  <!-- Nueva tabla -->
+                  <v-table density="compact">
+                    <thead>
+                      <tr>
+                        <th colspan="4" class="text-h6 text-center"><b>Principal</b></th>
+                        <th colspan="4" class="text-h6 text-center" v-if="this.editedItem.serial_number2 != ''">
+                          <b>Complementario</b>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Tipo</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Serial</th>
+                        <th v-if="this.editedItem.type2 != ''">Tipo</th>
+                        <th v-if="this.editedItem.brand2 != ''">Marca</th>
+                        <th v-if="this.editedItem.model2 != ''">Modelo</th>
+                        <th v-if="this.editedItem.serial_number2 != ''">Serial</th>
+                      </tr>
+                      <tr>
+                        <td>{{ this.editedItem.type1 }}</td>
+                        <td>{{ this.editedItem.brand1 }}</td>
+                        <td>{{ this.editedItem.model1 }}</td>
+                        <td>{{ this.editedItem.equipment_id }}</td>
+                        <td v-if="this.editedItem.type2 != ''">{{ this.editedItem.type2 }}</td>
+                        <td v-if="this.editedItem.brand2 != ''">{{ this.editedItem.brand2 }}</td>
+                        <td v-if="this.editedItem.model2 != ''">{{ this.editedItem.model2 }}</td>
+                        <td v-if="this.editedItem.serial_number2 != ''">{{
+                          this.editedItem.serial_number2 }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                  <!-- Nueva tabla -->
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <hr>
+                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.type_action_id }}: </b>{{
-                    this.editedItem.state_id }}</p>
+                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.type_action_id }}:
+                    </b>{{
+                      this.editedItem.state_id }}</p>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Técnico que Realizo el {{ this.editedItem.type_action_id
+                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Técnico que Realizo el {{
+                    this.editedItem.type_action_id
                       }}:</b> <i>{{ this.editedItem.technician }} </i>
                   </p>
                 </v-col>
@@ -360,7 +364,7 @@
       </v-dialog>
     </v-row>
 
-    
+
 
 
 
@@ -370,57 +374,58 @@
 
   <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
 
-<v-card>
-  <v-card-title>
-    <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-      Finalizar {{ this.editedItem.type_action_id }}
-    </h2>
-  </v-card-title>
+    <v-card>
+      <v-card-title>
+        <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+          Finalizar {{ this.editedItem.type_action_id }}
+        </h2>
+      </v-card-title>
 
-  <v-card-text>
-    <v-container>
-      <!-- Form -->
+      <v-card-text>
+        <v-container>
+          <!-- Form -->
 
-      <v-row class="pt-3">
-
-
-        <v-col cols="12" sm="12" md="12">
-          <template
-            v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
-            <div>
-              <!-- Fecha de finalización de movimiento -->
-
-              <base-input label="Fecha de finalización del movimiento" v-model="v$.finishMovement.finish_date.$model"
-                :rules="v$.finishMovement.finish_date" type="datetime-local" />
-
-              <!-- Fecha de finalización de movimiento -->
-
-            </div>
-          </template>
-        </v-col>
-
-        <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios" v-model="v$.finishMovement.description.$model"
-                  :rules="v$.finishMovement.description" />
-
-              </v-col>
+          <v-row class="pt-3">
 
 
-      </v-row>
+            <v-col cols="12" sm="12" md="12">
+              <template
+                v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
+                <div>
+                  <!-- Fecha de finalización de movimiento -->
 
-      <!-- Form -->
-      <v-row>
-        <v-col align="center">
-          <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
-          <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card-text>
-</v-card>
+                  <base-input label="Fecha de finalización del movimiento"
+                    v-model="v$.finishMovement.finish_date.$model" :rules="v$.finishMovement.finish_date"
+                    type="datetime-local" />
+
+                  <!-- Fecha de finalización de movimiento -->
+
+                </div>
+              </template>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12">
+              <base-text-area label="Comentarios" v-model="v$.finishMovement.description.$model"
+                :rules="v$.finishMovement.description" />
+
+            </v-col>
 
 
-</v-dialog>
+          </v-row>
+
+          <!-- Form -->
+          <v-row>
+            <v-col align="center">
+              <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </v-card>
+
+
+  </v-dialog>
 </template>
 
 <script>
@@ -438,13 +443,14 @@ import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
 import BaseSelect from "../components/base-components/BaseSelect.vue";
 import BaseTextArea from "../components/base-components/BaseTextArea.vue";
+import BaseMultiSelect from "../components/base-components/BaseMultiSelect.vue";
 import useAlert from "../composables/useAlert";
 
 const { alert } = useAlert();
 const langMessages = messages["es"].validations;
 
 export default {
-  components: { BaseButton, BaseInput, BaseSelect, BaseTextArea },
+  components: { BaseButton, BaseInput, BaseSelect, BaseMultiSelect, BaseTextArea },
   setup() {
     return { v$: useVuelidate() };
   },
@@ -538,7 +544,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-      
+
         quantity_out: {
           required,
           minLength: minLength(1),
@@ -567,7 +573,7 @@ export default {
           minLength: minLength(1)
         },
         description: {
-         
+
         }
 
       },
@@ -621,7 +627,7 @@ export default {
 
   methods: {
     movementFinishDateItem(item) {
-      
+
       this.finishMovement.description = item.description;
       console.log(this.finishMovement.description);
       this.editedIndex = this.records.indexOf(item);
@@ -650,14 +656,14 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
-  
+
       this.finishMovement.state_id = "Finalizado";
 
 
 
       try {
         if (this.finishMovement.finish_date != null) {
-          
+
           const endStatus = await backendApi.put(`/changeStatus/`, this.finishMovement);
 
 
