@@ -48,7 +48,7 @@
             </v-tabs>
 
             <v-card-text>
-              <v-window v-model="tab" class="mt-2 mb-6">                
+              <v-window v-model="tab" class="mt-2 mb-6">
                 <!-- tab de equipo -->
                 <v-window-item value="1">
                   <v-row>
@@ -69,7 +69,8 @@
 
                     <!-- number_internal_active -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-input label="Número de registro interno" v-model="v$.editedItem.number_internal_active.$model"
+                      <base-input label="Número de registro interno"
+                        v-model="v$.editedItem.number_internal_active.$model"
                         :rules="v$.editedItem.number_internal_active" />
                     </v-col>
                     <!-- number_internal_active -->
@@ -85,7 +86,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" />
                     </v-col>
-                    <!-- model -->                      
+                    <!-- model -->
 
                     <!-- serial_number -->
                     <v-col cols="12" sm="12" md="6" lg="6">
@@ -96,8 +97,11 @@
 
                     <!-- equipment state -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-select label="Estado del equipo" :items="this.equipmentstate" item-title="name" item-value="name"
-                        :value="name" v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
+                      <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name" 
+                       v-model.trim="v$.editedItem.state.$model"
+                        :rules="v$.editedItem.state" />
+
+              
                     </v-col>
                     <!-- equipment state -->
 
@@ -107,32 +111,34 @@
                         :items="this.equipmenttype" item-title="name" item-value="name"
                         :rules="v$.editedItem.equipment_type_id" />
                     </v-col>
-                    <!-- tipo de equipo -->                      
-                    
+                    <!-- tipo de equipo -->
+
                     <v-col cols="12">
                       <v-chip color="primary" variant="flat" label>
                         <v-icon icon="mdi-numeric-2-circle" start></v-icon>
                         Especificaciones técnicas
                       </v-chip>
                       <v-divider class="mt-2"></v-divider>
-                    </v-col>    
-                    
+                    </v-col>
+
                     <!-- característica -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-select label="Característica" :items="this.technicalDescrip" item-title="name" item-value="name"
-                        :value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
+                      <base-select label="Característica" :items="this.technicalDescrip" item-title="name"
+                        item-value="name"  v-model.trim="v$.editedItem.technicalDescription.$model"
                         :rules="v$.editedItem.technicalDescription" />
                     </v-col>
                     <!-- característica -->
 
                     <!-- valor -->
                     <v-col cols="4" sm="12" md="6" lg="6">
-                      <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model" :rules="v$.editedItem.attribute" type="number" min="0" max="100" />
+                      <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model"
+                        :rules="v$.editedItem.attribute" type="number" min="0" max="100" />
                     </v-col>
                     <!-- valor -->
 
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick"/>
+                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar"
+                        @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick" />
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12">
@@ -150,7 +156,9 @@
                               <td>{{ datos.technicalDescription }}</td>
                               <td>{{ datos.attribute }}</td>
                               <td>
-                                <v-icon size="20" class="mr-2" @click="deleteTechnicalAttributes(datos.technicalDescription)" color="red-darken-4" icon="mdi-delete" />
+                                <v-icon size="20" class="mr-2"
+                                  @click="deleteTechnicalAttributes(datos.technicalDescription)" color="red-darken-4"
+                                  icon="mdi-delete" />
                               </td>
                             </tr>
                             <tr v-if="this.editedItem.technicalAttributes == 0">
@@ -178,12 +186,13 @@
 
                   <!-- licencias -->
                   <v-col cols="12" sm="12" md="12">
-                    <base-select label="Licencias" :items="this.license" item-title="name" item-value="name" :value="name"
-                      v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
+                    <base-select label="Licencias" :items="this.license" item-title="name" item-value="name"
+                       v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
                   </v-col>
 
                   <v-col cols="12" sm="12" md="12">
-                    <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addLicense" block prepend-icon="mdi-plus-thick"/>
+                    <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar"
+                      @click="addLicense" block prepend-icon="mdi-plus-thick" />
                   </v-col>
 
                   <v-col cols="12" sm="12" md="12">
@@ -199,7 +208,8 @@
                           <tr v-for="Licencia in this.editedItem.licenses">
                             <td>{{ Licencia }}</td>
                             <td>
-                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" color="red-darken-4"/>
+                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete"
+                                color="red-darken-4" />
                             </td>
                           </tr>
                           <tr v-if="this.editedItem.licenses == 0">
@@ -227,29 +237,31 @@
 
                     <!-- invoice_number -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-input label="Número de factura" v-model="v$.editedItem.invoice_number.$model" :rules="v$.editedItem.invoice_number" />
+                      <base-input label="Número de factura" v-model="v$.editedItem.invoice_number.$model"
+                        :rules="v$.editedItem.invoice_number" />
                     </v-col>
                     <!-- invoice_number -->
 
                     <!-- adquisition_date -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-input label="Fecha de adquisición" v-model="v$.editedItem.adquisition_date.$model" :rules="v$.editedItem.adquisition_date" type="date" />
+                      <base-input label="Fecha de adquisición" v-model="v$.editedItem.adquisition_date.$model"
+                        :rules="v$.editedItem.adquisition_date" type="date" />
                     </v-col>
-                    <!-- adquisition_date -->    
+                    <!-- adquisition_date -->
 
                     <!-- proveedor -->
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-select label="Nombre" :items="this.provider" item-title="name" :value="name"
+                      <base-select label="Nombre" :items="this.provider" item-title="name" 
                         v-model.trim="v$.editedItem.provider.$model" :rules="v$.editedItem.provider">
                       </base-select>
                     </v-col>
-                    <!-- proveedor -->  
+                    <!-- proveedor -->
                   </v-row>
                 </v-window-item>
                 <!-- tab de proveedor -->
               </v-window>
             </v-card-text>
-            <!-- tabs -->    
+            <!-- tabs -->
             <v-row>
               <v-col align="center">
                 <base-button type="primary" title="Guardar" @click="save" />
@@ -284,14 +296,15 @@
         <v-container>
           <h1 class="black-secondary text-center mt-3 mb-3">
 
-            <b>¿Quieres cambiar la disponibilidad del equipo de </b>
+            <b>¿Desea cambiar el estado de disponibilidad del equipo de </b>
             <span
               :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }">
-              {{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() : this.editedItem.availability }}
+              '{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() :
+                this.editedItem.availability }}'
             </span>
 
-            <span v-if="this.editedItem.availability == 'Disponible'"> a "en uso"?</span>
-            <span v-if="this.editedItem.availability == 'En uso'"> a "disponible"?</span>
+            <span v-if="this.editedItem.availability == 'Disponible'"> a 'en uso'?</span>
+            <span v-if="this.editedItem.availability == 'En uso'"> a 'disponible'?</span>
 
           </h1>
           <v-row>
@@ -324,238 +337,307 @@
               <hr>
             </v-col>
             <v-col cols="12" sm="12" md="12">
-              <p><b>Disponibilidad del equipo:</b> <span
+              <p class="text-grey-darken-6 text-h6 text-left"><b>Disponibilidad del equipo:</b> <span
                   :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">{{
                     this.allowable }}</span></p>
 
             </v-col>
             <v-row class="pt-3">
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
+
 
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Registro del equipo </b></p>
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Registro del equipo </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <v-col cols="12" sm="12" md="12">
+                        <div class="w-100">
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left text-grey-darken-4">
+                                  Numero de activo fijo
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Numero de registro interno
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Codigo de factura
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Fecha de adquisición
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>{{ this.equipmentData.number_active }}</td>
+                                <td>{{ this.equipmentData.number_internal_active }}</td>
+                                <td>{{ this.equipmentData.invoice_number }}</td>
+                                <td>{{ this.equipmentData.adquisition_date }}</td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+
+                        </div>
+                      </v-col>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+
+                </v-expansion-panels>
+
               </v-col>
 
 
               <!-- Nuevo Formato -->
               <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Numero de activo fijo</b></td>
-                        <td><b>Numero de registro interno</b></td>
-                        <td><b>Codigo de factura</b></td>
-                        <td><b>Fecha de adquisición</b></td>
 
 
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style="height: 60px;">
+                <v-expansion-panels>
 
-                        <td>{{ this.equipmentData.number_active }}</td>
-                        <td>{{ this.equipmentData.number_internal_active }}</td>
-                        <td>{{ this.equipmentData.invoice_number }}</td>
-                        <td>{{ this.equipmentData.adquisition_date }}</td>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Generalidades del equipo </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <v-col cols="12" sm="12" md="12">
+                        <div class="w-100">
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left text-grey-darken-4">
+                                  Tipo de equipo
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Marca
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Modelo
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Serie
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Estado del equipo
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>{{ this.equipmentData.equipment_type_id }}</td>
+                                <td>{{ this.equipmentData.brand }}</td>
+                                <td>{{ this.equipmentData.model }}</td>
+                                <td>{{ this.equipmentData.serial_number }}</td>
+                                <td>{{ this.equipmentData.state }}</td>
+                              </tr>
+                            </tbody>
+                          </v-table>
 
-                      </tr>
+                        </div>
+                      </v-col>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-col>
 
-                    </tbody>
-                  </table>
-                </div>
+              <!-- Nuevo Formato -->
+
+              <!-- Nuevo Formato -->
+              <v-col cols="12" sm="12" md="12">
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Especificaciones del equipo </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <v-col cols="12" sm="12" md="12">
+                        <div class="w-100">
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left text-grey-darken-4">
+                                  Especificación
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Capacidad
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="datos in this.equipmentData.technicalAttributes" style="height: 60px;">
+                                <td>{{ datos.technicalDescription }}</td>
+                                <td>{{ datos.attribute }}</td>
+                              </tr>
+                              <tr v-if="this.equipmentData.technicalAttributes == 0">
+                                <td colspan="2">
+                                  <p class="text-center py-3">Sin datos que mostrar</p>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+                        </div>
+                      </v-col>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-col>
+
+              <!-- Nuevo Formato -->
+
+
+              <!-- Nuevo Formato -->
+              <v-col cols="12" sm="12" md="12">
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Licencias del equipo </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <v-col cols="12" sm="12" md="12">
+                        <div class="w-100">
+
+
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left text-grey-darken-4">
+                                  N
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Nombre licencia
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="(license, index) in this.equipmentData.licenses" :key="index"
+                                style="height: 60px;">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ license }}</td>
+                              </tr>
+                              <tr v-if="this.equipmentData.licenses == 0">
+                                <td colspan="2">
+                                  <p class="text-center py-3">Sin datos que mostrar</p>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+
+                        </div>
+                      </v-col>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
               </v-col>
 
               <!-- Nuevo Formato -->
 
               <v-col cols="12" sm="12" md="12">
-                <hr>
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Datos proveedor </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <v-col cols="12" sm="12" md="12">
+                        <div class="w-100">
+
+                          <v-table>
+                            <thead>
+
+                              <tr>
+                                <th class="text-left text-grey-darken-4">
+                                  Proveedor
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Contacto del proveedor
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Numero de contacto del proveedor
+                                </th>
+                                <th class="text-left text-grey-darken-4">
+                                  Fecha de adquisición
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template v-if="this.equipmentData.provider != null">
+                                <tr>
+                                  <td>{{ this.equipmentData.provider }}</td>
+                                  <td>{{ this.equipmentData.contact_name }}</td>
+                                  <td>{{ this.equipmentData.contact_phone }}</td>
+                                  <td>{{ this.equipmentData.adquisition_date }}</td>
+                                </tr>
+
+                              </template>
+                              <template v-else>
+                                <tr>
+                                  <td colspan="4">
+                                    <p class="text-center py-3">Sin datos que mostrar</p>
+                                  </td>
+                                </tr>
+
+                              </template>
+
+
+                            </tbody>
+                          </v-table>
+                        </div>
+                      </v-col>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
               </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Generalidades del equipo </b></p>
-              </v-col>
-
-
               <!-- Nuevo Formato -->
-              <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Tipo de equipo</b></td>
-                        <td><b>Marca</b></td>
-                        <td><b>Modelo</b></td>
-                        <td><b>Serie</b></td>
-                        <td><b>Estado del equipo</b></td>
-
-
-
-
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style="height: 60px;">
-
-                        <td>{{ this.equipmentData.equipment_type_id }}</td>
-                        <td>{{ this.equipmentData.brand }}</td>
-                        <td>{{ this.equipmentData.model }}</td>
-                        <td>{{ this.equipmentData.serial_number }}</td>
-                        <td>{{ this.equipmentData.state }}</td>
-
-
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-
-
-
-
-              </v-col>
-
-              <!-- Nuevo Formato -->
-
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Especificaciones del equipo </b></p>
-              </v-col>
-
-
-
-
-
-              <!-- Nuevo formato -->
-
-              <v-col cols="12" sm="12" md="12">
-                <div class="w-100">
-                  <table class="table w-100">
-                    <thead>
-                      <tr>
-                        <td><b>Especificación</b></td>
-                        <td><b>Capacidad</b></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="datos in this.equipmentData.technicalAttributes" style="height: 60px;">
-                        <td>{{ datos.technicalDescription }}</td>
-                        <td>{{ datos.attribute }}</td>
-
-
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </v-col>
 
               <!-- Nuevo Formato -->
 
               <v-col cols="12" sm="12" md="12">
-                <hr>
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-title>
+                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Historial del equipo </b></p>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                      <div class="w-100">
+                        <v-table height="300px" fixed-header>
+                          <thead>
+                            <tr>
+                              <th>Numero de activo interno</th>
+                              <th>Numero de activo fijo</th>
+                              <th>Usuarios que han tenido el equipo</th>
+                              <th>Movimientos del equipo</th>
+                              <th>Fecha de inicio de </th>
+                              <th>Fecha de finalización el movimiento</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="data in this.historyData">
+                              <td>{{ data.number_active }}</td>
+                              <td>{{ data.number_internal_active }}</td>
+                              <td>{{ data.users }}</td>
+                              <td>{{ data.type_action }}</td>
+                              <td>{{ data.start_date }}</td>
+                              <td v-if="data.end_date != null">{{ data.end_date }}</td>
+                              <td v-else>Actividad sin terminar</td>
+                            </tr>
+                            <tr v-if="this.historyData == 0">
+                              <td colspan="6">
+                                <p class="text-center py-3">Sin datos que mostrar</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </v-table>
+                      </div>
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </v-expansion-panels>
               </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Licencias del equipo </b></p>
-              </v-col>
-
-              <table class="table w-100">
-                <thead>
-                  <tr>
-                    <td><b>N</b></td>
-                    <td><b>Nombre licencia</b></td>
-
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(license, index) in this.equipmentData.licenses" :key="index" style="height: 60px;">
-
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ license }}</td>
-
-
-                  </tr>
-
-                </tbody>
-              </table>
-
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Datos proveedor </b></p>
-              </v-col>
-
-              <table class="table w-100">
-                <thead>
-                  <tr>
-                    <td><b>Proveedor</b></td>
-                    <td><b>Contacto del proveedor</b></td>
-                    <td><b>Numero de contacto del proveedor</b></td>
-                    <td><b>Fecha de adquisición</b></td>
-
-
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="height: 60px;">
-
-                    <td>{{ this.equipmentData.provider }}</td>
-                    <td>{{ this.equipmentData.contact_name }}</td>
-                    <td>{{ this.equipmentData.contact_phone }}</td>
-                    <td>{{ this.equipmentData.adquisition_date }}</td>
-
-                  </tr>
-
-                </tbody>
-              </table>
-
-              <v-col cols="12" sm="12" md="12">
-                <hr>
-              </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-center"> <b>Historial del equipo </b></p>
-              </v-col>
-
-              <v-col cols="12" sm="12" md="12">
-
-                <table>
-                  <tr>
-                    <th>Numero de activo interno</th>
-                    <th>Numero de activo fijo</th>
-                    <th>Usuarios que han tenido el equipo</th>
-                    <th>Movimientos del equipo</th>
-                    <th>Fecha de inicio de </th>
-                    <th>Fecha de finalización el movimiento</th>
-                  </tr>
-                  <tr v-for="data in this.historyData">
-                    <td>{{ data.number_active }}</td>
-                    <td>{{ data.number_internal_active }}</td>
-                    <td>{{ data.users }}</td>
-                    <td>{{ data.type_action }}</td>
-                    <td>{{ data.start_date }}</td>
-                    <td v-if="data.end_date!=null">{{ data.end_date }}</td>
-                    <td v-else>Actividad sin terminar</td>
-                  </tr>
-                  <tr v-if="this.historyData == 0">
-                    <td colspan="6">
-                      <p class="text-center py-3">Sin datos que mostrar</p>
-                    </td>
-                  </tr>
-                </table>
-              </v-col>
+              <!-- Nuevo Formato -->
 
 
             </v-row>
-
           </v-container>
 
         </v-card-text>
@@ -611,7 +693,6 @@ export default {
         { title: "Número de activo fijo", key: "number_active" },
         { title: "Número de registro interno", key: "number_internal_active" },
         { title: "Serial", key: "serial_number" },
-        { title: "Fecha de adquisición", key: "adquisition_date" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -670,10 +751,8 @@ export default {
           required,
           minLength: minLength(1),
         }, adquisition_date: {
-          required,
           minLength: minLength(1),
         }, invoice_number: {
-          required,
           minLength: minLength(1),
         }, state: {
           required,
@@ -688,7 +767,7 @@ export default {
           minLength: minLength(1),
         },
         provider: {
-          required,
+
           minLength: minLength(1),
         },
         license: {

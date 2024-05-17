@@ -55,7 +55,7 @@
               <!-- name -->
 
               <v-col cols="6" sm="12" md="12">
-                <base-select label="Usuarios" :items="this.users" item-title="name" :value="name"
+                <base-select label="Usuarios" :items="this.users" item-title="name" 
                   v-model.trim="v$.editedItem.users.$model" :rules="v$.editedItem.users">
                 </base-select>
               </v-col>
@@ -91,7 +91,7 @@
 
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
-                <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name" :value="name"
+                <base-select label="Movimiento realizado" :items="this.typeAction" item-title="name" 
                   v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
                 </base-select>
 
@@ -113,10 +113,11 @@
 
               <v-col cols="4" sm="12" md="12">
 
-                <base-select :value="v$.editedItem.equipment_id.$model" label="Equipo asignado principal"
+                <base-select  label="Equipo asignado principal"
                   :items="this.equipment" item-title="format" item-value="serial_number"
                   v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
                 </base-select>
+                
               </v-col>
 
 
@@ -171,40 +172,19 @@
               <!-- Cantidad de entrada -->
 
 
-
-
-
-
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Gestión de acciones y estados </b>
+                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de ténico y comentarios sobre movimiento </b>
                 </p>
                 <hr>
               </v-col>
 
-
-
-              <!-- Estado de proceso -->
-              <!-- Atol -->
-              <!-- <v-col cols="4" sm="12" md="12">
-                <base-select label="Estado del proceso" :items="this.processState" item-title="name" :value="name"
-                  v-model.trim="v$.editedItem.process.$model" :rules="v$.editedItem.process">
-                </base-select>
-              </v-col> -->
-              <!-- Estado de proceso -->
-
-
               <!-- technician -->
-
               <v-col cols="6" sm="12" md="12">
-                <base-select label="Técnico asignado" :items="this.userTech" item-title="name" :value="name"
+                <base-select label="Técnico asignado" :items="this.userTech" item-title="name" 
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-select>
               </v-col>
-
-
-
               <!-- technician -->
-
 
               <!-- Descripcion -->
 
@@ -481,9 +461,9 @@ export default {
 
         { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
-        { title: "Usuario", key: "users" },
+        // { title: "Usuario", key: "users" },
         { title: "Serial equipo principal", key: "equipment_id" },
-        { title: "Modelo", key: "model1" },
+        // { title: "Modelo", key: "model1" },
         { title: "Estado", key: "state_id" },
         { title: "Movimiento", key: "type_action_id" },
         { title: "ACCIONES", key: "actions", sortable: false },
