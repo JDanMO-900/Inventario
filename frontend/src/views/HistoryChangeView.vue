@@ -338,19 +338,42 @@
                 <v-col cols="12" sm="12" md="12">
                   <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
                 </v-col>
-
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Etapa de {{ this.editedItem.type_action_id }}:
-                    </b>{{
-                      this.editedItem.state_id }}</p>
+                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del movimiento </b></p>
                 </v-col>
 
+                <!-- Nuevo Formato -->
                 <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-4 text-h6 text-right"> <b>Técnico que Realizo el {{
-                    this.editedItem.type_action_id
-                      }}:</b> <i>{{ this.editedItem.technician }} </i>
-                  </p>
+                  <div class="w-100">
+                    <v-table density="compact">
+                      <thead>
+                        <tr>
+                          <th><b>Encargado/a de realizar el movimiento</b></th>
+                          <th><b>Movimiento realizado</b></th>
+                          <th><b>Etapa del movimiento</b></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="tech in this.editedItem.technician">
+                          <td>{{ tech }}</td>
+                          <td>{{ this.editedItem.type_action_id }}</td>
+                          <td>{{ this.editedItem.state_id }}</td>
+                        </tr>
+                        
+                        <tr v-if="this.editedItem.technician == 0">
+                          <td colspan="4">
+                            <p class="text-center py-3">Sin datos que mostrar</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                  </div>
                 </v-col>
+
+                <!-- Nuevo Formato -->
+
+
+
 
               </v-row>
             </v-container>
