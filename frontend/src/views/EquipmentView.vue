@@ -930,7 +930,7 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
 
-      const equipment_history = await backendApi.get(`/equipment/${item.number_internal_active}`);
+      const equipment_history = await backendApi.get(`/equipment/${item.serial_number}`);
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
 

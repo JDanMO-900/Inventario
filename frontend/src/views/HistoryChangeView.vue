@@ -56,7 +56,7 @@
               <!-- atol -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
-                  v-model.trim="v$.editedItem.users.$model" :rules="v$.editedItem.users">
+                  v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
                 </base-multi-select>
               </v-col>
               <!-- name -->
