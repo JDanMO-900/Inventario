@@ -2,6 +2,7 @@
   <div>
     <v-autocomplete
       v-bind="$attrs"
+      v-model="rules.$model"
       class="mt-4"
       variant="outlined"
       hide-details

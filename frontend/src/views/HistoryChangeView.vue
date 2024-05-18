@@ -183,9 +183,12 @@
                 <!-- <base-select label="Técnicos asignados" :items="this.userTech" item-title="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-select> -->
-                <base-multi-select label="Técnicos asignados" :items="this.userTech" item-title="name"
+
+                <base-multi-select label="Usuarios" :items="this.userTech" item-title="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-multi-select>
+           
+
               </v-col>
               <!-- technician -->
 
@@ -262,14 +265,15 @@
                     <v-table density="compact">
                       <thead>
                         <tr>
-                          <th><b>Equipo asignado a</b></th>
+                          <th><b>Usuario del equipo</b></th>
                           <th><b>Dependencia</b></th>
                           <th><b>Ubicación</b></th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>{{ this.editedItem.users }}</td>
+                     
+                        <tr v-for="user in this.editedItem.users">
+                          <td>{{ user }}</td>
                           <td>{{ this.editedItem.dependency_id }}</td>
                           <td>{{ this.editedItem.location_id }}</td>
                         </tr>
