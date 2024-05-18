@@ -9,6 +9,7 @@ use App\Models\Equipment;
 
 use App\Models\Dependency;
 use App\Models\TypeAction;
+use App\Models\HistoryTech;
 use App\Models\ProcessState;
 use Illuminate\Http\Request;
 use App\Models\HistoryChange;
@@ -97,31 +98,21 @@ class HistoryChangeController extends Controller
 
         $historychange->save();
 
-
-
-
-     
-
         foreach ($request->users as $user) {
-            $historyuserdetail = new HistoryUserDetail;
             $lastInsertedRow = HistoryChange::latest()->first();
+            $historyuserdetail = new HistoryUserDetail;
             $historyuserdetail->history_change_id = $lastInsertedRow->id;
             $historyuserdetail->user_id = User::where('name', $user)->first()->id;
-            if(count($request->technician) >0){
-                foreach ($request->technician as $tech) {
-                    $historyuserdetail->user_tech_id = User::where('name', $tech)->first()->id;
-                    $historyuserdetail->save();
-            }
-            }
-            else{
-                $historyuserdetail->save();
-            }
+            $historyuserdetail->save();
         }
-        
-        
-        
 
-
+        foreach ($request->technician as $tech) {
+            $lastInsertedRow = HistoryChange::latest()->first();
+            $historyusertech = new HistoryTech;
+            $historyusertech->history_change_id = $lastInsertedRow->id;
+            $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
+            $historyusertech->save();
+        }
 
 
         return response()->json([
@@ -150,6 +141,7 @@ class HistoryChangeController extends Controller
     public function update(Request $request)
     {
 
+
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->description = $request->description;
@@ -157,9 +149,9 @@ class HistoryChangeController extends Controller
         $historychange->quantity_in = $request->quantity_in;
         $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
-        
+
         $historychange->equipment_id = Equipment::where('serial_number', $request->equipment_id)->first()->id;
-        
+
         if ($request->serial_number2 != "") {
             $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
 
@@ -182,12 +174,25 @@ class HistoryChangeController extends Controller
 
 
         // Hacer que por medio de history change encuentre el history user_detail y de esta manera se pueda editar
-        $historyuserdetail = HistoryUserDetail::where('history_change_id', $historychange->id)->first();
-        $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
-        // Modificar por nuevo valor
-        $historyuserdetail->user_tech_id = User::where('name', $request->technician)->first()->id;
-        $historyuserdetail->save();
 
+        HistoryUserDetail::where('history_change_id', $historychange->id)->forceDelete();
+
+        Log::info($request->users);
+        foreach ($request->users as $user) {
+            $historyuserdetail = new HistoryUserDetail;
+            $historyuserdetail->history_change_id = $historychange->id;
+            $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+            $historyuserdetail->save();
+        }
+
+        HistoryTech::where('history_change_id', $historychange->id)->forceDelete();
+
+        foreach ($request->technician as $tech) {
+            $historyusertech = new HistoryTech;
+            $historyusertech->history_change_id = $historychange->id;
+            $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
+            $historyusertech->save();
+        }
 
 
         return response()->json([
@@ -214,9 +219,6 @@ class HistoryChangeController extends Controller
 
     public function updateEndProcess(Request $request)
     {
-        Log::info($request);
-
-
 
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();

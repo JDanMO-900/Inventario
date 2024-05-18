@@ -71,7 +71,7 @@ class HistoryChange extends Model
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-        return HistoryChange::select('history_change.*', 
+        $data =  HistoryChange::select('history_change.*', 
         'type_action.*', 
         'equipment_id.*', 
         'equipment2.*', 
@@ -80,9 +80,7 @@ class HistoryChange extends Model
         'dependency.*', 
         'history_change.id as id',
 
-        // Datos del usuario
-        'users.name as users',
-        'technician.name as technician',
+
 
         // Ubicacion
         'location.name as location_id',
@@ -121,24 +119,37 @@ class HistoryChange extends Model
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
-            ->join('history_user_detail', 'history_user_detail.history_change_id','=', 'history_change.id')
-            ->join('users', 'history_user_detail.user_id','=', 'users.id')
-            ->join('users as technician', 'history_user_detail.user_tech_id','=', 'technician.id')
+
+            
             ->where('location.name', 'like', $search)
             ->orWhere('dependency.name', 'like', $search)
             ->orWhere('process_state.name', 'like', $search)
             ->orWhere('type_action.name', 'like', $search)
-            ->orWhere(function($query) use ($search){
-                $query->where('users.name', 'like', $search);
-            })
-
-
-
-
+            
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("history_change.$sortBy", $sort)
             ->get();
+
+            $data->each(function($item){
+                $users = User::Join('history_user_detail', 'users.id','=', 'history_user_detail.user_id')
+                ->where('history_user_detail.history_change_id', $item->id)
+                ->pluck('users.name')
+                ->toArray();
+                $item->users = $users;
+            });
+
+            $data->each(function($item){
+                $technician = User::join('history_tech', 'users.id','=', 'history_tech.user_tech_id')
+                ->where('history_tech.history_change_id', $item->id)
+                ->pluck('users.name')
+                ->toArray();
+                $item->technician = $technician;
+            });
+
+
+
+            return $data;
             
     }
 

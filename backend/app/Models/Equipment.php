@@ -88,7 +88,7 @@ class Equipment extends Model
             $availability = $item->availability ? 'Disponible' : 'En uso';
             $item->availability = $availability;
 
-            $licenses = License::join('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
+            $licenses = License::leftJoin('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
                 ->where('equipment_license_detail.equipment_id', $item->id)
                 ->pluck('license.name')
                 ->toArray();
@@ -156,7 +156,7 @@ class Equipment extends Model
             ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
-            ->join('users', 'users.id', '=', 'history_user_detail.user_id')
+
             ->where('equipment.number_internal_active', 'like', $equip)
 
             ->get();
