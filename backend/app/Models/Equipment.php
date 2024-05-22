@@ -155,9 +155,10 @@ class Equipment extends Model
             ->join('provider', 'equipment.provider_id', '=', 'provider.id')
             ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('users', 'users.id', '=', 'history_user_detail.user_id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
 
-            ->where('equipment.number_internal_active', 'like', $equip)
+            ->where('equipment.serial_number', 'like', $equip)
 
             ->get();
 

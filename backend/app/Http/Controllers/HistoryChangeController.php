@@ -97,8 +97,10 @@ class HistoryChangeController extends Controller
         $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
 
         $historychange->save();
+        Log::info($request);
 
         foreach ($request->users as $user) {
+           
             $lastInsertedRow = HistoryChange::latest()->first();
             $historyuserdetail = new HistoryUserDetail;
             $historyuserdetail->history_change_id = $lastInsertedRow->id;
