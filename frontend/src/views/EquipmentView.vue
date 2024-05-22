@@ -886,14 +886,11 @@ export default {
 
     },
     deleteLicenses(item) {
-
       this.editedItem.licenses = this.editedItem.licenses.filter(
         function (obj) {
           return obj !== item
         }
       )
-
-
     },
 
     addTechnicalAttributes() {

@@ -30,7 +30,7 @@
       </v-data-table-server>
     </v-card>
 
-    <v-dialog v-model="dialog" max-width="800px">
+    <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
           <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
@@ -43,8 +43,6 @@
             <!-- Form -->
 
             <v-row class="pt-3">
-
-
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-1-circle" start></v-icon>
@@ -52,10 +50,8 @@
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
-
-
               <!-- name -->
-              <!-- atol -->
+  
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
                   v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
@@ -113,44 +109,55 @@
 
               <!-- Numero de activo fijo 1 -->
 
-              <v-col cols="4" sm="12" md="12">
-                <base-select label="Equipo asignado principal" :items="this.equipment" item-title="format"
-                  item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
-                  :rules="v$.editedItem.equipment_id">
+              <v-col cols="4" sm="12" md="12"  >
+                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
+                  v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                </base-select>
+
+                <base-select v-else label="Equipo" :items="this.equipment" item-title="format" item-value="serial_number"
+                  v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
                 </base-select>
 
               </v-col>
 
 
+
+              <!-- Probando datos de equipos -->
+              <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
+                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
+                  " block prepend-icon="mdi-plus-thick" />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
+                <div class="w-100">
+                  <v-table density="compact">
+                    <thead>
+                      <tr>
+                        <td><b>Equipo</b></td>
+                        <td><b>Acción</b></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="equipo in this.editedItem.equipment_id" v-if="this.formTitle == 'Nuevo movimiento'">
+                        <td>{{ equipo }}</td>
+                        <td>
+                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
+                            color="red-darken-4" />
+                        </td>
+                      </tr>
+                      <tr v-if="this.editedItem.equipment_id == 0">
+                        <td colspan="4">
+                          <p class="text-center py-3">Sin datos que mostrar</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </div>
+              </v-col>
+              <!-- Probando datos de licencia -->
+
+
               <!-- Numero de activo fijo 1 -->
-
-
-
-              <v-col cols="4" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h10 "><b class="text-black-darken-4">Seleccione el checkbox para
-                    agregar un dispositivo complementario: </b></p>
-                <v-checkbox-btn v-model="enabled" class="pe-2"></v-checkbox-btn>
-              </v-col>
-
-
-              <!-- Numero de activo fijo 2 -->
-
-              <v-col cols="4" sm="12" md="12">
-
-                <template v-if="enabled">
-                  <div>
-                    <base-select label="Equipo asignado complementario" :items="filterEquipment" item-title="format"
-                      item-value="serial_number" v-model.trim="v$.editedItem.serial_number2.$model"
-                      :rules="v$.editedItem.serial_number2" :disabled="!enabled">
-                    </base-select>
-
-                  </div>
-                </template>
-
-              </v-col>
-              <!-- Numero de activo fijo 2 -->
-
-
 
 
               <!-- Cantidad de salida -->
@@ -173,28 +180,21 @@
 
 
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Asignación de ténico y comentarios sobre movimiento
-                  </b>
-                </p>
-                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                
                 <v-chip color="primary" variant="flat" label>
-                  <v-icon icon="mdi-numeric-1-circle" start></v-icon>
-                  Detalles del usuario
+                  <v-icon icon="mdi-numeric-3-circle" start></v-icon>
+                  Detalles asignación
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
               <!-- technician -->
               <v-col cols="6" sm="12" md="12">
-                <!-- <base-select label="Técnicos asignados" :items="this.userTech" item-title="name"
-                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
-                </base-select> -->
+
 
                 <base-multi-select label="Usuarios" :items="this.userTech" item-title="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-multi-select>
-           
+
 
               </v-col>
               <!-- technician -->
@@ -278,7 +278,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                     
+
                         <tr v-for="user in this.editedItem.users">
                           <td>{{ user }}</td>
                           <td>{{ this.editedItem.dependency_id }}</td>
@@ -366,7 +366,7 @@
                           <td>{{ this.editedItem.type_action_id }}</td>
                           <td>{{ this.editedItem.state_id }}</td>
                         </tr>
-                        
+
                         <tr v-if="this.editedItem.technician == 0">
                           <td colspan="4">
                             <p class="text-center py-3">Sin datos que mostrar</p>
@@ -515,12 +515,12 @@ export default {
       options: {},
 
       editedItem: {
-        location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: "", serial_number2: "", state_id: "", start_date: "", end_date: "",
+        location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", serial_number2: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
-        location_id: "", dependency_id: "", technician: "", users: "", description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: "", serial_number2: "", state_id: "", start_date: "", end_date: ""
+        location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", serial_number2: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -595,6 +595,9 @@ export default {
         }, equipment_id: {
           required,
           minLength: minLength(1),
+        },
+        equipment:{
+          minLength: minLength(1),
         }, serial_number2: {
           minLength: minLength(1),
         },
@@ -660,10 +663,37 @@ export default {
   },
 
   methods: {
+    addEquipment() {
+      var isInArray = false;
+
+
+      if (this.editedItem.equipment != "") {
+
+        this.editedItem.equipment_id.forEach(item => {
+
+
+          if (item == this.editedItem.equipment) {
+            isInArray = true;
+          }
+        });
+
+        if (!isInArray) {
+          this.editedItem.equipment_id.push(this.editedItem.equipment);
+        }
+
+      }
+
+    },
+    deleteEquipment(item) {
+      this.editedItem.equipment_id = this.editedItem.equipment_id.filter(
+        function (obj) {
+          return obj !== item
+        }
+      )
+    },
     movementFinishDateItem(item) {
 
       this.finishMovement.description = item.description;
-      console.log(this.finishMovement.description);
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogMovementFinishDate = true;
@@ -683,7 +713,7 @@ export default {
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
       this.finishMovement.serial_number2 = this.editedItem.serial_number2;
-      console.log(this.editedItem.description);
+
 
       this.v$.finishMovement.$validate();
       if (this.v$.finishMovement.$invalid) {
@@ -755,8 +785,6 @@ export default {
         this.location = responses[5].data.data;
         this.dependency = responses[6].data.data;
 
-        console.log(this.equipment)
-
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
 
@@ -786,6 +814,7 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+        this.editedItem.equipment_id.length = 0;
       });
     },
 
@@ -832,6 +861,7 @@ export default {
       }
       this.close();
       this.initialize();
+      this.editedItem.equipment_id.length =0;
       return;
     },
 
