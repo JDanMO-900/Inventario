@@ -46,9 +46,11 @@
 
 
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Detalles del usuario </b>
-                </p>
-                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
+                <v-chip color="primary" variant="flat" label>
+                  <v-icon icon="mdi-numeric-1-circle" start></v-icon>
+                  Detalles del usuario
+                </v-chip>
+                <v-divider class="mt-2"></v-divider>
               </v-col>
 
 
@@ -84,9 +86,11 @@
               <!-- name -->
 
               <v-col cols="12" sm="12" md="12">
-                <p class="text-grey-darken-4 text-h6 text-left"> <b>Registro de movimientos y equipos </b>
-                </p>
-                <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
+                <v-chip color="primary" variant="flat" label>
+                  <v-icon icon="mdi-numeric-2-circle" start></v-icon>
+                  Movimiento a realizar
+                </v-chip>
+                <v-divider class="mt-2"></v-divider>
               </v-col>
 
               <!-- accion realizada -->
@@ -99,7 +103,6 @@
               <!-- Accion realizada -->
 
               <!-- Fecha de inicio de movimiento -->
-
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
                   :rules="v$.editedItem.start_date" type="datetime-local" />
@@ -110,9 +113,7 @@
 
               <!-- Numero de activo fijo 1 -->
 
-
               <v-col cols="4" sm="12" md="12">
-
                 <base-select label="Equipo asignado principal" :items="this.equipment" item-title="format"
                   item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
                   :rules="v$.editedItem.equipment_id">
@@ -176,6 +177,12 @@
                   </b>
                 </p>
                 <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
+                
+                <v-chip color="primary" variant="flat" label>
+                  <v-icon icon="mdi-numeric-1-circle" start></v-icon>
+                  Detalles del usuario
+                </v-chip>
+                <v-divider class="mt-2"></v-divider>
               </v-col>
 
               <!-- technician -->
