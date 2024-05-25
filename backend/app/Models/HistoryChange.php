@@ -28,7 +28,6 @@ class HistoryChange extends Model
    
         'type_action_id',
         'equipment_id',
-        'equipment_used_in_id',
         'state_id',
         'location_id',
         'dependency_id',
@@ -58,7 +57,6 @@ class HistoryChange extends Model
     //         'quantity_in' => $this->quantity_in,
     //         'type_action_id' => $this->type_action_id,
     //         'equipment_id' => $this->equipment_id,
-    //         'equipment_used_in_id' => $this->equipment_id,
     //         'state_id' => $this->state_id,
     //         'location_id' => $this->location_id,
     //         'dependency_id' => $this->location_id,
@@ -74,7 +72,6 @@ class HistoryChange extends Model
         $data =  HistoryChange::select('history_change.*', 
         'type_action.*', 
         'equipment_id.*', 
-        'equipment2.*', 
         'process_state.*', 
         'location.*', 
         'dependency.*', 
@@ -92,11 +89,7 @@ class HistoryChange extends Model
         'equipment_type1.name as type1',
         'brand1.name as brand1',
 
-        //Equipo2
-        'equipment2.serial_number as serial_number2',
-        'equipment2.model as model2',
-        'equipment_type2.name as type2',
-        'brand2.name as brand2',
+
 
         'process_state.name as state_id',
         'type_action.name as type_action_id'
@@ -111,10 +104,7 @@ class HistoryChange extends Model
             ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
             ->join('equipment_type as equipment_type1', 'equipment_id.equipment_type_id', '=', 'equipment_type1.id')
             ->join('brand as brand1', 'equipment_id.brand_id', '=', 'brand1.id')
-            // Equipo secundario
-            ->leftJoin('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
-            ->leftJoin('equipment_type as equipment_type2', 'equipment2.equipment_type_id', '=', 'equipment_type2.id')
-            ->leftJoin('brand as brand2', 'equipment2.brand_id', '=', 'brand2.id')
+ 
 
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
@@ -140,7 +130,7 @@ class HistoryChange extends Model
             });
 
             $data->each(function($item){
-                $technician = User::join('history_tech', 'users.id','=', 'history_tech.user_tech_id')
+                $technician = User::leftJoin('history_tech', 'users.id','=', 'history_tech.user_tech_id')
                 ->where('history_tech.history_change_id', $item->id)
                 ->pluck('users.name')
                 ->toArray();
@@ -157,10 +147,9 @@ class HistoryChange extends Model
 
     public static function counterPagination($search)
     {
-        return HistoryChange::select('history_change.*', 'type_action.*', 'equipment_id.*', 'equipment2.*', 'process_state.*', 'location.*', 'history_change.id as id')
+        return HistoryChange::select('history_change.*', 'type_action.*', 'equipment_id.*', 'process_state.*', 'location.*', 'history_change.id as id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
-            ->leftJoin('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')

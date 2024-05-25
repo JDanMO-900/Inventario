@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TypeAction;
-
-use Illuminate\Http\Request;
 use Encrypt;
+
+use App\Models\TypeAction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TypeActionController extends Controller
 {
@@ -51,9 +52,8 @@ class TypeActionController extends Controller
     public function store(Request $request)
     {
         $TypeAction = new TypeAction;
-
 		$TypeAction->name = $request->name;
-
+        $TypeAction->is_internal = $request->is_internal;
         $TypeAction->save();
 
         return response()->json([
@@ -85,6 +85,7 @@ class TypeActionController extends Controller
 
         $TypeAction = TypeAction::where('id', $data['id'])->first();
 		$TypeAction->name = $request->name;
+        $TypeAction->is_internal = $request->is_internal;
 
         $TypeAction->save();
 

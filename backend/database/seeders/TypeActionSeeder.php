@@ -17,21 +17,37 @@ class TypeActionSeeder extends Seeder
             [
       
                 "name" => "mantenimiento",
+                "is_internal" => 1
 
             ],
             [
               
                 "name" => "asignación",
+                "is_internal" => 1
 
             ],
             [
             
                 "name" => "traslado",
+                "is_internal" => 1
 
             ],
             [
                
                 "name" => "préstamo",
+                "is_internal" => 0
+
+            ],
+            [
+               
+                "name" => "soporte",
+                "is_internal" => 0
+
+            ],
+            [
+               
+                "name" => "solicitud equipo",
+                "is_internal" => 0
 
             ],
 

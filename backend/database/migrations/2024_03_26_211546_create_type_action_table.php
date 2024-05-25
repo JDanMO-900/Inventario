@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('type_action', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_internal');
             $table->timestamps();
             $table->softDeletes();
         });

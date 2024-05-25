@@ -68,20 +68,10 @@ class HistoryChangeController extends Controller
             $historychange->start_date = $request->start_date;
             $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
             $historychange->equipment_id = Equipment::where('serial_number', $equipment)->first()->id;
-            
             $available1 = Equipment::where('serial_number', $equipment)->first();
             $available1->availability = false;
             $available1->save();
 
-            if ($request->serial_number2 != "") {
-                $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
-                $available2 = Equipment::where('serial_number', $request->serial_number2)->first();
-                $available2->availability = false;
-                $available2->save();
-
-            } else {
-                $historychange->equipment_used_in_id = null;
-            }
 
             if ($request->end_date != "") {
                 $historychange->end_date = $request->end_date;
@@ -93,25 +83,39 @@ class HistoryChangeController extends Controller
             $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
             $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
             $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
-
             $historychange->save();
             $lastInsertedRow = $historychange->id;
-            Log::info($lastInsertedRow);
 
-
-            foreach ($request->users as $user) {
+            if (is_array($request->users)) {
+                foreach ($request->users as $user) {
+                    $historyuserdetail = new HistoryUserDetail;
+                    $historyuserdetail->history_change_id = $lastInsertedRow;
+                    $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+                    $historyuserdetail->save();
+                }
+            } else {
                 $historyuserdetail = new HistoryUserDetail;
                 $historyuserdetail->history_change_id = $lastInsertedRow;
-                $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+                $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
                 $historyuserdetail->save();
             }
 
-            foreach ($request->technician as $tech) {
-                $historyusertech = new HistoryTech;
-                $historyusertech->history_change_id = $lastInsertedRow;
-                $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
-                $historyusertech->save();
+            if ($request->technician != "") {
+                if (is_array($request->technician)) {
+                    foreach ($request->technician as $tech) {
+                        $historyusertech = new HistoryTech;
+                        $historyusertech->history_change_id = $lastInsertedRow;
+                        $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
+                        $historyusertech->save();
+                    }
+                } else {
+                    $historyusertech = new HistoryTech;
+                    $historyusertech->history_change_id = $lastInsertedRow;
+                    $historyusertech->user_tech_id = User::where('name', $request->technician)->first()->id;
+                    $historyusertech->save();
+                }
             }
+
         }
 
 
@@ -140,6 +144,8 @@ class HistoryChangeController extends Controller
      */
     public function update(Request $request)
     {
+        Log::info($request->users);
+
 
 
         $data = Encrypt::decryptArray($request->all(), 'id');
@@ -152,12 +158,6 @@ class HistoryChangeController extends Controller
 
         $historychange->equipment_id = Equipment::where('serial_number', $request->equipment_id)->first()->id;
 
-        if ($request->serial_number2 != "") {
-            $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
-
-        } else {
-            $historychange->equipment_used_in_id = null;
-        }
 
         if ($request->end_date != "") {
             $historychange->end_date = $request->end_date;
@@ -177,22 +177,39 @@ class HistoryChangeController extends Controller
 
         HistoryUserDetail::where('history_change_id', $historychange->id)->forceDelete();
 
-
-        foreach ($request->users as $user) {
+        if (is_array($request->users)) {
+            foreach ($request->users as $user) {
+                $historyuserdetail = new HistoryUserDetail;
+                $historyuserdetail->history_change_id = $historychange->id;
+                $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+                $historyuserdetail->save();
+            }
+        } else {
             $historyuserdetail = new HistoryUserDetail;
             $historyuserdetail->history_change_id = $historychange->id;
-            $historyuserdetail->user_id = User::where('name', $user)->first()->id;
+            $historyuserdetail->user_id = User::where('name', $request->users)->first()->id;
             $historyuserdetail->save();
         }
 
+
         HistoryTech::where('history_change_id', $historychange->id)->forceDelete();
 
-        foreach ($request->technician as $tech) {
+        if (is_array($request->technician)) {
+            foreach ($request->technician as $tech) {
+                $historyusertech = new HistoryTech;
+                $historyusertech->history_change_id = $historychange->id;
+                $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
+                $historyusertech->save();
+            }
+        } else {
             $historyusertech = new HistoryTech;
             $historyusertech->history_change_id = $historychange->id;
-            $historyusertech->user_tech_id = User::where('name', $tech)->first()->id;
+            $historyusertech->user_tech_id = User::where('name', $request->technician)->first()->id;
             $historyusertech->save();
+
         }
+
+
 
 
         return response()->json([
@@ -232,15 +249,6 @@ class HistoryChangeController extends Controller
         $available1->availability = true;
         $available1->save();
 
-        if ($request->serial_number2 != "") {
-            $historychange->equipment_used_in_id = Equipment::where('serial_number', $request->serial_number2)->first()->id;
-            $available2 = Equipment::where('serial_number', $request->serial_number2)->first();
-            $available2->availability = true;
-            $available2->save();
-
-        } else {
-            $historychange->equipment_used_in_id = null;
-        }
 
         return response()->json([
             "message" => "Movimiento terminado, equipo disponible de nuevo",

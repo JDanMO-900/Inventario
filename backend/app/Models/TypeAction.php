@@ -28,7 +28,7 @@ class TypeAction extends Model
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-        return TypeAction::select('type_action.*', 'type_action.id as id')
+        $data =  TypeAction::select('type_action.*', 'type_action.id as id')
         
 		->where('type_action.name', 'like', $search)
 
@@ -36,6 +36,13 @@ class TypeAction extends Model
         ->take($itemsPerPage)
         ->orderBy("type_action.$sortBy", $sort)
         ->get();
+
+        $data->each(function ($item) {
+            $is_internal = $item->is_internal ? 'Personal interno' : 'Personal externo';
+            $item->is_internal = $is_internal;
+        });
+
+        return $data;
     }
 
     public static function counterPagination($search)
