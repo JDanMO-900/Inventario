@@ -7,37 +7,14 @@
           <base-button type="primary" title="Agregar" @click="addRecord()" />
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field
-            class="mt-3"
-            variant="outlined"
-            label="Buscar"
-            type="text"
-            v-model="search"
-          ></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
-      <v-data-table-server
-        :headers="headers"
-        :items-length="total"
-        :items="records"
-        :loading="loading"
-        item-title="id"
-        item-value="id"
-        @update:options="getDataFromApi"
-      >
+      <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
+        item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            size="20"
-            class="mr-2"
-            @click="editItem(item.raw)"
-            icon="mdi-pencil"
-          />
-          <v-icon
-            size="20"
-            class="mr-2"
-            @click="deleteItem(item.raw)"
-            icon="mdi-delete"
-          />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -57,29 +34,31 @@
           <v-container>
             <!-- Form -->
             <v-row class="pt-3">
-               
-        <!-- name -->
-            <v-col cols="12" sm="12" md="12">
-                <base-input
-                label="Ingrese los tipos de acciones que se realizan sobre los equipos"
-                v-model="v$.editedItem.name.$model"
-                :rules="v$.editedItem.name"
-                />
-            </v-col>
-        <!-- name -->
 
-        
+              <!-- name -->
+              <v-col cols="12" sm="12" md="12">
+                <base-input label="Ingrese los tipos de acciones que se realizan sobre los equipos"
+                  v-model="v$.editedItem.name.$model" :rules="v$.editedItem.name" />
+              </v-col>
+              <!-- name -->
+
+              <!-- Tipo personal -->
+            
+              <v-col cols="6" sm="12" md="12">
+                <base-select label="Tipo de personal" :items="userTypes" item-title="text" item-value="value"
+                  v-model.trim="v$.editedItem.is_internal.$model" :rules="v$.editedItem.is_internal">
+                </base-select>
+              </v-col>
+
+              <!-- Tipo personal -->
+
+
             </v-row>
             <!-- Form -->
             <v-row>
               <v-col align="center">
                 <base-button type="primary" title="Guardar" @click="save" />
-                <base-button
-                  class="ms-1"
-                  type="secondary"
-                  title="Cancelar"
-                  @click="close"
-                />
+                <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
           </v-container>
@@ -95,17 +74,8 @@
           </h1>
           <v-row>
             <v-col align="center">
-              <base-button
-                type="primary"
-                title="Confirmar"
-                @click="deleteItemConfirm"
-              />
-              <base-button
-                class="ms-1"
-                type="secondary"
-                title="Cancelar"
-                @click="closeDelete"
-              />
+              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
             </v-col>
           </v-row>
         </v-container>
@@ -113,8 +83,8 @@
     </v-dialog>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
 import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
@@ -143,8 +113,9 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        
-		{ title: "Acción sobre los equipos", key: "name" },
+
+        { title: "Acción sobre los equipos", key: "name" },
+        { title: "Tipo de uso", key: "is_internal" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -153,14 +124,18 @@ export default {
       total: 0,
       options: {},
       editedItem: {
-        		name: "",
+        name: "", is_internal: false
       },
       defaultItem: {
-        		name: "",
+        name: "", is_internal: false
       },
       loading: false,
       debounce: 0,
-      
+      userTypes: [
+        {text: "Usuario interno", value: true},
+        {text: "Usuario externo", value: false},
+      ]
+
     };
   },
 
@@ -175,9 +150,13 @@ export default {
     return {
       editedItem: {
         name: {
-		required,
-		minLength: minLength(1),
-},
+          required,
+          minLength: minLength(1),
+        },
+        is_internal: {
+          required,
+          minLength: minLength(1),
+        }
       },
     };
   },
@@ -215,7 +194,7 @@ export default {
 
       let requests = [
         this.getDataFromApi(),
-        
+
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -223,7 +202,7 @@ export default {
       });
 
       if (responses) {
-        
+
       }
 
       this.loading = false;

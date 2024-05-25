@@ -15,11 +15,9 @@
       <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
         item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+          <!-- <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" /> -->
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo')" size="20"
-            class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+          <!-- <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" /> -->
 
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
@@ -50,15 +48,16 @@
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
-              <!-- name -->
-  
-              <v-col cols="6" sm="12" md="12">
-                <base-multi-select label="Usuarios" :items="this.users" item-title="name"
-                  v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
-                </base-multi-select>
-              </v-col>
-              <!-- name -->
 
+              <!-- User -->
+              <!-- accion realizada -->
+              <v-col cols="4" sm="12" md="12">
+                <base-input v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users"
+                  value="{{ this.user_name }}" hidden />
+              </v-col>
+              <!-- Accion realizada -->
+
+              <!-- User -->
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Ubicación del dispositivo asignado" :items="this.location" item-title="name"
@@ -84,6 +83,7 @@
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
+              
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Movimiento realizado" :items="filterTypeAction" item-title="name"
@@ -93,28 +93,32 @@
               </v-col>
               <!-- Accion realizada -->
 
+
+
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" />
+                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()"/>
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
 
 
               <!-- Numero de activo fijo 1 -->
-              <v-col cols="4" sm="12" md="12"  >
-                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+              <v-col cols="4" sm="12" md="12">
+                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipos" :items="this.equipment"
+                  item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
+                  :rules="v$.editedItem.equipment">
                 </base-select>
 
-                <base-select v-else label="Equipo" :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
+                <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
+                  item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
+                  :rules="v$.editedItem.equipment_id">
                 </base-select>
               </v-col>
 
               <!-- Probando datos de equipos -->
-              <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
+              <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
                 <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
                   " block prepend-icon="mdi-plus-thick" />
               </v-col>
@@ -168,38 +172,21 @@
 
 
               <!-- Cantidad de entrada -->
-
-
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-3-circle" start></v-icon>
-                  Detalles asignación
+                  Comentarios
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
-              <!-- technician -->
-              <v-col cols="6" sm="12" md="12">
 
-
-                <base-multi-select label="Usuarios" :items="this.userTech" item-title="name"
-                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
-                </base-multi-select>
-
-
-              </v-col>
-              <!-- technician -->
 
               <!-- Descripcion -->
-
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
                   :rules="v$.editedItem.description" />
-
               </v-col>
-
-
-
               <!-- Descripcion -->
 
             </v-row>
@@ -216,7 +203,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
     <v-dialog v-model="dialogDelete" max-width="400px">
       <v-card class="h-100">
         <v-container>
@@ -232,208 +218,8 @@
         </v-container>
       </v-card>
     </v-dialog>
-
-
-    <v-row justify="center">
-      <v-dialog v-model="dialogInfo" width="1024">
-
-        <v-card>
-          <v-card-title>
-            <h2 class="mx-auto pt-3 p  text-center black-secondary">
-              <b>Datos de equipo que se realizo: <i class="text-indigo-darken-4">{{
-                this.editedItem.type_action_id }} </i></b>
-            </h2>
-          </v-card-title>
-
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del usuario </b></p>
-                </v-col>
-
-
-                <!-- Nuevo Formato -->
-                <v-col cols="12" sm="12" md="12">
-                  <div class="w-100">
-                    <v-table density="compact">
-                      <thead>
-                        <tr>
-                          <th><b>Usuario del equipo</b></th>
-                          <th><b>Dependencia</b></th>
-                          <th><b>Ubicación</b></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        <tr v-for="user in this.editedItem.users">
-                          <td>{{ user }}</td>
-                          <td>{{ this.editedItem.dependency_id }}</td>
-                          <td>{{ this.editedItem.location_id }}</td>
-                        </tr>
-                        <tr v-if="this.editedItem.technicalAttributes == 0">
-                          <td colspan="4">
-                            <p class="text-center py-3">Sin datos que mostrar</p>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </v-table>
-                  </div>
-                </v-col>
-
-                <!-- Nuevo Formato -->
-
-                <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del equipo </b></p>
-                </v-col>
-                <v-col cols="12" sm="12" md="12">
-                  <!-- Nueva tabla -->
-                  <v-table density="compact">
-                    <tbody>
-                      <tr>
-                        <th>Tipo</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Serial</th>
-                      </tr>
-                      <tr>
-                        <td>{{ this.editedItem.type1 }}</td>
-                        <td>{{ this.editedItem.brand1 }}</td>
-                        <td>{{ this.editedItem.model1 }}</td>
-                        <td>{{ this.editedItem.equipment_id }}</td>
-                        
-                      </tr>
-                    </tbody>
-                  </v-table>
-                  <!-- Nueva tabla -->
-                </v-col>
-
-                <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                </v-col>
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del movimiento </b></p>
-                </v-col>
-
-                <!-- Nuevo Formato -->
-                <v-col cols="12" sm="12" md="12">
-                  <div class="w-100">
-                    <v-table density="compact">
-                      <thead>
-                        <tr>
-                          <th><b>Encargado/a de realizar el movimiento</b></th>
-                          <th><b>Movimiento realizado</b></th>
-                          <th><b>Etapa del movimiento</b></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="tech in this.editedItem.technician">
-                          <td>{{ tech }}</td>
-                          <td>{{ this.editedItem.type_action_id }}</td>
-                          <td>{{ this.editedItem.state_id }}</td>
-                        </tr>
-
-                        <tr v-if="this.editedItem.technician == 0">
-                          <td colspan="4">
-                            <p class="text-center py-3">Sin datos que mostrar</p>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </v-table>
-                  </div>
-                </v-col>
-
-                <!-- Nuevo Formato -->
-
-
-
-
-              </v-row>
-            </v-container>
-
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
-
-
-          </v-card-actions>
-        </v-card>
-
-
-      </v-dialog>
-    </v-row>
-
-
-
-
-
-
-
+   
   </div>
-
-  <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
-
-    <v-card>
-      <v-card-title>
-        <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-          Finalizar {{ this.editedItem.type_action_id }}
-        </h2>
-      </v-card-title>
-
-      <v-card-text>
-        <v-container>
-          <!-- Form -->
-
-          <v-row class="pt-3">
-
-
-            <v-col cols="12" sm="12" md="12">
-              <template
-                v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
-                <div>
-                  <!-- Fecha de finalización de movimiento -->
-
-                  <base-input label="Fecha de finalización del movimiento"
-                    v-model="v$.finishMovement.finish_date.$model" :rules="v$.finishMovement.finish_date"
-                    type="datetime-local" />
-
-                  <!-- Fecha de finalización de movimiento -->
-
-                </div>
-              </template>
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12">
-              <base-text-area label="Comentarios" v-model="v$.finishMovement.description.$model"
-                :rules="v$.finishMovement.description" />
-
-            </v-col>
-
-
-          </v-row>
-
-          <!-- Form -->
-          <v-row>
-            <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
-
-
-  </v-dialog>
 </template>
 
 <script>
@@ -468,14 +254,12 @@ export default {
       selected: [],
       dialog: false,
       dialogDelete: false,
-      dialogInfo: false,
-      dialogMovementFinishDate: false,
+
       enabled: false,
       headers: [
 
         { title: "Dependencia", key: "dependency_id" },
         { title: "Ubicación", key: "location_id" },
-        // { title: "Usuario", key: "users" },
         { title: "Serial equipo principal", key: "equipment_id" },
         // { title: "Modelo", key: "model1" },
         { title: "Estado", key: "state_id" },
@@ -484,17 +268,17 @@ export default {
       ],
       records: [],
       editedIndex: -1,
-      title: "Movimientos",
+      title: "",
       total: 0,
       options: {},
 
       editedItem: {
-        location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "",  state_id: "", start_date: "", end_date: "",
+        location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
-        location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "",  state_id: "", start_date: "", end_date: ""
+        location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -543,15 +327,8 @@ export default {
           minLength: minLength(1),
         },
         users: {
-          required,
           minLength: minLength(1),
         },
-
-        technician: {
-          required,
-          minLength: minLength(1),
-        },
-
         quantity_out: {
           required,
           minLength: minLength(1),
@@ -569,7 +346,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        equipment:{
+        equipment: {
           minLength: minLength(1),
         },
         start_date: {
@@ -600,6 +377,7 @@ export default {
 
   computed: {
     formTitle() {
+      this.editedItem.users = JSON.parse(window.localStorage.getItem("user")).name;
       return this.editedIndex === -1 ? "Nuevo movimiento" : "Editar movimiento";
     },
     filterEquipment() {
@@ -609,9 +387,10 @@ export default {
       else {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
-    }, filterTypeAction(){
-      return this.typeAction.filter(action=> action.is_internal === "Personal interno")
-    }
+    }, filterTypeAction() {
+      return this.typeAction.filter(action => action.is_internal === "Personal externo")
+    },
+    
   },
 
   watch: {
@@ -635,15 +414,22 @@ export default {
   },
 
   methods: {
+    getCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    
+    // Format: YYYY-MM-DDThh:mm (datetime-local format)
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  },
+    
     addEquipment() {
       var isInArray = false;
-
-
       if (this.editedItem.equipment != "") {
-
         this.editedItem.equipment_id.forEach(item => {
-
-
           if (item == this.editedItem.equipment) {
             isInArray = true;
           }
@@ -652,9 +438,7 @@ export default {
         if (!isInArray) {
           this.editedItem.equipment_id.push(this.editedItem.equipment);
         }
-
       }
-
     },
     deleteEquipment(item) {
       this.editedItem.equipment_id = this.editedItem.equipment_id.filter(
@@ -663,54 +447,7 @@ export default {
         }
       )
     },
-    movementFinishDateItem(item) {
 
-      this.finishMovement.description = item.description;
-      this.editedIndex = this.records.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogMovementFinishDate = true;
-
-    },
-
-    closeMovementFinishDate() {
-      this.dialogMovementFinishDate = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-    async changeMovementFinishDate() {
-
-
-      this.finishMovement.id = this.editedItem.id;
-      this.finishMovement.equipment_id = this.editedItem.equipment_id;
-
-
-      this.v$.finishMovement.$validate();
-      if (this.v$.finishMovement.$invalid) {
-        alert.error("Campos obligatorios");
-        return;
-      }
-
-      this.finishMovement.state_id = "Finalizado";
-
-
-
-      try {
-        if (this.finishMovement.finish_date != null) {
-
-          const endStatus = await backendApi.put(`/changeStatus/`, this.finishMovement);
-
-
-          alert.success(endStatus.data.message);
-        }
-      } catch (error) {
-        this.close();
-      }
-
-      this.initialize();
-      this.closeMovementFinishDate();
-    },
 
 
 
@@ -719,14 +456,11 @@ export default {
       this.loading = true;
       this.records = [];
 
-      var user = JSON.parse(window.localStorage.getItem("user"));
+
 
       let requests = [
         this.getDataFromApi(),
         backendApi.get('/typeAction', {
-          params: { itemsPerPage: -1 },
-        }),
-        backendApi.get('/user', {
           params: { itemsPerPage: -1 },
         }),
         backendApi.get('/equipment-available', {
@@ -749,29 +483,16 @@ export default {
 
 
       if (responses) {
+        console.log(responses)
         this.typeAction = responses[1].data.data;
-        this.users = responses[2].data.data;
-        this.equipment = responses[3].data;
-        this.processState = responses[4].data.data;
-        this.location = responses[5].data.data;
-        this.dependency = responses[6].data.data;
+        this.equipment = responses[2].data;
+        this.processState = responses[3].data.data;
+        this.location = responses[4].data.data;
+        this.dependency = responses[5].data.data;
 
-        let uniqueTechNames = new Set();
-        for (let i = 0; i < this.users.length; i++) {
-
-          if (this.users[i].role === "Tecnico")
-            uniqueTechNames.add(this.users[i].name);
-        }
-        this.userTech = Array.from(uniqueTechNames)
       }
 
       this.loading = false;
-    },
-
-    infoItem(item) {
-      this.editedIndex = this.records.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogInfo = true;
     },
 
     editItem(item) {
@@ -790,7 +511,6 @@ export default {
     },
 
     async save() {
-
       if (this.editedItem.type_action_id == 'préstamo' || this.editedItem.type_action_id == 'mantenimiento') {
         this.editedItem.state_id = "En proceso";
       }
@@ -832,7 +552,7 @@ export default {
       }
       this.close();
       this.initialize();
-      this.editedItem.equipment_id.length =0;
+      this.editedItem.equipment_id.length = 0;
       return;
     },
 
