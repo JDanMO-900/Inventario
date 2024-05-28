@@ -595,7 +595,8 @@ export default {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(async () => {
         try {
-          const { data } = await backendApi.get('/historyChange', {
+          
+          const { data } = await backendApi.get(`/historyUserDetail/${JSON.parse(window.localStorage.getItem("user")).name}`, {
             params: { ...options, search: this.search },
           });
 
