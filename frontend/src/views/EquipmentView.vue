@@ -1,13 +1,10 @@
 <template>
   <div data-app>
-
     <v-card class="p-3 mt-3">
       <v-container>
-
         <h2>{{ title }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
-
         </div>
 
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
@@ -17,12 +14,10 @@
       <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
         item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-calendar" />
-          <v-icon icon="fa:fas fa-search"></v-icon>
-          <font-awesome-icon :icon="['fas', 'file-invoice']" />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil"/>
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete"/>
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information"/>
+          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold"/>
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -30,10 +25,11 @@
       </v-data-table-server>
     </v-card>
 
+    <!-- Agregar y editar -->
     <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
-          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+          <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">
             {{ formTitle }}
           </h2>
         </v-card-title>
@@ -99,9 +95,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name" 
                        v-model.trim="v$.editedItem.state.$model"
-                        :rules="v$.editedItem.state" />
-
-              
+                        :rules="v$.editedItem.state" />              
                     </v-col>
                     <!-- equipment state -->
 
@@ -137,8 +131,7 @@
                     <!-- valor -->
 
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar"
-                        @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick" />
+                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick" />
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12">
@@ -208,8 +201,7 @@
                           <tr v-for="Licencia in this.editedItem.licenses">
                             <td>{{ Licencia }}</td>
                             <td>
-                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete"
-                                color="red-darken-4" />
+                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" color="red-darken-4" />
                             </td>
                           </tr>
                           <tr v-if="this.editedItem.licenses == 0">
@@ -272,12 +264,14 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <!-- Agregar y editar -->
 
+    <!-- Eliminar equipo -->
     <v-dialog v-model="dialogDelete" max-width="400px">
       <v-card class="h-100">
         <v-container>
-          <h1 class="black-secondary text-center mt-3 mb-3">
-            Eliminar registro
+          <h1 class="black-secondary text-center mt-3 mb-3 pb-3">
+            ¿Eliminar equipo?
           </h1>
           <v-row>
             <v-col align="center">
@@ -288,25 +282,22 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <!-- Eliminar equipo -->
 
-
-    <!-- Probando cambio de disponibilidad -->
+    <!-- Cambio de disponibilidad -->
     <v-dialog v-model="dialogAvailability" max-width="45rem">
       <v-card class="h-100">
         <v-container>
-          <h1 class="black-secondary text-center mt-3 mb-3">
-
+          <h2 class="black-secondary text-center mt-3 mb-3">
             <b>¿Desea cambiar el estado de disponibilidad del equipo de </b>
             <span
               :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }">
-              '{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() :
-                this.editedItem.availability }}'
+              "{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() : this.editedItem.availability }}"
             </span>
 
-            <span v-if="this.editedItem.availability == 'Disponible'"> a 'en uso'?</span>
-            <span v-if="this.editedItem.availability == 'En uso'"> a 'disponible'?</span>
-
-          </h1>
+            <span v-if='this.editedItem.availability == "Disponible"'> a "en uso"?</span>
+            <span v-if='this.editedItem.availability == "En uso"'> a "disponible"?</span>
+          </h2>
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" />
@@ -316,345 +307,239 @@
         </v-container>
       </v-card>
     </v-dialog>
-
+    <!-- Cambio de disponibilidad -->
   </div>
 
+  <!-- Detalles del equipos -->
+  <v-dialog v-model="dialogInfo" width="1024" @click:outside="closeDetails">
+    <v-card>
+      <v-card-title>
+        <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Datos del equipo</h2>
+      </v-card-title>
 
-  <!-- Aqui ira el dialogo de visualizar datos totales del equipo -->
-
-  <v-row justify="center">
-    <v-dialog v-model="dialogInfo" width="1024">
-      <v-card>
-        <v-card-title>
-          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-            Datos del equipo
-          </h2>
-        </v-card-title>
-
-        <v-card-text>
-          <v-container>
-            <v-col cols="12" sm="12" md="12">
-              <hr>
+      <v-card-text>
+        <v-container>
+          <v-col cols="12" sm="12" md="12">
+            <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b> 
+              <v-chip>
+                <span :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">
+                  {{ this.allowable }}
+                </span>
+              </v-chip>                
+            </p>
+          </v-col>
+          <v-row class="pt-1">
+            <!-- Información del equipo -->
+            <v-col cols="12" sm="12" md="12">  
+              <v-expansion-panels v-model="panel.one">
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <p class="text-indigo-darken-4 text-center">Información del equipo</p>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-table density="compact">
+                        <tbody class="tbl-info">
+                          <tr>
+                            <td>N° de activo fijo</td>
+                            <td>{{ this.equipmentData.number_active }}</td>
+                          </tr>
+                          <tr>
+                            <td>N° de registro interno</td>
+                            <td>{{ this.equipmentData.number_internal_active }}</td>
+                          </tr> 
+                          <tr>
+                            <td>Tipo de Equipo</td>
+                            <td>{{ this.equipmentData.equipment_type_id }}</td>
+                          </tr>
+                          <tr>
+                            <td>Marca</td>
+                            <td>{{ this.equipmentData.brand }}</td>
+                          </tr>
+                          <tr>
+                            <td>Modelo</td>
+                            <td>{{ this.equipmentData.model }}</td>
+                          </tr>
+                          <tr>
+                            <td>Serie</td>
+                            <td>{{ this.equipmentData.serial_number }}</td>
+                          </tr>                             
+                          <tr>
+                            <td>Estado</td>
+                            <td>{{ this.equipmentData.state }}</td>
+                          </tr>   
+                        </tbody>
+                      </v-table>
+                    </v-col>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-col>
+            <!-- Información del equipo -->
+
+            <!-- Historial de movimientos -->
             <v-col cols="12" sm="12" md="12">
-              <p class="text-grey-darken-6 text-h6 text-left"><b>Disponibilidad del equipo:</b> <span
-                  :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">{{
-                    this.allowable }}</span></p>
-
+              <v-expansion-panels v-model="panel.two">
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <p class="text-indigo-darken-4 text-center">Historial de movimientos</p>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-table density="compact">
+                        <thead class="tbl-info">
+                          <tr>
+                            <th style="width: 25% !important;">Tipo de movimiento</th>
+                            <th style="width: 25% !important;">Responsable</th>
+                            <th style="width: 25% !important;">Fecha de inicio</th>
+                            <th style="width: 25% !important;">Fecha de finalización</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="data in this.historyData">
+                            <td>{{ data.type_action }}</td>
+                            <td>{{ data.users }}</td>
+                            <td>{{ data.start_date }}</td>
+                            <td v-if="data.end_date != null">{{ data.end_date }}</td>
+                            <td v-else>Actividad sin terminar</td>
+                          </tr>
+                          <tr v-if="this.historyData == 0">
+                            <td colspan="6">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </v-table>
+                    </v-col>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-col>
-            <v-row class="pt-3">
+            <!-- Historial de movimientos -->
 
-
-              <v-col cols="12" sm="12" md="12">
-                <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Registro del equipo </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-col cols="12" sm="12" md="12">
-                        <div class="w-100">
-                          <v-table>
-                            <thead>
-                              <tr>
-                                <th class="text-left text-grey-darken-4">
-                                  Numero de activo fijo
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Numero de registro interno
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Codigo de factura
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Fecha de adquisición
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>{{ this.equipmentData.number_active }}</td>
-                                <td>{{ this.equipmentData.number_internal_active }}</td>
-                                <td>{{ this.equipmentData.invoice_number }}</td>
-                                <td>{{ this.equipmentData.adquisition_date }}</td>
-                              </tr>
-                            </tbody>
-                          </v-table>
-
-                        </div>
-                      </v-col>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-
-                </v-expansion-panels>
-
-              </v-col>
-
-
-              <!-- Nuevo Formato -->
-              <v-col cols="12" sm="12" md="12">
-
-
-                <v-expansion-panels>
-
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Generalidades del equipo </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-col cols="12" sm="12" md="12">
-                        <div class="w-100">
-                          <v-table>
-                            <thead>
-                              <tr>
-                                <th class="text-left text-grey-darken-4">
-                                  Tipo de equipo
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Marca
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Modelo
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Serie
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Estado del equipo
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>{{ this.equipmentData.equipment_type_id }}</td>
-                                <td>{{ this.equipmentData.brand }}</td>
-                                <td>{{ this.equipmentData.model }}</td>
-                                <td>{{ this.equipmentData.serial_number }}</td>
-                                <td>{{ this.equipmentData.state }}</td>
-                              </tr>
-                            </tbody>
-                          </v-table>
-
-                        </div>
-                      </v-col>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
-
-              <!-- Nuevo Formato -->
-
-              <!-- Nuevo Formato -->
-              <v-col cols="12" sm="12" md="12">
-                <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Especificaciones del equipo </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-col cols="12" sm="12" md="12">
-                        <div class="w-100">
-                          <v-table>
-                            <thead>
-                              <tr>
-                                <th class="text-left text-grey-darken-4">
-                                  Especificación
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Capacidad
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="datos in this.equipmentData.technicalAttributes" style="height: 60px;">
-                                <td>{{ datos.technicalDescription }}</td>
-                                <td>{{ datos.attribute }}</td>
-                              </tr>
-                              <tr v-if="this.equipmentData.technicalAttributes == 0">
-                                <td colspan="2">
-                                  <p class="text-center py-3">Sin datos que mostrar</p>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </v-table>
-                        </div>
-                      </v-col>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
-
-              <!-- Nuevo Formato -->
-
-
-              <!-- Nuevo Formato -->
-              <v-col cols="12" sm="12" md="12">
-                <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Licencias del equipo </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-col cols="12" sm="12" md="12">
-                        <div class="w-100">
-
-
-                          <v-table>
-                            <thead>
-                              <tr>
-                                <th class="text-left text-grey-darken-4">
-                                  N
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Nombre licencia
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="(license, index) in this.equipmentData.licenses" :key="index"
-                                style="height: 60px;">
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ license }}</td>
-                              </tr>
-                              <tr v-if="this.equipmentData.licenses == 0">
-                                <td colspan="2">
-                                  <p class="text-center py-3">Sin datos que mostrar</p>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </v-table>
-
-                        </div>
-                      </v-col>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
-
-              <!-- Nuevo Formato -->
-
-              <v-col cols="12" sm="12" md="12">
-                <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Datos proveedor </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                      <v-col cols="12" sm="12" md="12">
-                        <div class="w-100">
-
-                          <v-table>
-                            <thead>
-
-                              <tr>
-                                <th class="text-left text-grey-darken-4">
-                                  Proveedor
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Contacto del proveedor
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Numero de contacto del proveedor
-                                </th>
-                                <th class="text-left text-grey-darken-4">
-                                  Fecha de adquisición
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <template v-if="this.equipmentData.provider != null">
-                                <tr>
-                                  <td>{{ this.equipmentData.provider }}</td>
-                                  <td>{{ this.equipmentData.contact_name }}</td>
-                                  <td>{{ this.equipmentData.contact_phone }}</td>
-                                  <td>{{ this.equipmentData.adquisition_date }}</td>
-                                </tr>
-
-                              </template>
-                              <template v-else>
-                                <tr>
-                                  <td colspan="4">
-                                    <p class="text-center py-3">Sin datos que mostrar</p>
-                                  </td>
-                                </tr>
-
-                              </template>
-
-
-                            </tbody>
-                          </v-table>
-                        </div>
-                      </v-col>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
-              <!-- Nuevo Formato -->
-
-              <!-- Nuevo Formato -->
-
-              <v-col cols="12" sm="12" md="12">
-                <v-expansion-panels>
-                  <v-expansion-panel>
-                    <v-expansion-panel-title>
-                      <p class="text-grey-darken-4 text-h6 text-center"> <b>Historial del equipo </b></p>
-                    </v-expansion-panel-title>
-                    <v-expansion-panel-text>
+            <!-- Especificaciones técnicas-->
+            <v-col cols="12" sm="12" md="12">
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-title>                      
+                    <p class="text-indigo-darken-4 text-center">Especificaciones técnicas</p>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-col cols="12" sm="12" md="12">
                       <div class="w-100">
-                        <v-table height="300px" fixed-header>
-                          <thead>
+                        <v-table density="compact">
+                          <thead class="tbl-info">
                             <tr>
-                              <th>Numero de activo interno</th>
-                              <th>Numero de activo fijo</th>
-                              <th>Usuarios que han tenido el equipo</th>
-                              <th>Movimientos del equipo</th>
-                              <th>Fecha de inicio de </th>
-                              <th>Fecha de finalización el movimiento</th>
+                              <th>Característica</th>
+                              <th>Capacidad</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="data in this.historyData">
-                              <td>{{ data.number_active }}</td>
-                              <td>{{ data.number_internal_active }}</td>
-                              <td>{{ data.users }}</td>
-                              <td>{{ data.type_action }}</td>
-                              <td>{{ data.start_date }}</td>
-                              <td v-if="data.end_date != null">{{ data.end_date }}</td>
-                              <td v-else>Actividad sin terminar</td>
+                            <tr v-for="datos in this.equipmentData.technicalAttributes">
+                              <td>{{ datos.technicalDescription }}</td>
+                              <td>{{ datos.attribute }}</td>
                             </tr>
-                            <tr v-if="this.historyData == 0">
-                              <td colspan="6">
-                                <p class="text-center py-3">Sin datos que mostrar</p>
+                            <tr v-if="this.equipmentData.technicalAttributes == 0">
+                              <td colspan="2">
+                                <p class="text-center">Sin datos que mostrar</p>
                               </td>
                             </tr>
                           </tbody>
                         </v-table>
                       </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
-              <!-- Nuevo Formato -->
+                    </v-col>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>
+            <!-- Especificaciones técnicas -->
 
+            <!-- Licencias instaladas -->
+            <v-col cols="12" sm="12" md="12">
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <p class="text-indigo-darken-4 text-center">Licencias instaladas</p>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-col cols="12" sm="12" md="12">
+                        <v-table density="compact">
+                          <thead class="tbl-info">
+                            <tr>
+                              <!-- <th style="width: 5% !important;">N°</th> -->
+                              <th>Aplicación</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(license, index) in this.equipmentData.licenses" :key="index">
+                              <!-- <td class="text-center">{{ index + 1 }}</td> -->
+                              <td class="text-center">{{ license }}</td>
+                            </tr>
+                            <tr v-if="this.equipmentData.licenses == 0">
+                              <td colspan="2">
+                                <p class="text-center">Sin datos que mostrar</p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </v-table>
+                    </v-col>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>
+            <!-- Licencias instaladas -->
 
-            </v-row>
-          </v-container>
-
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
-  <!-- Probando modal de visualizar -->
-
-
-
-
-
-
+            <!-- Proveedor -->
+            <v-col cols="12" sm="12" md="12">
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <p class="text-indigo-darken-4 text-center">Proveedor</p>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-table density="compact">
+                        <tbody class="tbl-info">
+                          <tr>
+                            <td>Nombre</td>
+                            <td>{{ this.equipmentData.provider }}</td>
+                          </tr>
+                          <tr>
+                            <td>Código de factura</td>
+                            <td>{{ this.equipmentData.invoice_number }}</td>
+                          </tr>
+                          <tr>
+                            <td>Fecha de adquisición</td>
+                            <td>{{ this.equipmentData.adquisition_date }}</td>
+                          </tr>                            
+                          <tr>
+                            <td>Contacto directo</td>
+                            <td>{{ this.equipmentData.contact_name }}</td>
+                          </tr>  
+                          <tr>
+                            <td>Número de contacto</td>
+                            <td>{{ this.equipmentData.contact_phone }}</td>
+                          </tr> 
+                        </tbody>
+                      </v-table>
+                    </v-col>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>  
+            <!-- Proveedor -->              
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-col cols="12" align="center">
+          <base-button class="ms-1" type="secondary" title="Cerrar" @click="closeDetails" />
+        </v-col>          
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <!-- Detalles del equipos -->
 </template>
 
 <script>
@@ -688,11 +573,10 @@ export default {
       dialogInfo: false,
       dialogAvailability: false,
       headers: [
-        { title: "Tipo de equipo", key: "equipment_type_id" },
-        { title: "Disponibilidad", key: "availability" },
-        { title: "Número de activo fijo", key: "number_active" },
-        { title: "Número de registro interno", key: "number_internal_active" },
-        { title: "Serial", key: "serial_number" },
+        { title: "TIPO DE EQUIPO", key: "equipment_type_id" },
+        { title: "# DE ACTIVO FIJO", key: "number_active" },
+        { title: "# DE REGISTRO INTERNO", key: "number_internal_active" },
+        { title: "DISPONIBILIDAD", key: "availability" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -703,28 +587,25 @@ export default {
       editedItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
         state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
-
       },
       defaultItem: {
         number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
         state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
-
       },
       loading: false,
       debounce: 0,
       equipmentstate: [],
-
       equipmenttype: [],
       brand: [],
       provider: [],
       license: [],
       equipmentData: [],
-
       historyData: [],
       allowable: "",
-
-
-
+      panel: {
+        one: 0,
+        two: 0,
+      }
     };
   },
 
@@ -757,33 +638,22 @@ export default {
         }, state: {
           required,
           minLength: minLength(1),
-        },
-        equipment_type_id: {
+        }, equipment_type_id: {
           required,
           minLength: minLength(1),
-        },
-        brand: {
+        }, brand: {
           required,
           minLength: minLength(1),
-        },
-        provider: {
-
+        }, provider: {
           minLength: minLength(1),
-        },
-        license: {
-
+        }, license: {
           minLength: minLength(1),
-        },
-        technicalDescription: {
-
+        }, technicalDescription: {
           minLength: minLength(1),
         }, attribute: {
-
           numeric,
           minLength: minLength(1),
         },
-
-
       },
     };
   },
@@ -829,11 +699,9 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogAvailability = true;
-
     },
 
     closeAvailability() {
-
       this.dialogAvailability = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -841,19 +709,13 @@ export default {
       });
     },
     async changeAvailabilityItemConfirm() {
-
       const edited = Object.assign(
         this.records[this.editedIndex],
         this.editedItem
       );
 
-
       try {
         const availabilityStatus = await backendApi.put(`/available/`, edited);
-
-
-
-
         alert.success(availabilityStatus.data.message);
       } catch (error) {
         this.close();
@@ -867,12 +729,8 @@ export default {
     addLicense() {
       var isInArray = false;
 
-
       if (this.editedItem.license != "") {
-
         this.editedItem.licenses.forEach(item => {
-
-
           if (item == this.editedItem.license) {
             isInArray = true;
           }
@@ -881,7 +739,6 @@ export default {
         if (!isInArray) {
           this.editedItem.licenses.push(this.editedItem.license);
         }
-
       }
 
     },
@@ -895,12 +752,8 @@ export default {
 
     addTechnicalAttributes() {
       var isInArray = false;
-
-
       if (this.editedItem.attribute != "" && this.editedItem.technicalDescription != "" && this.editedItem.attribute != undefined) {
-
         this.editedItem.technicalAttributes.forEach(item => {
-
           if (item.technicalDescription == this.editedItem.technicalDescription) {
             isInArray = true;
           }
@@ -919,29 +772,26 @@ export default {
           return obj.technicalDescription !== item
         }
       )
-
-
     },
 
     async infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
-
       const equipment_history = await backendApi.get(`/equipment/${item.serial_number}`);
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
-
       this.dialogInfo = true;
-
-
-
     },
 
+    closeDetails() {
+      this.panel.one = 0
+      this.panel.two = 0
+      this.dialogInfo = false     
+    },
 
     async initialize() {
       this.loading = true;
       this.records = [];
-
       let requests = [
         this.getDataFromApi(),
         backendApi.get('/equipmentState', {
@@ -952,18 +802,13 @@ export default {
           params: { itemsPerPage: -1 },
         }), backendApi.get('/provider', {
           params: { itemsPerPage: -1 },
-
         }),
         backendApi.get('/license', {
           params: { itemsPerPage: -1 },
-
         }),
         backendApi.get('/technicalDescription', {
           params: { itemsPerPage: -1 },
-
         }),
-
-
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -971,29 +816,21 @@ export default {
       });
 
       if (responses) {
-
-
-
         this.equipmentstate = responses[1].data.data;
-
         this.equipmenttype = responses[2].data.data;
         this.brand = responses[3].data.data;
         this.provider = responses[4].data.data;
         this.license = responses[5].data.data;
         this.technicalDescrip = responses[6].data.data;
-
-
       }
 
       this.loading = false;
     },
 
     editItem(item) {
-
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-
     },
 
     close() {
@@ -1001,18 +838,12 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
-
         this.editedItem.licenses.length = 0;
-
         this.editedItem.technicalAttributes.length = 0;
-
-
       });
     },
 
     async save() {
-
-
       this.v$.$validate();
       if (this.v$.$invalid) {
         alert.error("Campos obligatorios");
@@ -1028,8 +859,6 @@ export default {
 
         try {
           const { data } = await backendApi.put(`/equipment/${edited.id}`, edited);
-
-
           alert.success(data.message);
           this.tab = null
         } catch (error) {
@@ -1045,7 +874,6 @@ export default {
       try {
 
         const { data } = await backendApi.post('/equipment', this.editedItem);
-
         alert.success(data.message);
         this.tab = null
       } catch (error) {
@@ -1060,10 +888,8 @@ export default {
     },
 
     deleteItem(item) {
-
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
-
       this.dialogDelete = true;
     },
 
@@ -1076,7 +902,6 @@ export default {
     },
 
     async deleteItemConfirm() {
-
       try {
         const { data } = await backendApi.delete(`/equipment/${this.editedItem.id}`, {
           params: {
@@ -1101,18 +926,12 @@ export default {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(async () => {
         try {
-
-
           const { data } = await backendApi.get('/equipment', {
             params: { ...options, search: this.search },
           });
 
-
           // var user = JSON.parse(window.localStorage.getItem("user"));
-
-
           // const rol = await backendApi.get(`/user/${user.name}`);
-
           this.records = data.data;
           this.total = data.total;
           this.loading = false;
@@ -1140,25 +959,30 @@ table {
   margin: 1.562rem 0;
   width: 100%;
   text-align: left;
-
 }
 
 td,
 th {
-  border: 1px solid #7b84e467;
+  border: 1px solid #C5CAE9;
   padding: 0.75rem 0.9375rem;
 }
-
-
 
 tbody,
 tr {
   border-bottom: 1px solid #fce8e8;
-
 }
 
-tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3e6;
+.tbl-info td:nth-child(1) {
+  background-color: #E8EAF6;
+  color: #1A237E;
+  width: 50%;
+}
+
+.tbl-info tr th {
+  background-color: #E8EAF6;
+  color: #1A237E !important;
+  text-align: center !important;
+  width: 50%;
 }
 
 tbody tr:last-of-type {

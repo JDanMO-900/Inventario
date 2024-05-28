@@ -472,14 +472,13 @@ export default {
       dialogMovementFinishDate: false,
       enabled: false,
       headers: [
-
-        { title: "Dependencia", key: "dependency_id" },
-        { title: "Ubicación", key: "location_id" },
+        { title: "DEPENDENCIA", key: "dependency_id" },
+        { title: "UBICACIÓN", key: "location_id" },
         // { title: "Usuario", key: "users" },
         { title: "Serial equipo principal", key: "equipment_id" },
         // { title: "Modelo", key: "model1" },
-        { title: "Estado", key: "state_id" },
-        { title: "Movimiento", key: "type_action_id" },
+        { title: "ESTADO", key: "state_id" },
+        { title: "MOVIMIENTO", key: "type_action_id" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
