@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class HistoryUserDetail extends Model
 {
@@ -18,7 +19,7 @@ class HistoryUserDetail extends Model
         'id',
         'history_change_id',
         'user_id',
-        'user_tech_id',
+
         'created_at',
         'updated_at',
     ];
@@ -35,60 +36,38 @@ class HistoryUserDetail extends Model
 
     public static function allDataGeneralUser($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-
-        $data = HistoryUserDetail::select(
+        return HistoryUserDetail::select(
             'history_user_detail.*',
             'history_change.*',
             'users.*',
             'history_user_detail.id as id',
 
             // Datos del equipo
-            'equipment.model as model',
-            'brand.name as brand',
-            'equipment_state.name as state',
-            'equipment_type.name as type',
+            'equipment.*',
+            'users.name as users',
+            'equipment_type.name as equipment_type',
+            'equipment.serial_number as serial_number',
+            'history_change.start_date as start_date',
+            'history_change.end_date as end_date',
+            'type_action.name as type_action',
+            'process_state.name as process_state'
+            
 
-            // Datos del history change
-            'history_change.description as history_description',
-
-
-            'process_state.name as process',
-
-            // Datos de la dependencia
-            'dependency.name as dependency',
- 
-
-
-
-
+            
         )
-            ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
-            ->join('location', 'location.id', '=', 'history_change.location_id')
-            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
-            ->join('users', 'history_user_detail.user_id', '=', 'users.id')
-            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
-            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
-            ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
-            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
-            ->where('users.name', 'like', $username)
-            ->where('history_user_detail.user_tech_id', 'like', $search)
 
+            ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=','equipment_type.id')
+            ->join('users', 'history_user_detail.user_id', '=', 'users.id')
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->skip($skip)
             ->take($itemsPerPage)
+            ->where('users.name', 'like', $username)
             ->orderBy("history_user_detail.$sortBy", $sort)
             ->get();
 
-        $data->each(function ($item) {
-            $licenses = License::join('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
-                ->where('equipment_license_detail.equipment_id', $item->equipment_id)
-                ->pluck('license.name')
-                ->toArray();
-
-            $item->licenses = $licenses;
-        });
-
-        return $data;
     }
 
 
@@ -102,8 +81,8 @@ class HistoryUserDetail extends Model
             'history_user_detail.id as id',
 
             // Datos del equipo
-            'equipment1.*', 
-            'equipment2.*',
+            'equipment1.*',
+
             'equipment.number_active as activo_fijo',
             'equipment.number_internal_active as activo_fijo_interno',
 
@@ -129,10 +108,9 @@ class HistoryUserDetail extends Model
 
             // getting internal active number
             'equipment1.number_internal_active as number_internal_active1',
-            'equipment2.number_internal_active as number_internal_active2',
 
             // Location description
-   
+
 
         )
 
@@ -147,16 +125,15 @@ class HistoryUserDetail extends Model
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('equipment as equipment1', 'history_change.equipment_id', '=', 'equipment1.id')
-            ->join('equipment as equipment2', 'history_change.equipment_used_in_id', '=', 'equipment2.id')
-         
-            ->where('history_user_detail.user_tech_id', 'like', $search)
+
+
             ->orWhere('equipment_type.name', 'like', $search)
             ->orWhere('equipment.model', 'like', $search)
 
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("history_user_detail.$sortBy", $sort)
-            
+
 
             ->get();
 
@@ -178,7 +155,7 @@ class HistoryUserDetail extends Model
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
 
-            ->where('history_user_detail.user_tech_id', 'like', $search)
+
 
             ->count();
     }

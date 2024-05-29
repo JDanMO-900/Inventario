@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HistoryUserDetail;
-use App\Models\HistoryChange;
-use App\Models\User;
-
-
-use Illuminate\Http\Request;
 use Encrypt;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+
+use App\Models\HistoryChange;
+use App\Models\HistoryUserDetail;
+use Illuminate\Support\Facades\Log;
 
 class HistoryUserDetailController extends Controller
 {
@@ -19,6 +20,7 @@ class HistoryUserDetailController extends Controller
      */
 
      public function userFilter($username, Request $request){
+
         $itemsPerPage = $request->itemsPerPage ?? 10;
         $skip = ($request->page - 1) * $request->itemsPerPage;
 

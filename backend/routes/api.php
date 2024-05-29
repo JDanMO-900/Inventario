@@ -93,6 +93,6 @@ Route::resource('/location', LocationController::class);
 
 
 Route::resource('/historyUserDetail', HistoryUserDetailController::class);
-
+Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
 
 
