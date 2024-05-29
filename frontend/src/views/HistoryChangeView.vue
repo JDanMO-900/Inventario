@@ -33,7 +33,7 @@
     <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
-          <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+          <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">
             {{ formTitle }}
           </h2>
         </v-card-title>
@@ -41,7 +41,6 @@
         <v-card-text>
           <v-container>
             <!-- Form -->
-
             <v-row class="pt-3">
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
@@ -50,25 +49,48 @@
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
-              <!-- name -->
-  
+
+              <!-- name -->  
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
                   v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
                 </base-multi-select>
               </v-col>
-              <!-- name -->
+              <!-- name -->              
+
+              <v-col cols="12" sm="12" md="12">
+                <v-chip color="primary" variant="flat" label>
+                  <v-icon icon="mdi-numeric-2-circle" start></v-icon>
+                  Detalles del movimiento
+                </v-chip>
+                <v-divider class="mt-2"></v-divider>
+              </v-col>
+
+              <!-- acción realizada -->
+              <v-col cols="4" sm="12" md="12">
+                <base-select label="Tipo de movimiento" :items="filterTypeAction" item-title="name"
+                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
+                </base-select>
+
+              </v-col>
+              <!-- acción realizada -->
+
+              <!-- fecha del movimiento -->
+              <v-col cols="12" sm="12" md="12">
+                <base-input label="Fecha" v-model="v$.editedItem.start_date.$model"
+                  :rules="v$.editedItem.start_date" type="datetime-local" />
+              </v-col>
+              <!-- fecha del movimiento -->
 
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
-                <base-select label="Ubicación del dispositivo asignado" :items="this.location" item-title="name"
+                <base-select label="Área o ubicación" :items="this.location" item-title="name"
                   v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id">
                 </base-select>
               </v-col>
               <!-- location -->
 
               <!-- name -->
-
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
                   v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id">
@@ -76,35 +98,9 @@
               </v-col>
               <!-- name -->
 
-              <v-col cols="12" sm="12" md="12">
-                <v-chip color="primary" variant="flat" label>
-                  <v-icon icon="mdi-numeric-2-circle" start></v-icon>
-                  Movimiento a realizar
-                </v-chip>
-                <v-divider class="mt-2"></v-divider>
-              </v-col>
-
-              <!-- accion realizada -->
-              <v-col cols="4" sm="12" md="12">
-                <base-select label="Movimiento realizado" :items="filterTypeAction" item-title="name"
-                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
-                </base-select>
-
-              </v-col>
-              <!-- Accion realizada -->
-
-              <!-- Fecha de inicio de movimiento -->
-              <v-col cols="12" sm="12" md="12">
-                <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" />
-              </v-col>
-
-              <!-- Fecha de inicio de movimiento -->
-
-
               <!-- Numero de activo fijo 1 -->
               <v-col cols="4" sm="12" md="12"  >
-                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
+                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipo(s)" :items="this.equipment" item-title="format" item-value="serial_number"
                   v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
                 </base-select>
 
@@ -112,8 +108,8 @@
                   v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
                 </base-select>
               </v-col>
-
               <!-- Probando datos de equipos -->
+
               <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
                 <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
                   " block prepend-icon="mdi-plus-thick" />
@@ -132,8 +128,7 @@
                       <tr v-for="equipo in this.editedItem.equipment_id" v-if="this.formTitle == 'Nuevo movimiento'">
                         <td>{{ equipo }}</td>
                         <td>
-                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
-                            color="red-darken-4" />
+                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete" color="red-darken-4" />
                         </td>
                       </tr>
                       <tr v-if="this.editedItem.equipment_id == 0">
@@ -146,17 +141,13 @@
                 </div>
               </v-col>
               <!-- Probando datos de licencia -->
-
-
               <!-- Numero de activo fijo 1 -->
-
 
               <!-- Cantidad de salida -->
               <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
                   :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
               </v-col>
-
               <!-- Cantidad de salida -->
 
               <!-- Cantidad de entrada -->
@@ -164,44 +155,29 @@
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
                   :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" />
               </v-col>
-
-
-
               <!-- Cantidad de entrada -->
-
 
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-3-circle" start></v-icon>
-                  Detalles asignación
+                  Técnico responsable
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
-              <!-- technician -->
+              <!-- técnico responsable -->
               <v-col cols="6" sm="12" md="12">
-
-
-                <base-multi-select label="Usuarios" :items="this.userTech" item-title="name"
+                <base-multi-select label="Técnico(s)" :items="this.userTech" item-title="name"
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-multi-select>
-
-
               </v-col>
-              <!-- technician -->
+              <!-- técnico responsable -->              
 
               <!-- Descripcion -->
-
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" />
-
+                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model" :rules="v$.editedItem.description" />
               </v-col>
-
-
-
               <!-- Descripcion -->
-
             </v-row>
 
 
