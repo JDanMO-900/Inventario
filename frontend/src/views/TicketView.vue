@@ -12,11 +12,17 @@
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
-      <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
-        item-value="id" @update:options="getDataFromApi">
-        <template v-slot:[`item.actions`]="{ item }">
+
+      <v-data-table
+      :headers="headers"
+      :items="records"
+      item-key="name"
+      class="elevation-1"
+      :search="search"
+    >
+    <template v-slot:[`item.actions`]="{ item }">
           <!-- <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" /> -->
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
+          <!-- <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" /> -->
           <!-- <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" /> -->
 
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -25,7 +31,9 @@
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-      </v-data-table-server>
+    
+    </v-data-table>
+
     </v-card>
 
     <v-dialog v-model="dialog" max-width="800px" persistent>
@@ -44,18 +52,13 @@
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-1-circle" start></v-icon>
-                  Detalles del usuario
+                  Usuario: {{ this.editedItem.users }}  
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
               <!-- User -->
-              <!-- accion realizada -->
-              <v-col cols="4" sm="12" md="12">
-                <base-input v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users"
-                  value="{{ this.user_name }}" hidden />
-              </v-col>
-              <!-- Accion realizada -->
+
 
               <!-- User -->
               <!-- location -->
@@ -83,7 +86,7 @@
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
-              
+
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Movimiento realizado" :items="filterTypeAction" item-title="name"
@@ -98,7 +101,7 @@
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()"/>
+                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -218,7 +221,7 @@
         </v-container>
       </v-card>
     </v-dialog>
-   
+
   </div>
 </template>
 
@@ -258,13 +261,15 @@ export default {
       enabled: false,
       headers: [
 
-        { title: "Dependencia", key: "dependency_id" },
-        { title: "Ubicación", key: "location_id" },
-        { title: "Serial equipo principal", key: "equipment_id" },
-        // { title: "Modelo", key: "model1" },
-        { title: "Estado", key: "state_id" },
-        { title: "Movimiento", key: "type_action_id" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+
+        { title: "Equipo", key: "equipment_type" },
+        { title: "Serial", key: "serial_number" },
+        { title: 'Movimiento', key: "type_action" },
+        { title: 'Fase', key: "process_state" },
+        { title: "Fecha de inicio del movmiento", key: "start_date" },
+
+
+        // { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,
@@ -390,7 +395,7 @@ export default {
     }, filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal === "Personal externo")
     },
-    
+
   },
 
   watch: {
@@ -415,17 +420,17 @@ export default {
 
   methods: {
     getCurrentDateTime() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    
-    // Format: YYYY-MM-DDThh:mm (datetime-local format)
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  },
-    
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+
+      // Format: YYYY-MM-DDThh:mm (datetime-local format)
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    },
+
     addEquipment() {
       var isInArray = false;
       if (this.editedItem.equipment != "") {
@@ -483,13 +488,11 @@ export default {
 
 
       if (responses) {
-        console.log(responses)
         this.typeAction = responses[1].data.data;
         this.equipment = responses[2].data;
         this.processState = responses[3].data.data;
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
-
       }
 
       this.loading = false;
@@ -533,6 +536,7 @@ export default {
 
         try {
           const { data } = await backendApi.put(`/historyChange/${edited.id}`, edited);
+
           alert.success(data.message);
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
@@ -595,12 +599,14 @@ export default {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(async () => {
         try {
-          
-          const { data } = await backendApi.get(`/historyUserDetail/${JSON.parse(window.localStorage.getItem("user")).name}`, {
+
+          const { data } = await backendApi.get(`/historyUser/${JSON.parse(window.localStorage.getItem("user")).name}`, {
             params: { ...options, search: this.search },
           });
 
+
           this.records = data.data;
+          console.log(this.records);
 
           this.total = data.total;
           this.loading = false;
