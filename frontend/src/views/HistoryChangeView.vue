@@ -111,8 +111,7 @@
               <!-- Probando datos de equipos -->
 
               <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
-                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
-                  " block prepend-icon="mdi-plus-thick" />
+                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment" block prepend-icon="mdi-plus-thick" />
               </v-col>
 
               <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
@@ -212,44 +211,31 @@
 
     <v-row justify="center">
       <v-dialog v-model="dialogInfo" width="1024">
-
         <v-card>
           <v-card-title>
-            <h2 class="mx-auto pt-3 p  text-center black-secondary">
-              <b>Datos de equipo que se realizo: <i class="text-indigo-darken-4">{{
-                this.editedItem.type_action_id }} </i></b>
-            </h2>
+            <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Detalles del movimiento</h2>
           </v-card-title>
 
           <v-card-text>
             <v-container>
               <v-row>
                 <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
+                  <v-chip color="primary" variant="flat" label>
+                    <v-icon icon="mdi-numeric-1-circle" start></v-icon>Detalles del usuario
+                  </v-chip>
                 </v-col>
 
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del usuario </b></p>
-                </v-col>
-
-
-                <!-- Nuevo Formato -->
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
                     <v-table density="compact">
-                      <thead>
+                      <thead class="tbl-info">
                         <tr>
-                          <th><b>Usuario del equipo</b></th>
-                          <th><b>Dependencia</b></th>
-                          <th><b>Ubicación</b></th>
+                          <td>Usuario(s) del equipo</td>
                         </tr>
                       </thead>
                       <tbody>
-
                         <tr v-for="user in this.editedItem.users">
                           <td>{{ user }}</td>
-                          <td>{{ this.editedItem.dependency_id }}</td>
-                          <td>{{ this.editedItem.location_id }}</td>
                         </tr>
                         <tr v-if="this.editedItem.technicalAttributes == 0">
                           <td colspan="4">
@@ -261,53 +247,56 @@
                   </div>
                 </v-col>
 
-                <!-- Nuevo Formato -->
-
                 <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del equipo </b></p>
+                  <v-chip color="primary" variant="flat" label>
+                    <v-icon icon="mdi-numeric-2-circle" start></v-icon>Detalles del equipo
+                  </v-chip>
                 </v-col>
                 <v-col cols="12" sm="12" md="12">
-                  <!-- Nueva tabla -->
                   <v-table density="compact">
-                    <tbody>
+                    <tbody class="tbl-info">
                       <tr>
-                        <th>Tipo</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Serial</th>
+                        <td>Tipo de equipo</td>
+                        <td>{{ this.editedItem.type1 }}</td>
                       </tr>
                       <tr>
-                        <td>{{ this.editedItem.type1 }}</td>
+                        <td>Marca</td>
                         <td>{{ this.editedItem.brand1 }}</td>
+                      </tr>
+                      <tr>
+                        <td>Modelo</td>
                         <td>{{ this.editedItem.model1 }}</td>
+                      </tr>
+                      <tr>
+                        <td>Serial</td>
                         <td>{{ this.editedItem.equipment_id }}</td>
-                        
+                      </tr>
+                      <tr>
+                        <td>Dependencia</td>
+                        <td>{{ this.editedItem.dependency_id }}</td>
+                      </tr>
+                      <tr>
+                        <td>Ubicación</td>
+                        <td>{{ this.editedItem.location_id }}</td>
                       </tr>
                     </tbody>
                   </v-table>
-                  <!-- Nueva tabla -->
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
-                  <v-divider :thickness="3" class="border-opacity-25" color="success" inset></v-divider>
-                </v-col>
-                <v-col cols="12" sm="12" md="12">
-                  <p class="text-grey-darken-6 text-h5 text-left"> <b>Detalles del movimiento </b></p>
+                  <v-chip color="primary" variant="flat" label>
+                    <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
+                  </v-chip>
                 </v-col>
 
-                <!-- Nuevo Formato -->
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
                     <v-table density="compact">
-                      <thead>
+                      <thead class="tbl-info">
                         <tr>
-                          <th><b>Encargado/a de realizar el movimiento</b></th>
-                          <th><b>Movimiento realizado</b></th>
-                          <th><b>Etapa del movimiento</b></th>
+                          <th style="width: 33% !important;">Técnico responsable</th>
+                          <th style="width: 33% !important;">Tipo de movimiento</th>
+                          <th style="width: 33% !important;">Etapa del movimiento</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -326,38 +315,21 @@
                     </v-table>
                   </div>
                 </v-col>
-
-                <!-- Nuevo Formato -->
-
-
-
-
               </v-row>
             </v-container>
-
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
-
-
+            <v-col cols="12" align="center">
+              <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
+            </v-col>           
           </v-card-actions>
         </v-card>
-
-
       </v-dialog>
     </v-row>
-
-
-
-
-
-
-
   </div>
 
   <v-dialog v-model="dialogMovementFinishDate" max-width="45rem">
-
     <v-card>
       <v-card-title>
         <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
@@ -368,22 +340,17 @@
       <v-card-text>
         <v-container>
           <!-- Form -->
-
           <v-row class="pt-3">
-
-
             <v-col cols="12" sm="12" md="12">
               <template
                 v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
                 <div>
                   <!-- Fecha de finalización de movimiento -->
-
                   <base-input label="Fecha de finalización del movimiento"
                     v-model="v$.finishMovement.finish_date.$model" :rules="v$.finishMovement.finish_date"
                     type="datetime-local" />
 
                   <!-- Fecha de finalización de movimiento -->
-
                 </div>
               </template>
             </v-col>
@@ -391,10 +358,7 @@
             <v-col cols="12" sm="12" md="12">
               <base-text-area label="Comentarios" v-model="v$.finishMovement.description.$model"
                 :rules="v$.finishMovement.description" />
-
             </v-col>
-
-
           </v-row>
 
           <!-- Form -->
@@ -407,8 +371,6 @@
         </v-container>
       </v-card-text>
     </v-card>
-
-
   </v-dialog>
 </template>
 
@@ -448,13 +410,11 @@ export default {
       dialogMovementFinishDate: false,
       enabled: false,
       headers: [
-        { title: "DEPENDENCIA", key: "dependency_id" },
+        { title: "TIPO DE MOVIMIENTO", key: "type_action_id" },
+        { title: "TIPO DE EQUIPO", key: "type1" },
+        { title: "# DE ACTIVO", key: "number_active" },
         { title: "UBICACIÓN", key: "location_id" },
-        // { title: "Usuario", key: "users" },
-        { title: "Serial equipo principal", key: "equipment_id" },
-        // { title: "Modelo", key: "model1" },
         { title: "ESTADO", key: "state_id" },
-        { title: "MOVIMIENTO", key: "type_action_id" },
         { title: "ACCIONES", key: "actions", sortable: false },
       ],
       records: [],
@@ -856,6 +816,8 @@ export default {
 
           this.records = data.data;
 
+          console.log(this.records)
+
           this.total = data.total;
           this.loading = false;
         } catch (error) {
@@ -888,18 +850,26 @@ table {
 
 td,
 th {
-  border: 1px solid #7b84e467;
+  border: 1px solid #C5CAE9;
   padding: 0.75rem 0.9375rem;
 }
 
 tbody,
 tr {
   border-bottom: 1px solid #fce8e8;
-
 }
 
-tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3e6;
+.tbl-info td:nth-child(1) {
+  background-color: #E8EAF6;
+  color: #1A237E;
+  width: 50%;
+}
+
+.tbl-info tr th {
+  background-color: #E8EAF6;
+  color: #1A237E !important;
+  text-align: center !important;
+  width: 50%;
 }
 
 tbody tr:last-of-type {
