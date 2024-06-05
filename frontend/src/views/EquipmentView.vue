@@ -11,18 +11,25 @@
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
-      <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
-        item-value="id" @update:options="getDataFromApi">
+
+      <!-- Nueva tabla -->
+      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil"/>
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete"/>
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information"/>
-          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold"/>
+
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" />
+
+          <v-icon icon="fa:fas fa-search"></v-icon>
+          <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-      </v-data-table-server>
+      </v-data-table>
+      <!-- Nueva tabla -->
+
     </v-card>
 
     <!-- Agregar y editar -->
@@ -93,9 +100,8 @@
 
                     <!-- equipment state -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name" 
-                       v-model.trim="v$.editedItem.state.$model"
-                        :rules="v$.editedItem.state" />              
+                      <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name"
+                        v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
                     </v-col>
                     <!-- equipment state -->
 
@@ -118,7 +124,7 @@
                     <!-- característica -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Característica" :items="this.technicalDescrip" item-title="name"
-                        item-value="name"  v-model.trim="v$.editedItem.technicalDescription.$model"
+                        item-value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
                         :rules="v$.editedItem.technicalDescription" />
                     </v-col>
                     <!-- característica -->
@@ -131,7 +137,8 @@
                     <!-- valor -->
 
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick" />
+                      <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar"
+                        @click="addTechnicalAttributes" block prepend-icon="mdi-plus-thick" />
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12">
@@ -180,7 +187,7 @@
                   <!-- licencias -->
                   <v-col cols="12" sm="12" md="12">
                     <base-select label="Licencias" :items="this.license" item-title="name" item-value="name"
-                       v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
+                      v-model.trim="v$.editedItem.license.$model" :rules="v$.editedItem.license" />
                   </v-col>
 
                   <v-col cols="12" sm="12" md="12">
@@ -201,7 +208,8 @@
                           <tr v-for="Licencia in this.editedItem.licenses">
                             <td>{{ Licencia }}</td>
                             <td>
-                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete" color="red-darken-4" />
+                              <v-icon size="20" class="mr-2" @click="deleteLicenses(Licencia)" icon="mdi-delete"
+                                color="red-darken-4" />
                             </td>
                           </tr>
                           <tr v-if="this.editedItem.licenses == 0">
@@ -243,7 +251,7 @@
 
                     <!-- proveedor -->
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-select label="Nombre" :items="this.provider" item-title="name" 
+                      <base-select label="Nombre" :items="this.provider" item-title="name"
                         v-model.trim="v$.editedItem.provider.$model" :rules="v$.editedItem.provider">
                       </base-select>
                     </v-col>
@@ -292,7 +300,8 @@
             <b>¿Desea cambiar el estado de disponibilidad del equipo de </b>
             <span
               :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }">
-              "{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() : this.editedItem.availability }}"
+              "{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() :
+                this.editedItem.availability }}"
             </span>
 
             <span v-if='this.editedItem.availability == "Disponible"'> a "en uso"?</span>
@@ -320,17 +329,17 @@
       <v-card-text>
         <v-container>
           <v-col cols="12" sm="12" md="12">
-            <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b> 
+            <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
                 <span :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">
                   {{ this.allowable }}
                 </span>
-              </v-chip>                
+              </v-chip>
             </p>
           </v-col>
           <v-row class="pt-1">
             <!-- Información del equipo -->
-            <v-col cols="12" sm="12" md="12">  
+            <v-col cols="12" sm="12" md="12">
               <v-expansion-panels v-model="panel.one">
                 <v-expansion-panel>
                   <v-expansion-panel-title>
@@ -347,7 +356,7 @@
                           <tr>
                             <td>N° de registro interno</td>
                             <td>{{ this.equipmentData.number_internal_active }}</td>
-                          </tr> 
+                          </tr>
                           <tr>
                             <td>Tipo de Equipo</td>
                             <td>{{ this.equipmentData.equipment_type_id }}</td>
@@ -363,11 +372,11 @@
                           <tr>
                             <td>Serie</td>
                             <td>{{ this.equipmentData.serial_number }}</td>
-                          </tr>                             
+                          </tr>
                           <tr>
                             <td>Estado</td>
                             <td>{{ this.equipmentData.state }}</td>
-                          </tr>   
+                          </tr>
                         </tbody>
                       </v-table>
                     </v-col>
@@ -421,7 +430,7 @@
             <v-col cols="12" sm="12" md="12">
               <v-expansion-panels>
                 <v-expansion-panel>
-                  <v-expansion-panel-title>                      
+                  <v-expansion-panel-title>
                     <p class="text-indigo-darken-4 text-center">Especificaciones técnicas</p>
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
@@ -463,25 +472,25 @@
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <v-col cols="12" sm="12" md="12">
-                        <v-table density="compact">
-                          <thead class="tbl-info">
-                            <tr>
-                              <!-- <th style="width: 5% !important;">N°</th> -->
-                              <th>Aplicación</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="(license, index) in this.equipmentData.licenses" :key="index">
-                              <!-- <td class="text-center">{{ index + 1 }}</td> -->
-                              <td class="text-center">{{ license }}</td>
-                            </tr>
-                            <tr v-if="this.equipmentData.licenses == 0">
-                              <td colspan="2">
-                                <p class="text-center">Sin datos que mostrar</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </v-table>
+                      <v-table density="compact">
+                        <thead class="tbl-info">
+                          <tr>
+                            <!-- <th style="width: 5% !important;">N°</th> -->
+                            <th>Aplicación</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(license, index) in this.equipmentData.licenses" :key="index">
+                            <!-- <td class="text-center">{{ index + 1 }}</td> -->
+                            <td class="text-center">{{ license }}</td>
+                          </tr>
+                          <tr v-if="this.equipmentData.licenses == 0">
+                            <td colspan="2">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </v-table>
                     </v-col>
                   </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -511,23 +520,23 @@
                           <tr>
                             <td>Fecha de adquisición</td>
                             <td>{{ this.equipmentData.adquisition_date }}</td>
-                          </tr>                            
+                          </tr>
                           <tr>
                             <td>Contacto directo</td>
                             <td>{{ this.equipmentData.contact_name }}</td>
-                          </tr>  
+                          </tr>
                           <tr>
                             <td>Número de contacto</td>
                             <td>{{ this.equipmentData.contact_phone }}</td>
-                          </tr> 
+                          </tr>
                         </tbody>
                       </v-table>
                     </v-col>
                   </v-expansion-panel-text>
                 </v-expansion-panel>
               </v-expansion-panels>
-            </v-col>  
-            <!-- Proveedor -->              
+            </v-col>
+            <!-- Proveedor -->
           </v-row>
         </v-container>
       </v-card-text>
@@ -535,7 +544,7 @@
         <v-spacer></v-spacer>
         <v-col cols="12" align="center">
           <base-button class="ms-1" type="secondary" title="Cerrar" @click="closeDetails" />
-        </v-col>          
+        </v-col>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -574,6 +583,8 @@ export default {
       dialogAvailability: false,
       headers: [
         { title: "TIPO DE EQUIPO", key: "equipment_type_id" },
+        { title: "# MODELO", key: "model" },
+        { title: "# SERIAL", key: "serial_number" },
         { title: "# DE ACTIVO FIJO", key: "number_active" },
         { title: "# DE REGISTRO INTERNO", key: "number_internal_active" },
         { title: "DISPONIBILIDAD", key: "availability" },
@@ -786,7 +797,7 @@ export default {
     closeDetails() {
       this.panel.one = 0
       this.panel.two = 0
-      this.dialogInfo = false     
+      this.dialogInfo = false
     },
 
     async initialize() {
