@@ -22,9 +22,9 @@
           <span>Movimientos</span>
         </RouterLink>               
 
-        <RouterLink to="/dependency" class="d-flex flex-column align-center mb-3 p-1">
+        <RouterLink to="/dashboard" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-shield-home" size="20"></v-icon>
-          <span>Dependencias</span>
+          <span>Dashboard</span>
         </RouterLink>
 
         <!-- Cerrar sesion -->

@@ -187,14 +187,10 @@ class Equipment extends Model
             'brand.name as brand',
             'provider.name as provider',
             'equipment_state.name as state',
-
             'equipment_type.name as equipment_type_id',
             'equipment.availability',
             'equipment.model as model',
             'equipment.serial_number as serial_number'
-
-
-
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
@@ -212,10 +208,6 @@ class Equipment extends Model
 
         return $data;
     }
-
-
-
-
 
 }
 

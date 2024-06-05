@@ -117,6 +117,12 @@ const router = createRouter({
       component: () => import("../views/TicketView.vue"),
       meta: { requiresAuth: true}, // add meta field to specify the route requires authentication
     },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: () => import("../views/DashboardView.vue"),
+      meta: { requiresAuth: true}, // add meta field to specify the route requires authentication
+    },
 
     {
       path: "/:pathMatch(.*)*",
