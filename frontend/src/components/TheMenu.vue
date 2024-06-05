@@ -27,6 +27,11 @@
           <span>Dashboard</span>
         </RouterLink>
 
+        <RouterLink to="/ticket" class="d-flex flex-column align-center mb-3 p-1">
+          <v-icon icon="mdi-ticket" size="20"></v-icon>
+          <span>Ticket</span>
+        </RouterLink>
+
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1" @click="logout()">
           <v-icon icon="mdi-logout" size="20"></v-icon>

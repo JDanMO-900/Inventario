@@ -400,8 +400,8 @@
                           <tr>
                             <th style="width: 25% !important;">Tipo de movimiento</th>
                             <th style="width: 25% !important;">Responsable</th>
-                            <th style="width: 25% !important;">Fecha de inicio</th>
-                            <th style="width: 25% !important;">Fecha de finalización</th>
+                            <th style="width: 25% !important;">Fecha de inicio del movimiento</th>
+                            <th style="width: 25% !important;">Fecha de retorno del equipo</th>
                           </tr>
                         </thead>
                         <tbody>

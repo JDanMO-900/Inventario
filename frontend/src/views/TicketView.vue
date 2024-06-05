@@ -13,14 +13,8 @@
         </v-col>
       </v-container>
 
-      <v-data-table
-      :headers="headers"
-      :items="records"
-      item-key="name"
-      class="elevation-1"
-      :search="search"
-    >
-    <template v-slot:[`item.actions`]="{ item }">
+      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
+        <template v-slot:[`item.actions`]="{ item }">
           <!-- <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" /> -->
           <!-- <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" /> -->
           <!-- <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" /> -->
@@ -31,8 +25,8 @@
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-    
-    </v-data-table>
+
+      </v-data-table>
 
     </v-card>
 
@@ -52,15 +46,11 @@
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-1-circle" start></v-icon>
-                  Usuario: {{ this.editedItem.users }}  
+                  Usuario: {{ this.editedItem.users }}
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
-              <!-- User -->
-
-
-              <!-- User -->
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Ubicación del dispositivo asignado" :items="this.location" item-title="name"
@@ -89,13 +79,11 @@
 
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
-                <base-select label="Movimiento realizado" :items="filterTypeAction" item-title="name"
+                <base-select label="Movimiento" :items="filterTypeAction" item-title="name"
                   v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
                 </base-select>
-
               </v-col>
               <!-- Accion realizada -->
-
 
 
               <!-- Fecha de inicio de movimiento -->
@@ -107,72 +95,52 @@
               <!-- Fecha de inicio de movimiento -->
 
 
-              <!-- Numero de activo fijo 1 -->
-              <v-col cols="4" sm="12" md="12">
-                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipos" :items="this.equipment"
-                  item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
-                  :rules="v$.editedItem.equipment">
-                </base-select>
+              <template v-if="v$.editedItem.type_action_id.$model != 'soporte'">
+       
+                  <!-- Numero de activo fijo 1 -->
+                  <v-col cols="4" sm="12" md="12">
+                    <base-select label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
+                      v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                    </base-select>
+                  </v-col>
 
-                <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
-                  item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
-                  :rules="v$.editedItem.equipment_id">
-                </base-select>
-              </v-col>
 
-              <!-- Probando datos de equipos -->
-              <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
-                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
-                  " block prepend-icon="mdi-plus-thick" />
-              </v-col>
+                  <v-col cols="12" sm="12" md="12">
+                    <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
+                      " block prepend-icon="mdi-plus-thick" />
+                  </v-col>
 
-              <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
-                <div class="w-100">
-                  <v-table density="compact">
-                    <thead>
-                      <tr>
-                        <td><b>Equipo</b></td>
-                        <td><b>Acción</b></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="equipo in this.editedItem.equipment_id" v-if="this.formTitle == 'Nuevo movimiento'">
-                        <td>{{ equipo }}</td>
-                        <td>
-                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
-                            color="red-darken-4" />
-                        </td>
-                      </tr>
-                      <tr v-if="this.editedItem.equipment_id == 0">
-                        <td colspan="4">
-                          <p class="text-center py-3">Sin datos que mostrar</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                </div>
-              </v-col>
-              <!-- Probando datos de licencia -->
+                  <v-col cols="12" sm="12" md="12">
+                    <div class="w-100">
+                      <v-table density="compact">
+                        <thead>
+                          <tr>
+                            <td><b>Equipo</b></td>
+                            <td><b>Acción</b></td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="equipo in this.editedItem.equipment_id">
+                            <td>{{ equipo }}</td>
+                            <td>
+                              <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
+                                color="red-darken-4" />
+                            </td>
+                          </tr>
+                          <tr v-if="this.editedItem.equipment_id == 0">
+                            <td colspan="4">
+                              <p class="text-center py-3">Sin datos que mostrar</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </v-table>
+                    </div>
+                  </v-col>
 
+
+              </template>
 
               <!-- Numero de activo fijo 1 -->
-
-
-              <!-- Cantidad de salida -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
-                <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
-                  :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
-              </v-col>
-
-              <!-- Cantidad de salida -->
-
-              <!-- Cantidad de entrada -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
-                <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
-                  :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" />
-              </v-col>
-
-
 
               <!-- Cantidad de entrada -->
               <v-col cols="12" sm="12" md="12">
