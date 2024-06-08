@@ -65,7 +65,7 @@ Route::put('/available',[EquipmentController::class, 'updateAvailability']);
 
 Route::resource('/equipment', EquipmentController::class);
 
-
+Route::get('/equipment-user/{username}', [EquipmentController::class, 'equipmentInUseByUser']);
 
 
 

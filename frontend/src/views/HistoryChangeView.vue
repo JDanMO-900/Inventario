@@ -3,7 +3,7 @@
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }}</h2>
+        <h2>{{ title }} {{  }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
@@ -825,7 +825,7 @@ export default {
 
           this.records = data.data;
 
-          console.log(this.records)
+  
 
           this.total = data.total;
           this.loading = false;

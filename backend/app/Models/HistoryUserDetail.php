@@ -41,7 +41,6 @@ class HistoryUserDetail extends Model
             'history_change.*',
             'users.*',
             'history_user_detail.id as id',
-
             // Datos del equipo
             'equipment.*',
             'users.name as users',
@@ -51,9 +50,6 @@ class HistoryUserDetail extends Model
             'history_change.end_date as end_date',
             'type_action.name as type_action',
             'process_state.name as process_state'
-            
-
-            
         )
 
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
@@ -67,7 +63,6 @@ class HistoryUserDetail extends Model
             ->where('users.name', 'like', $username)
             ->orderBy("history_user_detail.$sortBy", $sort)
             ->get();
-
     }
 
 

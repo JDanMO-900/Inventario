@@ -115,7 +115,8 @@ const router = createRouter({
       path: "/ticket",
       name: "ticket",
       component: () => import("../views/TicketView.vue"),
-      meta: { requiresAuth: true}, // add meta field to specify the route requires authentication
+      // meta: { requiresAuth: true}, 
+      // add meta field to specify the route requires authentication
     },
     {
       path: "/dashboard",

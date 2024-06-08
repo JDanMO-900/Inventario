@@ -69,6 +69,7 @@ class HistoryChange extends Model
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
+
         $data =  HistoryChange::select('history_change.*', 
         'type_action.*', 
         'equipment_id.*', 
@@ -93,11 +94,6 @@ class HistoryChange extends Model
 
         'process_state.name as state_id',
         'type_action.name as type_action_id'
-
-        
-        
-
-        
         )
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             // Equipo principal

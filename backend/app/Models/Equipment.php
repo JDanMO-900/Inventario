@@ -179,7 +179,6 @@ class Equipment extends Model
         $data = Equipment::select(
             'equipment.*',
             'equipment_state.*',
-
             'equipment_type.*',
             'brand.*',
             'provider.*',
@@ -209,7 +208,7 @@ class Equipment extends Model
         return $data;
     }
 
-    public static function userEquipment()
+    public static function userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
     {
 
         $data = Equipment::select(
@@ -225,15 +224,28 @@ class Equipment extends Model
             'equipment_type.name as equipment_type_id',
             'equipment.availability',
             'equipment.model as model',
-            'equipment.serial_number as serial_number'
+            'equipment.serial_number as serial_number',
+            'history_change.start_date as start_date',
+            'history_change.end_date as end_date',
+
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('history_change', 'equipment.id', '=','history_change.equipment_id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
+            ->join('history_user_detail', 'history_change.id', '=','history_user_detail.history_change_id')
+            ->join('users', 'users.id', '=','history_user_detail.user_id')
             ->where('equipment.availability', 'like', 0)
+            ->where('users.name', 'like', $username)
+            ->whereNull('history_change.end_date')
             ->get();
+
+            $data->each(function ($item) {
+                $availability = $item->availability ? 'Disponible' : 'En uso';
+                $item->availability = $availability;
+                $item->format =  '(Tipo: ' . $item->equipment_type_id. ') ' . '(Modelo: ' . $item->model. ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
+            });
 
             
 

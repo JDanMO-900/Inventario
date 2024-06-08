@@ -140,6 +140,17 @@
 
               </template>
 
+              <template v-else>
+                
+                 <!-- Numero de activo fijo 1 -->
+                 <v-col cols="4" sm="12" md="12">
+                    <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format" item-value="serial_number"
+                      v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                    </base-select>
+                  </v-col>
+
+              </template>
+
               <!-- Numero de activo fijo 1 -->
 
               <!-- Cantidad de entrada -->
@@ -448,6 +459,9 @@ export default {
         backendApi.get('/dependency', {
           params: { itemsPerPage: -1 },
         }),
+        backendApi.get(`/equipment-user/${JSON.parse(window.localStorage.getItem("user")).name}`, {
+          params: { itemsPerPage: -1 },
+        }),
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -461,6 +475,8 @@ export default {
         this.processState = responses[3].data.data;
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
+        this.userEquipment = responses[6].data.data;
+        console.log(this.userEquipment)
       }
 
       this.loading = false;
@@ -574,7 +590,7 @@ export default {
 
 
           this.records = data.data;
-          console.log(this.records);
+
 
           this.total = data.total;
           this.loading = false;

@@ -41,6 +41,38 @@ class EquipmentController extends Controller
 
     }
 
+
+
+    public function equipmentInUseByUser($username, Request $request)
+    {
+
+        $itemsPerPage = $request->itemsPerPage ?? 10;
+        $skip = ($request->page - 1) * $request->itemsPerPage;
+
+        // Getting all the records
+        if (($request->itemsPerPage == -1)) {
+            $itemsPerPage = Equipment::count();
+            $skip = 0;
+        }
+
+        $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+
+        $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
+
+        $search = (isset($request->search)) ? "%$request->search%" : '%%';
+
+        $equipment = Equipment::userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage);
+        $equipment = Encrypt::encryptObject($equipment, "id");
+
+        $total = Equipment::counterPagination($search);
+
+        return response()->json([
+            "message" => "Registros obtenidos correctamente.",
+            "data" => $equipment,
+            "total" => $total,
+        ]);
+    }
+
     public function index(Request $request)
     {
 
