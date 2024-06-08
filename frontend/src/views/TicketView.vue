@@ -95,7 +95,7 @@
               <!-- Fecha de inicio de movimiento -->
 
 
-              <template v-if="v$.editedItem.type_action_id.$model != 'soporte'">
+              <template v-if="v$.editedItem.type_action_id.$model != 'soporte' && v$.editedItem.type_action_id.$model != ''">
        
                   <!-- Numero de activo fijo 1 -->
                   <v-col cols="4" sm="12" md="12">
@@ -136,11 +136,9 @@
                       </v-table>
                     </div>
                   </v-col>
-
-
               </template>
 
-              <template v-else>
+              <template v-if="v$.editedItem.type_action_id.$model == 'soporte' && v$.editedItem.type_action_id.$model != ''">
                 
                  <!-- Numero de activo fijo 1 -->
                  <v-col cols="4" sm="12" md="12">
