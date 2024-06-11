@@ -69,9 +69,6 @@ Route::get('/equipment-user/{username}', [EquipmentController::class, 'equipment
 
 
 
-
-
-
 Route::resource('/technicalDescription', TechnicalDescriptionController::class);
 Route::resource('/equipmentDetail', EquipmentDetailController::class);  
 
@@ -82,6 +79,9 @@ Route::resource('/typeAction', TypeActionController::class);
 Route::resource('/processState', ProcessStateController::class);
 
 Route::resource('/historyChange', HistoryChangeController::class);
+
+Route::put('/cancelMovement', [HistoryChangeController::class, 'updateUserCancelMovement']);
+
 Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndProcess']);
 
 // To get role of the user

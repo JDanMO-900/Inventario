@@ -45,11 +45,13 @@ class HistoryUserDetail extends Model
             'equipment.*',
             'users.name as users',
             'equipment_type.name as equipment_type',
-            'equipment.serial_number as serial_number',
+            'equipment.serial_number as equipment_id',
             'history_change.start_date as start_date',
             'history_change.end_date as end_date',
             'type_action.name as type_action',
-            'process_state.name as process_state'
+            'type_action.is_internal as internal',
+            'process_state.name as process_state',
+            
         )
 
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')

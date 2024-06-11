@@ -495,7 +495,6 @@ export default {
           required,
           minLength: minLength(1),
         },
-
         quantity_out: {
           required,
           minLength: minLength(1),
@@ -644,18 +643,14 @@ export default {
         if (this.finishMovement.finish_date != null) {
 
           const endStatus = await backendApi.put(`/changeStatus/`, this.finishMovement);
-
-
           alert.success(endStatus.data.message);
         }
       } catch (error) {
         this.close();
       }
-
       this.initialize();
       this.closeMovementFinishDate();
     },
-
 
 
     // Cambiando fecha de prestamo
@@ -663,7 +658,7 @@ export default {
       this.loading = true;
       this.records = [];
 
-      var user = JSON.parse(window.localStorage.getItem("user"));
+
 
       let requests = [
         this.getDataFromApi(),

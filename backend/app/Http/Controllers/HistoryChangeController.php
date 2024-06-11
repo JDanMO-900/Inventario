@@ -244,7 +244,7 @@ class HistoryChangeController extends Controller
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->save();
 
-
+        Log::info($request->equipment_id);
         $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
         $available1->availability = true;
         $available1->save();
@@ -254,6 +254,29 @@ class HistoryChangeController extends Controller
             "message" => "Movimiento terminado, equipo disponible de nuevo",
         ]);
     }
+
+    public function updateUserCancelMovement(Request $request){
+        
+        
+        $data = Encrypt::decryptArray($request->all(), 'id');
+        
+        $historychange = HistoryChange::where('id', $request->history_change)->first();
+        Log::info($request);
+        $historychange->end_date = $request->finish_date;
+        $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
+        $historychange->save();
+
+        $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
+        $available1->availability = true;
+        $available1->save();
+
+        return response()->json([
+            "message" => "Movimiento cancelado",
+        ]);
+
+    }
+
+
 
 
 

@@ -29,6 +29,11 @@ class ProcessStateSeeder extends Seeder
                 "name" => "Finalizado",
 
             ],
+            [
+
+                "name" => "Cancelado",
+
+            ],
 
         ]);
     }
