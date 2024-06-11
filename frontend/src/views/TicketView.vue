@@ -14,8 +14,10 @@
       </v-container>
 
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
-        <template v-slot:[`item.actions`]="{ item }" >
-          <v-icon v-if="item.raw.process_state != 'Finalizado' && item.raw.process_state != 'Cancelado' && item.raw.internal != 1" size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" />
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon
+            v-if="item.raw.process_state == 'Pendiente' && item.raw.process_state != 'Cancelado' && item.raw.internal != 1"
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" />
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -551,7 +553,7 @@ export default {
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
         this.userEquipment = responses[6].data.data;
-        console.log(this.userEquipment)
+
       }
 
       this.loading = false;
@@ -573,7 +575,10 @@ export default {
     },
 
     async save() {
-      this.editedItem.state_id = "En proceso";
+
+
+      this.editedItem.state_id = "Pendiente"
+
       this.v$.editedItem.$validate();
       if (this.v$.editedItem.$invalid) {
         alert.error("Campos obligatorios");

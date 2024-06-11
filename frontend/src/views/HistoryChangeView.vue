@@ -729,6 +729,7 @@ export default {
     },
 
     async save() {
+      
 
       if (this.editedItem.type_action_id == 'préstamo' || this.editedItem.type_action_id == 'mantenimiento') {
         this.editedItem.state_id = "En proceso";
