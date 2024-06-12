@@ -25,8 +25,11 @@
       <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo')" size="20"
+          <template v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo' && item.raw.state_id != 'Finalizado' &&  item.raw.state_id != 'Cancelado')">
+            <v-icon  size="20"
             class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+          </template>
+
 
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />

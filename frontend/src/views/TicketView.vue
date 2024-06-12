@@ -142,12 +142,49 @@
                 v-if="v$.editedItem.type_action_id.$model == 'soporte' && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
+
+
+                <!-- Mis equipos -->
+                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
-                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
-                    item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
-                    :rules="v$.editedItem.equipment">
+                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format" item-value="serial_number"
+                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
                   </base-select>
                 </v-col>
+
+
+                <v-col cols="12" sm="12" md="12">
+                  <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment
+                    " block prepend-icon="mdi-plus-thick" />
+                </v-col>
+
+                <v-col cols="12" sm="12" md="12">
+                  <div class="w-100">
+                    <v-table density="compact">
+                      <thead>
+                        <tr>
+                          <td><b>Equipo</b></td>
+                          <td><b>Acción</b></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="equipo in this.editedItem.equipment_id">
+                          <td>{{ equipo }}</td>
+                          <td>
+                            <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
+                              color="red-darken-4" />
+                          </td>
+                        </tr>
+                        <tr v-if="this.editedItem.equipment_id == 0">
+                          <td colspan="4">
+                            <p class="text-center py-3">Sin datos que mostrar</p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                  </div>
+                </v-col>
+                 <!-- Mis equipos -->
 
               </template>
 
