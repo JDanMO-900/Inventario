@@ -106,23 +106,17 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
     {
-      path: "/historyUser",
-      name: "historyUser",
-      component: () => import("../views/HistoryUserDetailView.vue"),
-      meta: { requiresAuth: true}, // add meta field to specify the route requires authentication
-    },
-    {
       path: "/ticket",
       name: "ticket",
       component: () => import("../views/TicketView.vue"),
-      // meta: { requiresAuth: true}, 
+      meta: { requiresAuth: true}, 
       // add meta field to specify the route requires authentication
     },
     {
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../views/DashboardView.vue"),
-      meta: { requiresAuth: true}, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
 
     {
