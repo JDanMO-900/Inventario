@@ -260,7 +260,7 @@ export default {
         );
 
         try {
-          const { data } = await backendApi.put(`/userData/${edited.id}`, edited);
+          const { data } = await backendApi.put(`/user/${edited.id}`, edited);
 
           alert.success(data.message);
         } catch (error) {
@@ -274,7 +274,7 @@ export default {
 
       //Creating record
       try {
-        const { data } = await backendApi.post('/userData', this.editedItem);
+        const { data } = await backendApi.post('/user', this.editedItem);
 
         alert.success(data.message);
       } catch (error) {
@@ -326,7 +326,7 @@ export default {
       clearTimeout(this.debounce);
       this.debounce = setTimeout(async () => {
         try {
-          const { data } = await backendApi.get('/userData', {
+          const { data } = await backendApi.get('/user', {
             params: { ...options, search: this.search },
           });
 
