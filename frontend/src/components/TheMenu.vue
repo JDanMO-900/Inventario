@@ -31,6 +31,12 @@
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
         </RouterLink>
+        
+        <RouterLink to="/users" class="d-flex flex-column align-center mb-3 p-1">
+          <v-icon icon="mdi-account-check" size="20"></v-icon>
+          <span>Usuarios</span>
+        </RouterLink>
+        
 
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1" @click="logout()">

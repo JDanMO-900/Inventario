@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HistoryUserDetailController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
@@ -86,7 +87,9 @@ Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndProcess']
 
 // To get role of the user
 Route::get('/user/{name}', [UserController::class, 'filter']);
-Route::get('/user', [UserController::class, 'index']);
+Route::resource('/userData', UserController::class);
+Route::get('/role', [RoleController::class, 'index']);
+
 
 
 Route::resource('/location', LocationController::class);

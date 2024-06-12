@@ -41,9 +41,7 @@ class Role extends Model
     public static function counterPagination($search)
     {
         return Role::select('role.*', 'role.id as id')
-
             ->where('role.name', 'like', $search)
-
             ->count();
     }
 }

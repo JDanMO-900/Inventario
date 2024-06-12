@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Role;
+use Encrypt;
 use App\Models\User;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -11,6 +13,8 @@ class UserController extends Controller
         $user = User::showUser($name);
         return $user;
     }
+
+
 
     public function index(Request $request) {
         $itemsPerPage = $request->itemsPerPage ?? 10;
@@ -27,15 +31,32 @@ class UserController extends Controller
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
-        $license = User::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        // $license = Encrypt::encryptObject($license, "id");
+        $user = User::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
+        // $user = Encrypt::encryptObject($user, "id");
 
         $total = User::counterPagination($search);
 
         return response()->json([
             "message"=>"Registros obtenidos correctamente.",
-            "data" => $license,
+            "data" => $user,
             "total" => $total,
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        Log::info($request);
+
+        $userData = User::where('id',$request->id)->first();
+		$userData->name = $request->name;
+        $userData->email = $request->email;
+        $userData->role_id = Role::where('name', $request->role_id)->first()->id;
+
+
+        $userData->save();
+
+        return response()->json([
+            "message"=>"Registro modificado correctamente.",
         ]);
     }
 
