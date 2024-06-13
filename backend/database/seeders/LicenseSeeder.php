@@ -15,30 +15,17 @@ class LicenseSeeder extends Seeder
     {
         License::insert([
             [
-
-                "name" => "Office 365",
-
+                "name" => "Microsoft Office 2021 Pro-Plus",
             ],
             [
-
                 "name" => "Eset Endpoint Security",
-
             ],
             [
-
                 "name" => "Adobe",
-
             ],
             [
-
-                "name" => "Autocad",
-
-            ],
-            [
-
-                "name" => "Photoshop",
-
-            ],
+                "name" => "AutoDesk",
+            ]
         ]);
     }
 }

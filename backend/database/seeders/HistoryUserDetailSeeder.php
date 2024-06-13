@@ -16,24 +16,21 @@ class HistoryUserDetailSeeder extends Seeder
     {
         HistoryUserDetail::insert([
             [
-                'history_change_id'=>1, 
-                'user_id'=>1, 
+                'history_change_id'=> 1, 
+                'user_id' => 1, 
             ],
             [
-                'history_change_id'=>2, 
-                'user_id'=>2, 
-
+                'history_change_id' => 2, 
+                'user_id'=> 2, 
             ],
             [
-                'history_change_id'=>3, 
-                'user_id'=>2, 
-
+                'history_change_id' => 3, 
+                'user_id' =>2, 
             ],
             [
-                'history_change_id'=>4, 
-                'user_id'=>2, 
-            ],
-
+                'history_change_id' => 4, 
+                'user_id' => 2, 
+            ]
         ]);
     }
 }

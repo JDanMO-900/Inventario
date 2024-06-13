@@ -18,31 +18,16 @@ class DependencySeeder extends Seeder
         Dependency::insert([
             [
                 "id" => 1,
-                "name" => "Informatica",
-                
-                ],
-                [
+                "name" => "BINAES"            
+            ],
+            [
                 "id" => 2,
-                "name" => "Servicios de informacion",
-                
-                ],
-                [
+                "name" => "Archivo General de la Nación"            
+            ],
+            [
                 "id" => 3,
-                "name" => "Prototipado",
-                ],
-                [
-                "id" => 4,
-                "name" => "Robotica",
-                ],
-                [
-                "id" => 5,
-                "name" => "Realidad virtual",
-                ],
-                [
-                "id" => 6,
-                "name" => "Zona gamer",
-                ],
-               
+                "name" => "Ministerio de Cultura, Edif. A5"
+            ]               
         ]);
 
     }

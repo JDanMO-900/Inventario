@@ -20,29 +20,38 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel -1: Parqueo',
             ],
             [
-                'name' => 'Nivel 1: Lobby',
+                'name' => 'Nivel 1: Recepción',
             ],
             [
-                'name' => 'Nivel 2: primera infancia',
+                'name' => 'Nivel 1: Monitoreo',
             ],
             [
-                'name' => 'Nivel 3: Niñez',
+                'name' => 'Nivel 2: Técnología',
             ],
             [
-                'name' => 'Nivel 4: Juvenil',
+                'name' => 'Nivel 3: Cómputo público',
+            ],
+            [
+                'name' => 'Nivel 4: Cómputo público',
             ],
             [
                 'name' => 'Nivel 5: Colección general',
             ],
             [
-                'name' => 'Nivel 6: Tecnología e innovación',
+                'name' => 'Nivel 5: Dirección',
+            ],
+            [
+                'name' => 'Nivel 6: Tecnología',
+            ],
+            [
+                'name' => 'Nivel 6: Prototipado',
+            ],
+            [
+                'name' => 'Nivel 6: Robótica',
             ],
             [
                 'name' => 'Nivel 7: Área de restaurantes',
-            ],
-
-           
-            
+            ]  
         ]);
        
 

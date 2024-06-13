@@ -14,46 +14,30 @@ class TypeActionSeeder extends Seeder
     public function run(): void
     {
         TypeAction::insert([
-            [
-      
-                "name" => "mantenimiento",
+            [      
+                "name" => "Mantenimiento",
                 "is_internal" => 1
-
             ],
-            [
-              
-                "name" => "asignación",
+            [              
+                "name" => "Asignación",
                 "is_internal" => 1
-
             ],
-            [
-            
-                "name" => "traslado",
+            [           
+                "name" => "Traslado",
                 "is_internal" => 1
-
             ],
-            [
-               
-                "name" => "préstamo",
+            [               
+                "name" => "Préstamo",
                 "is_internal" => 0
-
             ],
-            [
-               
-                "name" => "soporte",
+            [               
+                "name" => "Soporte",
                 "is_internal" => 0
-
             ],
-            [
-               
-                "name" => "solicitud equipo",
-                "is_internal" => 0
-
-            ],
-
-
-            
-
+            // [               
+            //     "name" => "Solicitud equipo",
+            //     "is_internal" => 0
+            // ]   
         ]);
     }
 }

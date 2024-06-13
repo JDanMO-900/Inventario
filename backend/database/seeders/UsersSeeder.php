@@ -15,57 +15,41 @@ class UsersSeeder extends Seeder
     {
         User::insert([
             [
-
-                'name'  => 'Ciudadano promedio',
-  
-                'email' => 'a@gmail.com',
-                'password' => 'atol',
-                'role_id' => 1
-
+                'name'  => 'Leonel López',  
+                'email' => 'lalopez@cultura.gob.sv',
+                'password' => '12345',
+                'role_id' => 2
             ],
-            [
-     
+            [     
                 'name'  => 'Jose Daniel',
-                'email' => 'prueba@prueba.com',
-                'password' => 'atol',
+                'email' => 'jmolina@cultura.gob.sv',
+                'password' => '12345',
                 'role_id' => 3
-
             ],
             [
-
                 'name'  => 'Kelvin Alas',
-                'email' => 'a1@gmail.com',
-                'password' => 'atol',
+                'email' => 'kalas@cultura.gob.sv',
+                'password' => '12345',
                 'role_id' => 3
-
             ],
-            [
- 
+            [ 
                 'name'  => 'Jonathan Rivas',
-                'email' => 'prueba1@prueba.com',
-                'password' => 'atol',
+                'email' => 'jjmejia@cultura.gob.sv',
+                'password' => '12345',
                 'role_id' => 3
-
             ],
             [
-
                 'name'  => 'Mario Reyes',
-                'email' => 'a2@gmail.com',
-                'password' => 'atol',
+                'email' => 'mreyes@cultura.gob.sv',
+                'password' => '12345',
                 'role_id' => 3
-
             ],
-            [
- 
+            [ 
                 'name'  => 'Rudy Valiente',
-                'email' => 'prueba2@prueba.com',
-                'password' => 'atol',
+                'email' => 'rvaliente@cultura.gob.sv',
+                'password' => '12345',
                 'role_id' => 3
-
-            ],
-
-
-
+            ]
         ]);
     }
 }

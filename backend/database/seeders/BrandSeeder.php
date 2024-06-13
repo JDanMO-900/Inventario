@@ -16,7 +16,7 @@ class BrandSeeder extends Seeder
         Brand::insert([
             [
                 "id" => 1,
-                "name" => "Dell",
+                "name" => "DELL",
                 
                 ],
                 [

@@ -25,12 +25,7 @@ class HistoryChangeSeeder extends Seeder
                 "equipment_id" => 1,
                 "state_id" => 1,
                 "location_id" => 1,
-                "dependency_id" => 2,
-
-
-
-
-
+                "dependency_id" => 2
             ],
             [
                 'start_date' => "2024-02-27",
@@ -42,8 +37,7 @@ class HistoryChangeSeeder extends Seeder
                 "equipment_id" => 2,
                 "state_id" => 1,
                 "location_id" => 2,
-                "dependency_id" => 1,
-
+                "dependency_id" => 1
             ],
             [
                 'start_date' => "2024-01-02",
@@ -55,18 +49,11 @@ class HistoryChangeSeeder extends Seeder
                 "equipment_id" => 1,
                 "state_id" => 1,
                 "location_id" => 1,
-                "dependency_id" => 4,
-
-
-
-
-
+                "dependency_id" => 3
             ],
             [
-
                 'start_date' => "2024-01-04",
                 'end_date' => "2024-01-04",
-
                 "description" => "Se coloco sobre la mesa",
                 "quantity_out" => 0,
                 "quantity_in" => 1,
@@ -74,9 +61,8 @@ class HistoryChangeSeeder extends Seeder
                 "equipment_id" => 2,
                 "state_id" => 2,
                 "location_id" => 2,
-                "dependency_id" => 1,
-
-            ],
+                "dependency_id" => 1
+            ]
         ]);
     }
 }

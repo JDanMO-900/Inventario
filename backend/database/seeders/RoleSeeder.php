@@ -15,14 +15,14 @@ class RoleSeeder extends Seeder
     {
         Role::insert([
             [
-                'name' => 'Usuario',
+                'name' => 'Usuario'
             ],
             [
-                'name' => 'Jefe',
+                'name' => 'Jefe'
             ],
             [
-                'name' => 'Tecnico',
-            ],
+                'name' => 'Tecnico'
+            ]
         ]);
     }
 }

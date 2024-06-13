@@ -15,25 +15,17 @@ class TechnicalDescriptionSeeder extends Seeder
     {
         TechnicalDescription::insert([
             [
-
                 "name" => "Procesador",
-
             ],
             [
-
                 "name" => "Potencia (W)",
-
             ],
             [
-
                 "name" => "RAM (GB)",
             ],
             [
-
                 "name" => "Disco duro (GB)",
-            ],
-
-
+            ]
         ]);
     }
 }

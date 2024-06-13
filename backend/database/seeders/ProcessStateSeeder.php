@@ -15,26 +15,17 @@ class ProcessStateSeeder extends Seeder
     {
         ProcessState::insert([
             [
-
-                "name" => "Pendiente",
-
+                "name" => "Pendiente"
+            ],
+            [ 
+                "name" => "En proceso"
             ],
             [
- 
-                "name" => "En proceso",
-
+                "name" => "Finalizado"
             ],
             [
-
-                "name" => "Finalizado",
-
-            ],
-            [
-
-                "name" => "Cancelado",
-
-            ],
-
+                "name" => "Cancelado"
+            ]
         ]);
     }
 }
