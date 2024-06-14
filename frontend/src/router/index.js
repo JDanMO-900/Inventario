@@ -147,10 +147,10 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
     else{
-      var user = JSON.parse(window.localStorage.getItem("user"));
-      const rol = await backendApi.get(`/user/${user.name}`);
-      const userRole = rol.data[0].rolName;
-      if(userRole == "Jefe" ){
+      var user = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
+      let rol =  user.data[0].rolName;
+
+      if(rol== "Jefe" ){
         next();
       }
       else{

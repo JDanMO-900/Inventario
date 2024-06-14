@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Encrypt;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
@@ -68,10 +69,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->belongsTo(Role::class, 'model_id');
     }
 
-    public  static function showUser($name){
-        return User::select('users.*', 'role.*', 'users.id as id', 'role.name as rolName')
+    public  static function showUser($email){
+        Log::info($email);
+        return User::select('users.*', 'users.id as id', 'users.email as email', 'role.name as rolName')
         ->join('role', 'users.role_id', '=','role.id')
-        ->where('users.name','like', $name)
+        ->where('users.email','like', $email)
         ->get();
     }
 

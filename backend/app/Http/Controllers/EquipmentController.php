@@ -201,7 +201,14 @@ class EquipmentController extends Controller
 
         $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
         $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
-        $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
+
+        if ($request->provider != "") {
+            $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
+
+        } else {
+            $equipment->provider_id  = null;
+        }
+
 
 
         $equipment->save();

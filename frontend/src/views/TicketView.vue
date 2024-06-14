@@ -3,7 +3,7 @@
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }}</h2>
+        <h2>{{ title }} </h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
@@ -365,7 +365,8 @@ export default {
         finish_date: "",
         equipment_id: "",
 
-      }
+      },
+
 
     };
   },
@@ -473,6 +474,8 @@ export default {
   },
 
   methods: {
+
+    
     movementCancelStatusItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -576,6 +579,9 @@ export default {
         backendApi.get(`/equipment-user/${JSON.parse(window.localStorage.getItem("user")).name}`, {
           params: { itemsPerPage: -1 },
         }),
+
+        
+
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -584,12 +590,17 @@ export default {
 
 
       if (responses) {
+
+
+        
         this.typeAction = responses[1].data.data;
         this.equipment = responses[2].data;
         this.processState = responses[3].data.data;
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
         this.userEquipment = responses[6].data.data;
+
+
 
       }
 

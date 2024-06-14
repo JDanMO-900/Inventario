@@ -668,7 +668,7 @@ export default {
         backendApi.get('/typeAction', {
           params: { itemsPerPage: -1 },
         }),
-        backendApi.get('/user', {
+        backendApi.get('/userData', {
           params: { itemsPerPage: -1 },
         }),
         backendApi.get('/equipment-available', {
@@ -701,7 +701,7 @@ export default {
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
 
-          if (this.users[i].role === "Tecnico")
+          if (this.users[i].role_id === "Tecnico")
             uniqueTechNames.add(this.users[i].name);
         }
         this.userTech = Array.from(uniqueTechNames)

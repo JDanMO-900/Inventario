@@ -87,7 +87,7 @@ Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndProcess']
 
 // To get role of the user
 Route::get('/user/{name}', [UserController::class, 'filter']);
-Route::resource('/user', UserController::class);
+Route::resource('/userData', UserController::class);
 Route::get('/role', [RoleController::class, 'index']);
 
 

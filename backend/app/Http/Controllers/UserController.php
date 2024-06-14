@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function filter(string $name) {
-        $user = User::showUser($name);
+    public function filter(string $email) {
+        $user = User::showUser($email);
         return $user;
     }
 

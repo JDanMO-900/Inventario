@@ -22,16 +22,19 @@ class DatabaseSeeder extends Seeder
             TechnicalDescriptionSeeder::class,
             RoleSeeder::class,
             UsersSeeder::class,
-            EquipmentSeeder::class,
             LicenseSeeder::class,
-            EquipmentLicenseDetailSeeder::class,
             ProcessStateSeeder::class,
             TypeActionSeeder::class,
             LocationSeeder::class,
-            HistoryChangeSeeder::class,
-            EquipmentDetailSeeder::class,
-            HistoryUserDetailSeeder::class,
-            HistoryTechSeeder::class
+
+
+            // EquipmentSeeder::class,
+            // EquipmentLicenseDetailSeeder::class,
+            // HistoryChangeSeeder::class,
+            // EquipmentDetailSeeder::class,
+            // HistoryUserDetailSeeder::class,
+            // HistoryTechSeeder::class
+
         ]);
     }
 }
