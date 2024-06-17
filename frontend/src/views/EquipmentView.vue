@@ -33,7 +33,7 @@
     </v-card>
 
     <!-- Agregar y editar -->
-    <v-dialog v-model="dialog" max-width="800px" persistent>
+    <v-dialog v-model="dialog" max-width="800px">
       <v-card>
         <v-card-title>
           <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">
@@ -596,11 +596,11 @@ export default {
       total: 0,
       options: {},
       editedItem: {
-        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
+        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "", license: "",
         state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
       },
       defaultItem: {
-        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "",
+        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "", license: "",
         state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
       },
       loading: false,
@@ -743,12 +743,14 @@ export default {
       if (this.editedItem.license != "") {
         this.editedItem.licenses.forEach(item => {
           if (item == this.editedItem.license) {
+            this.editedItem.license = ''
             isInArray = true;
           }
         });
 
-        if (!isInArray) {
+        if (!isInArray) {          
           this.editedItem.licenses.push(this.editedItem.license);
+          this.editedItem.license = ''
         }
       }
 
@@ -766,12 +768,16 @@ export default {
       if (this.editedItem.attribute != "" && this.editedItem.technicalDescription != "" && this.editedItem.attribute != undefined) {
         this.editedItem.technicalAttributes.forEach(item => {
           if (item.technicalDescription == this.editedItem.technicalDescription) {
+            this.editedItem.technicalDescription = ''
+            this.editedItem.attribute = ''
             isInArray = true;
           }
         });
 
         if (!isInArray) {
           this.editedItem.technicalAttributes.push({ "technicalDescription": this.editedItem.technicalDescription, "attribute": this.editedItem.attribute });
+          this.editedItem.technicalDescription = ''
+          this.editedItem.attribute = ''
         }
 
       }

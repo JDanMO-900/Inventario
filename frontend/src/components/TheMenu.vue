@@ -24,7 +24,7 @@
 
         <RouterLink to="/dashboard" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-shield-home" size="20"></v-icon>
-          <span>Dashboard</span>
+          <span>Catálogos</span>
         </RouterLink>
 
         <RouterLink to="/ticket" class="d-flex flex-column align-center mb-3 p-1">

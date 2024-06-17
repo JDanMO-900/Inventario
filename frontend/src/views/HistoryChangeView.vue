@@ -42,7 +42,7 @@
 
     </v-card>
 
-    <v-dialog v-model="dialog" max-width="800px" persistent>
+    <v-dialog v-model="dialog" max-width="800px">
       <v-card>
         <v-card-title>
           <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">
@@ -120,7 +120,6 @@
                   v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
                 </base-select>
               </v-col>
-              <!-- Probando datos de equipos -->
 
               <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
                 <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment" block prepend-icon="mdi-plus-thick" />
@@ -151,7 +150,6 @@
                   </v-table>
                 </div>
               </v-col>
-              <!-- Probando datos de licencia -->
               <!-- Numero de activo fijo 1 -->
 
               <!-- Cantidad de salida -->
@@ -583,22 +581,18 @@ export default {
   methods: {
     addEquipment() {
       var isInArray = false;
-
-
       if (this.editedItem.equipment != "") {
-
         this.editedItem.equipment_id.forEach(item => {
-
-
           if (item == this.editedItem.equipment) {
+            this.editedItem.equipment = ''
             isInArray = true;
           }
         });
 
         if (!isInArray) {
           this.editedItem.equipment_id.push(this.editedItem.equipment);
+          this.editedItem.equipment = ''
         }
-
       }
 
     },
@@ -610,12 +604,10 @@ export default {
       )
     },
     movementFinishDateItem(item) {
-
       this.finishMovement.description = item.description;
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogMovementFinishDate = true;
-
     },
 
     closeMovementFinishDate() {
@@ -626,12 +618,8 @@ export default {
       });
     },
     async changeMovementFinishDate() {
-
-
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
-
-
       this.v$.finishMovement.$validate();
       if (this.v$.finishMovement.$invalid) {
         alert.error("Campos obligatorios");
@@ -639,9 +627,6 @@ export default {
       }
 
       this.finishMovement.state_id = "Finalizado";
-
-
-
       try {
         if (this.finishMovement.finish_date != null) {
 
@@ -660,9 +645,6 @@ export default {
     async initialize() {
       this.loading = true;
       this.records = [];
-
-
-
       let requests = [
         this.getDataFromApi(),
         backendApi.get('/typeAction', {
@@ -697,7 +679,6 @@ export default {
         this.processState = responses[4].data.data;
         this.location = responses[5].data.data;
         this.dependency = responses[6].data.data;
-
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
 
@@ -731,8 +712,7 @@ export default {
       });
     },
 
-    async save() {
-      
+    async save() {  
 
       if (this.editedItem.type_action_id == 'préstamo' || this.editedItem.type_action_id == 'mantenimiento') {
         this.editedItem.state_id = "En proceso";

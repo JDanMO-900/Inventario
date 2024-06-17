@@ -5,30 +5,30 @@
         <h1>Gestión de Equipos y Recursos</h1>
       </v-container>
       <v-row class="p-2 mt-2">
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/equipmentType" max-width="37rem" prepend-icon="mdi-desktop-classic"
-            rel="noopener" subtitle="Gestión de tipo de equipos" target="_blank" title="Tipo de equipos"  color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto" @click="$router.push('/equipmentType')" max-width="23.5rem" prepend-icon="mdi-desktop-classic"
+            rel="noopener" subtitle="Gestión de tipo de equipos" title="Tipo de equipos" color="grey-lighten-5">
+          </v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/equipmentState" max-width="37rem" prepend-icon="mdi-checkbox-marked-circle"
-            rel="noopener" subtitle="Gestión del estado de los equipos" target="_blank"
-            title="Estado de los equipos" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto" @click="$router.push('/equipmentState')" max-width="23.5rem" prepend-icon="mdi-checkbox-marked-circle"
+            rel="noopener" subtitle="Gestión del estado de los equipos" title="Estado de los equipos" color="grey-lighten-5"></v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/brand" max-width="23.5rem" prepend-icon="mdi-label" rel="noopener"
-            subtitle="Gestión de marcas" target="_blank" title="Marcas de equipos" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto" @click="$router.push('/brand')" max-width="23.5rem" prepend-icon="mdi-label" rel="noopener"
+            subtitle="Gestión de marcas" title="Marcas de equipos" color="grey-lighten-5"></v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/technicalDescription" max-width="23.5rem" prepend-icon="mdi-memory" rel="noopener"
-            subtitle="Gestión de descripciones tecnicas" target="_blank" title="Descripción técnicas" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto" @click="$router.push('/technicalDescription')" max-width="23.5rem" prepend-icon="mdi-memory" rel="noopener"
+            subtitle="Gestión de descripciones tecnicas" title="Descripción técnicas" color="grey-lighten-5"></v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/license" max-width="23.5rem" prepend-icon="mdi-certificate" rel="noopener"
-            subtitle="Gestión de licencias" target="_blank" title="Licencias" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/license')" max-width="23.5rem" prepend-icon="mdi-certificate" rel="noopener"
+            subtitle="Gestión de licencias" title="Licencias" color="grey-lighten-5"></v-card>
         </v-col>
       </v-row>
     </v-card>
@@ -39,17 +39,17 @@
         <h1>Gestión Organizativa</h1>
       </v-container>
       <v-row class="p-2 mt-2">
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/dependency" max-width="23.5rem" prepend-icon="mdi-sitemap" rel="noopener"
-            subtitle="Gestión de dependencias" target="_blank" title="Dependencias" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/dependency')" max-width="23.5rem" prepend-icon="mdi-sitemap" rel="noopener"
+            subtitle="Gestión de dependencias" title="Dependencias" color="grey-lighten-5"></v-card>
         </v-col>
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/location" max-width="23.5rem" prepend-icon="mdi-map-marker" rel="noopener"
-            subtitle="Gestión de ubicaciones" target="_blank" title="Ubicación" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/location')" max-width="23.5rem" prepend-icon="mdi-map-marker" rel="noopener"
+            subtitle="Gestión de ubicaciones" title="Ubicación" color="grey-lighten-5"></v-card>
         </v-col>
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/provider" max-width="23.5rem" prepend-icon="mdi-store" rel="noopener"
-            subtitle="Gestión de proveedores" target="_blank" title="Proveedores" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/provider')" max-width="23.5rem" prepend-icon="mdi-store" rel="noopener"
+            subtitle="Gestión de proveedores" title="Proveedores" color="grey-lighten-5"></v-card>
         </v-col>
       </v-row>
     </v-card>
@@ -59,14 +59,14 @@
         <h1>Gestión de Procesos</h1>
       </v-container>
       <v-row class="p-2 mt-2">
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/processState" max-width="37rem" prepend-icon="mdi-progress-clock" rel="noopener"
-            subtitle="Gestión de estados de procesos" target="_blank" title="Estado del proceso" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/processState')" max-width="23.5rem" prepend-icon="mdi-progress-clock" rel="noopener"
+            subtitle="Gestión de estados de procesos" title="Estado del proceso" color="grey-lighten-5"></v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="pl-0 pb-0 pr-0">
-          <v-card class="mx-auto" href="/typeAction" max-width="37rem" prepend-icon="mdi-shuffle" rel="noopener"
-            subtitle="Gestión de ubicaciones" target="_blank" title="Movimientos" color="grey-lighten-5"></v-card>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/typeAction')" max-width="23.5rem" prepend-icon="mdi-shuffle" rel="noopener"
+            subtitle="Gestión de ubicaciones" title="Movimientos" color="grey-lighten-5"></v-card>
         </v-col>
 
       </v-row>
