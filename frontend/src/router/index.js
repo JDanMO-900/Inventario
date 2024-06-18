@@ -18,7 +18,8 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: () => import("../views/HomeView.vue"),
+      // component: () => import("../views/HomeView.vue"),
+      redirect: '/equipment',
       meta: { requiresAuth: true }, // add meta field to specify the route requires authentication
     },
     {
@@ -44,8 +45,7 @@ const router = createRouter({
       name: "equipmentType",
       component: () => import("../views/EquipmentTypeView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
-    },
-    
+    },    
     {
       path: "/dependency",
       name: "dependency",
@@ -58,14 +58,12 @@ const router = createRouter({
       component: () => import("../views/ProviderView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
-    ,
     {
       path: "/technicalDescription",
       name: "technicalDescription",
       component: () => import("../views/TechnicalDescriptionView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
-    },
-    
+    },    
     {
       path: "/license",
       name: "license",
@@ -90,16 +88,13 @@ const router = createRouter({
       component: () => import("../views/HistoryChangeView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
-
-
     {
       path: "/equipment",
       name: "equipment",
       component: () => import("../views/EquipmentView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
-
-        {
+    {
       path: "/location",
       name: "location",
       component: () => import("../views/LocationView.vue"),
@@ -123,9 +118,7 @@ const router = createRouter({
       name: "users",
       component: () => import("../views/UserListView.vue"),
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
-    },
-    
-
+    },  
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
@@ -138,8 +131,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
 
   const requiresRole = to.meta.roles;
-
-
   if (to.meta.requiresAuth && !hasAccessToken()) {
     next("/login");
   } else {
@@ -155,10 +146,8 @@ router.beforeEach(async (to, from, next) => {
       }
       else{
         next("/unauthorized")
-      }
-      
-    }
-    
+      }      
+    }    
   }
 });
 

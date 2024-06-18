@@ -7,10 +7,10 @@
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
-        <RouterLink to="/" class="d-flex flex-column align-center mb-3 p-1">
+        <!-- <RouterLink to="/" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-home" size="20"></v-icon>
           <span>Inicio</span>
-        </RouterLink>
+        </RouterLink> -->
 
         <RouterLink to="/equipment" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
@@ -25,18 +25,39 @@
         <RouterLink to="/dashboard" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-shield-home" size="20"></v-icon>
           <span>Catálogos</span>
-        </RouterLink>
+        </RouterLink>        
+        
+        <v-menu location="end" open-on-hover>
+          <template v-slot:activator="{ props }">
+            <div class="d-flex flex-column align-center mb-3 p-1" v-bind="props">
+              <v-icon icon="mdi-chart-line" size="20"></v-icon>
+              <span>Reportes</span>
+            </div>
+          </template>
+
+          <v-list density="compact" variant="plain" class="my-list">
+            <RouterLink to="/">
+                <v-list-item>
+                Inventario general
+              </v-list-item>
+            </RouterLink>
+            <RouterLink to="/">
+              <v-list-item> 
+                Tipo de equipos
+              </v-list-item>
+            </RouterLink>
+            <RouterLink to="/">
+              <v-list-item> 
+                Equipos por ubicación
+              </v-list-item>
+            </RouterLink>
+          </v-list>
+        </v-menu>
 
         <RouterLink to="/ticket" class="d-flex flex-column align-center mb-3 p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
-        </RouterLink>
-        
-        <RouterLink to="/users" class="d-flex flex-column align-center mb-3 p-1">
-          <v-icon icon="mdi-account-check" size="20"></v-icon>
-          <span>Usuarios</span>
-        </RouterLink>
-        
+        </RouterLink>  
 
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1" @click="logout()">
@@ -86,15 +107,27 @@ const { isLoggedIn, logout } = useAuth();
   font-size: 16px;
 }
 
-.menu-sidebar a {
+.menu-sidebar a, .menu-sidebar div {
   color: white;
 }
 
-.menu-options a:hover{
+.menu-options a:hover, .menu-options div:hover{
   color: #E0E5F1;
   background-color: #474F7A;
-  border-radius: 20px;
-  // opacity: 50%;
+  border-radius: 10px;
+}
+
+.my-list {
+  background-color: #3C486B !important;
+}
+
+.my-list a{
+  color: #F0F0F0 !important;
+}
+
+.my-list .v-list-item:hover{
+  color: white !important;  
+  background-color: #82B1FF;
 }
 
 .inactive {

@@ -15,12 +15,10 @@
       <!-- Nueva tabla -->
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
           <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" />
-
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -358,7 +356,7 @@
                             <td>{{ this.equipmentData.number_internal_active }}</td>
                           </tr>
                           <tr>
-                            <td>Tipo de Equipo</td>
+                            <td>Tipo de equipo</td>
                             <td>{{ this.equipmentData.equipment_type_id }}</td>
                           </tr>
                           <tr>
@@ -582,9 +580,9 @@ export default {
       dialogInfo: false,
       dialogAvailability: false,
       headers: [
-        { title: "TIPO DE EQUIPO", key: "equipment_type_id" },
-        { title: "# MODELO", key: "model" },
-        { title: "# SERIAL", key: "serial_number" },
+        { title: "EQUIPO", key: "equipment_type_id" },
+        { title: "MODELO", key: "model" },
+        { title: "# DE SERIE", key: "serial_number" },
         { title: "# DE ACTIVO FIJO", key: "number_active" },
         { title: "# DE REGISTRO INTERNO", key: "number_internal_active" },
         { title: "DISPONIBILIDAD", key: "availability" },
@@ -739,7 +737,6 @@ export default {
     // Prueba cambiar estado
     addLicense() {
       var isInArray = false;
-
       if (this.editedItem.license != "") {
         this.editedItem.licenses.forEach(item => {
           if (item == this.editedItem.license) {
@@ -779,9 +776,7 @@ export default {
           this.editedItem.technicalDescription = ''
           this.editedItem.attribute = ''
         }
-
       }
-
     },
     deleteTechnicalAttributes(item) {
       this.editedItem.technicalAttributes = this.editedItem.technicalAttributes.filter(
@@ -889,7 +884,6 @@ export default {
 
       //Creating record
       try {
-
         const { data } = await backendApi.post('/equipment', this.editedItem);
         alert.success(data.message);
         this.tab = null

@@ -32,13 +32,11 @@ class EquipmentController extends Controller
     public function equipmentSearch(string $equip)
     {
         return Equipment::equipmentFilter($equip);
-
     }
 
     public function availableEquipment()
     {
         return Equipment::availableEquipments();
-
     }
 
 
@@ -84,11 +82,8 @@ class EquipmentController extends Controller
             $itemsPerPage = Equipment::count();
             $skip = 0;
         }
-
         $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
-
         $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
-
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $equipment = Equipment::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
@@ -188,8 +183,6 @@ class EquipmentController extends Controller
     public function update(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
-
-
         $equipment = Equipment::where('id', $data['id'])->first();
         $equipment->number_active = $request->number_active;
         $equipment->number_internal_active = $request->number_internal_active;
@@ -198,7 +191,6 @@ class EquipmentController extends Controller
         $equipment->adquisition_date = $request->adquisition_date;
         $equipment->invoice_number = $request->invoice_number;
         $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-
         $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
         $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
 
@@ -209,31 +201,19 @@ class EquipmentController extends Controller
             $equipment->provider_id  = null;
         }
 
-
-
         $equipment->save();
 
         // Recibe las licencias
-
         $equipmentId = $equipment->id;
-
-
-
         EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
-
-
         foreach ($request->licenses as $licenseName) {
             $detalleLicencias = new EquipmentLicenseDetail();
             $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
             $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
             $detalleLicencias->save();
-
         }
 
-
-
         EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
-
         // Prueba
         if ($request->technicalAttributes) {
             foreach ($request->technicalAttributes as $technicalAttributes) {
@@ -242,13 +222,8 @@ class EquipmentController extends Controller
                 $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
                 $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
                 $detalleEquipment->save();
-
             }
-
         }
-
-
-
 
         return response()->json([
             "message" => "Registro modificado correctamente.",
@@ -259,36 +234,26 @@ class EquipmentController extends Controller
     public function updateAvailability(Request $request)
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
-
-
         $equipment = Equipment::where('id', $data['id'])->first();
-
 
         if($request->availability == "Disponible"){
             $equipment->availability = 0;
-
         }
         else{
             $equipment->availability = 1;
-        }
- 
+        } 
   
         $equipment->save();
-
         $changeEndUseDate = HistoryChange::where('equipment_id', $equipment->id)
         ->latest()
         ->first();
-
         $changeEndUseDate -> end_date = Carbon::now();
         $changeEndUseDate->save();
-
 
         return response()->json([
             "message" => "Disponibilidad cambiada con exito",
         ]);
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -299,7 +264,6 @@ class EquipmentController extends Controller
     public function destroy(Request $request)
     {
         $id = Encrypt::decryptValue($request->id);
-
         Equipment::where('id', $id)->delete();
 
         return response()->json([

@@ -62,16 +62,15 @@ class AuthController extends Controller
                 $user->email = $userData['email'];
                 $user->password = Hash::make($credentials['password']);
                 $user->email_verified_at = now();
-                if ('lalopez@cultura.gob.sv' ==  Str::lcfirst($userData['email']) 
-                OR Str::lcfirst('rramirez@cultura.gob.sv') == $userData['email']
-                OR Str::lcfirst('evaldez@cultura.gob.sv') == $userData['email']
-            ) {
+                if('lalopez@cultura.gob.sv' ==  Str::lcfirst($userData['email']) 
+                    OR Str::lcfirst('rramirez@cultura.gob.sv') == $userData['email']
+                    OR Str::lcfirst('evaldez@cultura.gob.sv') == $userData['email']
+                ) {
                     $user->role_id = Role::where('name', 'Jefe')->first()->id;
                 }
-                else{
+                else {
                     $user->role_id = Role::where('name', 'Usuario')->first()->id;
-                }
-                
+                }                
                 $user->save();
             } else {
                 $user->name = $userData['name'];

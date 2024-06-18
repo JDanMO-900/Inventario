@@ -6,29 +6,48 @@
       </v-container>
       <v-row class="p-2 mt-2">
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto" @click="$router.push('/equipmentType')" max-width="23.5rem" prepend-icon="mdi-desktop-classic"
+          <v-card class="mx-auto" @click="$router.push('/equipmentType')" max-width="23.5rem"
             rel="noopener" subtitle="Gestión de tipo de equipos" title="Tipo de equipos" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-desktop-classic" color="primary" size="small"></v-icon>
+            </template>
           </v-card>
         </v-col>
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto" @click="$router.push('/equipmentState')" max-width="23.5rem" prepend-icon="mdi-checkbox-marked-circle"
-            rel="noopener" subtitle="Gestión del estado de los equipos" title="Estado de los equipos" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto" @click="$router.push('/equipmentState')" max-width="23.5rem"
+            rel="noopener" subtitle="Gestión del estado de los equipos" title="Estado de los equipos" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-checkbox-marked-circle" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto" @click="$router.push('/brand')" max-width="23.5rem" prepend-icon="mdi-label" rel="noopener"
-            subtitle="Gestión de marcas" title="Marcas de equipos" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto" @click="$router.push('/brand')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de marcas" title="Marcas de equipos" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-label" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto" @click="$router.push('/technicalDescription')" max-width="23.5rem" prepend-icon="mdi-memory" rel="noopener"
-            subtitle="Gestión de descripciones tecnicas" title="Descripción técnicas" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto" @click="$router.push('/technicalDescription')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de descripciones técnicas" title="Descripciones técnicas" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-memory" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/license')" max-width="23.5rem" prepend-icon="mdi-certificate" rel="noopener"
-            subtitle="Gestión de licencias" title="Licencias" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/license')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de licencias" title="Licencias" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-certificate" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
       </v-row>
     </v-card>
@@ -40,16 +59,36 @@
       </v-container>
       <v-row class="p-2 mt-2">
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/dependency')" max-width="23.5rem" prepend-icon="mdi-sitemap" rel="noopener"
-            subtitle="Gestión de dependencias" title="Dependencias" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/users')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de dependencias" title="Usuarios" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-account-check" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/location')" max-width="23.5rem" prepend-icon="mdi-map-marker" rel="noopener"
-            subtitle="Gestión de ubicaciones" title="Ubicación" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/dependency')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de dependencias" title="Dependencias" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-sitemap" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/provider')" max-width="23.5rem" prepend-icon="mdi-store" rel="noopener"
-            subtitle="Gestión de proveedores" title="Proveedores" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/location')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de ubicaciones" title="Ubicación" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-map-marker" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
+        </v-col>
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto"  @click="$router.push('/provider')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de proveedores" title="Proveedores" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-store" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
       </v-row>
     </v-card>
@@ -60,18 +99,25 @@
       </v-container>
       <v-row class="p-2 mt-2">
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/processState')" max-width="23.5rem" prepend-icon="mdi-progress-clock" rel="noopener"
-            subtitle="Gestión de estados de procesos" title="Estado del proceso" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/processState')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de estados de procesos" title="Estado del proceso" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-progress-clock" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
-          <v-card class="mx-auto"  @click="$router.push('/typeAction')" max-width="23.5rem" prepend-icon="mdi-shuffle" rel="noopener"
-            subtitle="Gestión de ubicaciones" title="Movimientos" color="grey-lighten-5"></v-card>
+          <v-card class="mx-auto"  @click="$router.push('/typeAction')" max-width="23.5rem" rel="noopener"
+            subtitle="Gestión de ubicaciones" title="Movimientos" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-shuffle" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
         </v-col>
 
       </v-row>
     </v-card>
-
   </div>
 </template>
 

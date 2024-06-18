@@ -47,11 +47,9 @@ class Equipment extends Model
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
-
         $data = Equipment::select(
             'equipment.*',
             'equipment_state.*',
-
             'equipment_type.*',
             'brand.*',
             'provider.*',
@@ -59,16 +57,10 @@ class Equipment extends Model
             'brand.name as brand',
             'provider.name as provider',
             'equipment_state.name as state',
-
             'equipment_type.name as equipment_type_id',
-            'equipment.availability',
-            
-
-
-
+            'equipment.availability'
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
-
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
@@ -79,10 +71,13 @@ class Equipment extends Model
             ->orWhere('equipment.adquisition_date', 'like', $search)
             ->orWhere('equipment.invoice_number', 'like', $search)
             ->orWhere('equipment.equipment_type_id', 'like', $search)
+            ->orWhere('equipment.availability', 'like', $search)
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("equipment.$sortBy", $sort)
             ->get();
+
+            Log::info(($search==='En uso')?0:(($search==='Dispo')?1:''));
 
         $data->each(function ($item) {
             $availability = $item->availability ? 'Disponible' : 'En uso';
@@ -135,27 +130,22 @@ class Equipment extends Model
             'provider.name as provider',
             'equipment_state.name as state',
             'equipment_type.name as type',
-
             // Users
             'users.name as users',
-
             // Type action
             'type_action.name as type_action',
-
             "history_change.start_date as start_date",
             "history_change.end_date as end_date"
 
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
-
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
-            ->join('provider', 'equipment.provider_id', '=', 'provider.id')
+            ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
             ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('users', 'users.id', '=', 'history_user_detail.user_id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
-
             ->where('equipment.serial_number', 'like', $equip)
 
             ->get();
