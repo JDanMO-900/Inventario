@@ -147,6 +147,7 @@ class Equipment extends Model
             ->join('users', 'users.id', '=', 'history_user_detail.user_id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
             ->where('equipment.serial_number', 'like', $equip)
+            ->orderBy('history_change.start_date', 'desc')
 
             ->get();
 

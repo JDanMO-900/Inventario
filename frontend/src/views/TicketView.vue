@@ -16,7 +16,7 @@
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
-            v-if="item.raw.process_state == 'Pendiente' && item.raw.process_state != 'Cancelado' && item.raw.internal != 1"
+            v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
             size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" />
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
@@ -93,9 +93,8 @@
 
               <!-- Fecha de inicio de movimiento -->
 
-
               <template
-                v-if="v$.editedItem.type_action_id.$model != 'soporte' && v$.editedItem.type_action_id.$model != ''">
+                v-if="v$.editedItem.type_action_id.$model.toLowerCase() != 'soporte' && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
@@ -139,7 +138,7 @@
               </template>
 
               <template
-                v-if="v$.editedItem.type_action_id.$model == 'soporte' && v$.editedItem.type_action_id.$model != ''">
+                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'soporte' && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
 
@@ -448,7 +447,7 @@ export default {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
     }, filterTypeAction() {
-      return this.typeAction.filter(action => action.is_internal === "Personal externo")
+      return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
 
   },

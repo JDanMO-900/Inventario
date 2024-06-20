@@ -106,60 +106,69 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        // availability
-        $equipment = new Equipment;
-        $equipment->availability = $request->availability;
-        $equipment->number_active = $request->number_active;
-        $equipment->number_internal_active = $request->number_internal_active;
-        $equipment->model = $request->model;
-        $equipment->serial_number = $request->serial_number;
-        $equipment->adquisition_date = $request->adquisition_date;
-        $equipment->invoice_number = $request->invoice_number;
-        $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-        $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
-        $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
-        
+        $existingEquipment = Equipment::where('number_internal_active', $request->number_internal_active)
+            ->orWhere('serial_number', $request->serial_number)
+            ->first();
 
-        if ($request->provider != "") {
-            $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
-            
+
+
+        if ($existingEquipment) {
+            return response()->json(
+                [
+                    "message" => "Alerta: No fue posible realizar el registro ¡Este equipo ya esta registrado!"
+                ]
+            );
 
         } else {
-            $equipment->provider_id  = null;
-        }
+            // availability
+            $equipment = new Equipment;
+            $equipment->availability = $request->availability;
+            $equipment->number_active = $request->number_active;
+            $equipment->number_internal_active = $request->number_internal_active;
+            $equipment->model = $request->model;
+            $equipment->serial_number = $request->serial_number;
+            $equipment->adquisition_date = $request->adquisition_date;
+            $equipment->invoice_number = $request->invoice_number;
+            $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
+            $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
+            $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
+
+            if ($request->provider != "") {
+                $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
 
 
-
-
-        $equipment->save();
-
-
-        if ($request->licenses) {
-            foreach ($request->licenses as $licenseName) {
-                $detalleLicencias = new EquipmentLicenseDetail();
-                $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-                $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
-                $detalleLicencias->save();
-            }
-        }
-
-        // Recibe las licencias
-        if ($request->technicalAttributes) {
-            foreach ($request->technicalAttributes as $technicalAttributes) {
-                $detalleEquipment = new EquipmentDetail();
-                $detalleEquipment->attribute = $technicalAttributes['attribute'];
-                $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-                $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
-                $detalleEquipment->save();
-
+            } else {
+                $equipment->provider_id = null;
             }
 
-        }
-        // Recibe las licencias
+            $equipment->save();
 
-        return response()->json([
-            "message" => "Registro creado correctamente.",
-        ]);
+            if ($request->licenses) {
+                foreach ($request->licenses as $licenseName) {
+                    $detalleLicencias = new EquipmentLicenseDetail();
+                    $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                    $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
+                    $detalleLicencias->save();
+                }
+            }
+
+            // Recibe las licencias
+            if ($request->technicalAttributes) {
+                foreach ($request->technicalAttributes as $technicalAttributes) {
+                    $detalleEquipment = new EquipmentDetail();
+                    $detalleEquipment->attribute = $technicalAttributes['attribute'];
+                    $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                    $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
+                    $detalleEquipment->save();
+
+                }
+            }
+            // Recibe las licencias
+
+            return response()->json([
+                "message" => "Registro creado correctamente.",
+            ]);
+        }
     }
 
     /**
@@ -182,52 +191,75 @@ class EquipmentController extends Controller
      */
     public function update(Request $request)
     {
+
+        $existingEquipment = Equipment::where('number_internal_active', $request->number_internal_active)
+            ->orWhere('serial_number', $request->serial_number)
+            ->first();
+
+
         $data = Encrypt::decryptArray($request->all(), 'id');
         $equipment = Equipment::where('id', $data['id'])->first();
-        $equipment->number_active = $request->number_active;
-        $equipment->number_internal_active = $request->number_internal_active;
-        $equipment->model = $request->model;
-        $equipment->serial_number = $request->serial_number;
-        $equipment->adquisition_date = $request->adquisition_date;
-        $equipment->invoice_number = $request->invoice_number;
-        $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
-        $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
-        $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
 
-        if ($request->provider != "") {
-            $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
+
+
+
+
+
+        if ($equipment->id == $existingEquipment->id) {
+
+            $equipment->number_active = $request->number_active;
+            $equipment->number_internal_active = $request->number_internal_active;
+            $equipment->model = $request->model;
+            $equipment->serial_number = $request->serial_number;
+            $equipment->adquisition_date = $request->adquisition_date;
+            $equipment->invoice_number = $request->invoice_number;
+            $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
+            $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
+            $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
+
+            if ($request->provider != "") {
+                $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
+
+            } else {
+                $equipment->provider_id = null;
+            }
+
+            $equipment->save();
+
+            // Recibe las licencias
+            $equipmentId = $equipment->id;
+            EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
+            foreach ($request->licenses as $licenseName) {
+                $detalleLicencias = new EquipmentLicenseDetail();
+                $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
+                $detalleLicencias->save();
+            }
+
+            EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
+            // Prueba
+            if ($request->technicalAttributes) {
+                foreach ($request->technicalAttributes as $technicalAttributes) {
+                    $detalleEquipment = new EquipmentDetail();
+                    $detalleEquipment->attribute = $technicalAttributes['attribute'];
+                    $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
+                    $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
+                    $detalleEquipment->save();
+                }
+            }
+
+            return response()->json([
+                "message" => "Registro modificado correctamente.",
+            ]);
 
         } else {
-            $equipment->provider_id  = null;
+            return response()->json(
+                [
+                    "message" => "Alerta: No fue posible realizar la modificación ¡Este equipo ya esta registrado!"
+                ]
+            );
         }
 
-        $equipment->save();
-
-        // Recibe las licencias
-        $equipmentId = $equipment->id;
-        EquipmentLicenseDetail::where('equipment_id', $equipmentId)->forceDelete();
-        foreach ($request->licenses as $licenseName) {
-            $detalleLicencias = new EquipmentLicenseDetail();
-            $detalleLicencias->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-            $detalleLicencias->license_id = License::where('name', $licenseName)->first()->id;
-            $detalleLicencias->save();
-        }
-
-        EquipmentDetail::where('equipment_id', $equipmentId)->forceDelete();
-        // Prueba
-        if ($request->technicalAttributes) {
-            foreach ($request->technicalAttributes as $technicalAttributes) {
-                $detalleEquipment = new EquipmentDetail();
-                $detalleEquipment->attribute = $technicalAttributes['attribute'];
-                $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
-                $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
-                $detalleEquipment->save();
-            }
-        }
-
-        return response()->json([
-            "message" => "Registro modificado correctamente.",
-        ]);
     }
 
 
@@ -236,18 +268,17 @@ class EquipmentController extends Controller
         $data = Encrypt::decryptArray($request->all(), 'id');
         $equipment = Equipment::where('id', $data['id'])->first();
 
-        if($request->availability == "Disponible"){
+        if (strtolower($request->availability) == "disponible") {
             $equipment->availability = 0;
-        }
-        else{
+        } else {
             $equipment->availability = 1;
-        } 
-  
+        }
+
         $equipment->save();
         $changeEndUseDate = HistoryChange::where('equipment_id', $equipment->id)
-        ->latest()
-        ->first();
-        $changeEndUseDate -> end_date = Carbon::now();
+            ->latest()
+            ->first();
+        $changeEndUseDate->end_date = Carbon::now();
         $changeEndUseDate->save();
 
         return response()->json([

@@ -3,7 +3,7 @@
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }} {{  }}</h2>
+        <h2>{{ title }} {{ }}</h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
@@ -14,20 +14,19 @@
       </v-container>
 
 
-      <v-data-table
-      :headers="headers"
-      :items="records"
-      item-key="name"
-      class="elevation-1"
-      :search="search"
-    >
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <template v-if="(item.raw.type_action_id == 'mantenimiento' || item.raw.type_action_id == 'préstamo' && item.raw.state_id != 'Finalizado' &&  item.raw.state_id != 'Cancelado')">
-            <v-icon  size="20"
-            class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-calendar" />
+          <template
+            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' && item.raw.state_id.toLowerCase() != 'cancelado' && item.raw.state_id.toLowerCase() != 'pendiente')">
+            <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
+
+          </template>
+
+          <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente')">
+            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" />
           </template>
 
 
@@ -37,8 +36,8 @@
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-    
-    </v-data-table>
+
+      </v-data-table>
 
     </v-card>
 
@@ -62,13 +61,13 @@
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
-              <!-- name -->  
+              <!-- name -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
                   v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
                 </base-multi-select>
               </v-col>
-              <!-- name -->              
+              <!-- name -->
 
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
@@ -89,8 +88,8 @@
 
               <!-- fecha del movimiento -->
               <v-col cols="12" sm="12" md="12">
-                <base-input label="Fecha" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" />
+                <base-input label="Fecha" v-model="v$.editedItem.start_date.$model" :rules="v$.editedItem.start_date"
+                  type="datetime-local" />
               </v-col>
               <!-- fecha del movimiento -->
 
@@ -111,18 +110,21 @@
               <!-- name -->
 
               <!-- Numero de activo fijo 1 -->
-              <v-col cols="4" sm="12" md="12"  >
-                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipo(s)" :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+              <v-col cols="4" sm="12" md="12">
+                <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipo(s)" :items="this.equipment"
+                  item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
+                  :rules="v$.editedItem.equipment">
                 </base-select>
 
-                <base-select v-else label="Equipo" :items="this.equipment" item-title="format" item-value="serial_number"
-                  v-model.trim="v$.editedItem.equipment_id.$model" :rules="v$.editedItem.equipment_id">
+                <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
+                  item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
+                  :rules="v$.editedItem.equipment_id">
                 </base-select>
               </v-col>
 
-              <v-col cols="12" sm="12" md="12"  v-if="this.formTitle == 'Nuevo movimiento'">
-                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar" @click="addEquipment" block prepend-icon="mdi-plus-thick" />
+              <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
+                <base-button color="blue-accent-1" type="primary" density="comfortable" title="Agregar"
+                  @click="addEquipment" block prepend-icon="mdi-plus-thick" />
               </v-col>
 
               <v-col cols="12" sm="12" md="12" v-if="this.formTitle == 'Nuevo movimiento'">
@@ -138,7 +140,8 @@
                       <tr v-for="equipo in this.editedItem.equipment_id" v-if="this.formTitle == 'Nuevo movimiento'">
                         <td>{{ equipo }}</td>
                         <td>
-                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete" color="red-darken-4" />
+                          <v-icon size="20" class="mr-2" @click="deleteEquipment(equipo)" icon="mdi-delete"
+                            color="red-darken-4" />
                         </td>
                       </tr>
                       <tr v-if="this.editedItem.equipment_id == 0">
@@ -153,14 +156,16 @@
               <!-- Numero de activo fijo 1 -->
 
               <!-- Cantidad de salida -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
+              <v-col cols="4" sm="12" md="6"
+                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
                   :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
               </v-col>
               <!-- Cantidad de salida -->
 
               <!-- Cantidad de entrada -->
-              <v-col cols="4" sm="12" md="6" v-if="v$.editedItem.type_action_id.$model == 'Mantenimiento'">
+              <v-col cols="4" sm="12" md="6"
+                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
                   :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" />
               </v-col>
@@ -180,11 +185,12 @@
                   v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
                 </base-multi-select>
               </v-col>
-              <!-- técnico responsable -->              
+              <!-- técnico responsable -->
 
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
-                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model" :rules="v$.editedItem.description" />
+                <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
+                  :rules="v$.editedItem.description" />
               </v-col>
               <!-- Descripcion -->
             </v-row>
@@ -332,7 +338,7 @@
             <v-spacer></v-spacer>
             <v-col cols="12" align="center">
               <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
-            </v-col>           
+            </v-col>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -353,7 +359,7 @@
           <v-row class="pt-3">
             <v-col cols="12" sm="12" md="12">
               <template
-                v-if="v$.editedItem.type_action_id.$model == 'préstamo' || v$.editedItem.type_action_id.$model == 'mantenimiento'">
+                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'préstamo' || v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <div>
                   <!-- Fecha de finalización de movimiento -->
                   <base-input label="Fecha de finalización del movimiento"
@@ -382,6 +388,43 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+
+
+  <v-dialog v-model="dialogChangeProcessState" max-width="45rem">
+    <v-card>
+      <v-card-title>
+        <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
+          Cambiar estado de {{ this.editedItem.type_action_id }}
+        </h2>
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <!-- Form -->
+          <v-row class="pt-3">
+
+            <v-col cols="4" sm="12" md="12">
+              <base-select label="Estado del proceso" :items="this.processState" item-title="name"
+                v-model.trim="v$.changeStatusProccess.state_id.$model" :rules="v$.changeStatusProccess.state_id">
+              </base-select>
+
+            </v-col>
+          </v-row>
+
+          <!-- Form -->
+          <v-row>
+            <v-col align="center">
+              <base-button type="primary" title="Confirmar" @click="changeProcessStanteChange" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeProcessStanteChange" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+
+
+
 </template>
 
 <script>
@@ -418,6 +461,7 @@ export default {
       dialogDelete: false,
       dialogInfo: false,
       dialogMovementFinishDate: false,
+      dialogChangeProcessState: false,
       enabled: false,
       headers: [
         { title: "TIPO DE MOVIMIENTO", key: "type_action_id" },
@@ -435,11 +479,11 @@ export default {
 
       editedItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "",  state_id: "", start_date: "", end_date: "",
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "",  state_id: "", start_date: "", end_date: ""
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -464,6 +508,11 @@ export default {
         finish_date: "",
         equipment_id: "",
         description: ""
+      },
+      changeStatusProccess: {
+        id: "",
+        state_id: ""
+
       }
 
     };
@@ -513,7 +562,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        equipment:{
+        equipment: {
           minLength: minLength(1),
         },
         start_date: {
@@ -535,6 +584,12 @@ export default {
         description: {
           required
         }
+      },
+      changeStatusProccess: {
+        state_id: {
+          required
+        }
+
       }
 
     };
@@ -553,8 +608,8 @@ export default {
       else {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
-    }, filterTypeAction(){
-      return this.typeAction.filter(action=> action.is_internal === "Personal interno")
+    }, filterTypeAction() {
+      return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal interno")
     }
   },
 
@@ -617,6 +672,7 @@ export default {
         this.editedIndex = -1;
       });
     },
+
     async changeMovementFinishDate() {
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
@@ -626,10 +682,9 @@ export default {
         return;
       }
 
-      this.finishMovement.state_id = "Finalizado";
       try {
         if (this.finishMovement.finish_date != null) {
-
+          this.finishMovement.state_id = "Finalizado";
           const endStatus = await backendApi.put(`/changeStatus/`, this.finishMovement);
           alert.success(endStatus.data.message);
         }
@@ -638,10 +693,46 @@ export default {
       }
       this.initialize();
       this.closeMovementFinishDate();
+      this.finishMovement.state_id = "";
     },
 
+    // Aqui va el nuevo elemento
+    processStanteChangeItem(item) {
+      this.editedIndex = this.records.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogChangeProcessState = true;
+    },
 
-    // Cambiando fecha de prestamo
+    closeProcessStanteChange() {
+      this.dialogChangeProcessState = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+    async changeProcessStanteChange() {
+      this.changeStatusProccess.id = this.editedItem.id;
+
+      this.v$.changeStatusProccess.$validate();
+      if (this.v$.changeStatusProccess.$invalid) {
+        alert.error("Campos obligatorios");
+        return;
+      }
+
+      try {
+        if (this.changeStatusProccess.state_id != null) {
+
+          const endStatus = await backendApi.put(`/updateProcessState/`, this.changeStatusProccess);
+          alert.success(endStatus.data.message);
+        }
+      } catch (error) {
+        this.close();
+      }
+      this.initialize();
+      this.closeProcessStanteChange();
+    },
+    // Aqui va el nuevo elemento
+
     async initialize() {
       this.loading = true;
       this.records = [];
@@ -682,7 +773,7 @@ export default {
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
 
-          if (this.users[i].role_id === "Tecnico")
+          if (this.users[i].role_id.toLowerCase() === "tecnico")
             uniqueTechNames.add(this.users[i].name);
         }
         this.userTech = Array.from(uniqueTechNames)
@@ -712,13 +803,13 @@ export default {
       });
     },
 
-    async save() {  
+    async save() {
 
-      if (this.editedItem.type_action_id == 'préstamo' || this.editedItem.type_action_id == 'mantenimiento') {
+      if (this.editedItem.type_action_id.toLowerCase() == 'préstamo' || this.editedItem.type_action_id.toLowerCase() == 'mantenimiento') {
         this.editedItem.state_id = "En proceso";
       }
       else {
-        this.editedItem.state_id = "Finalizado";
+        this.editedItem.state_id = "finalizado";
       }
 
       this.v$.editedItem.$validate();
@@ -755,7 +846,7 @@ export default {
       }
       this.close();
       this.initialize();
-      this.editedItem.equipment_id.length =0;
+      this.editedItem.equipment_id.length = 0;
       return;
     },
 
@@ -804,7 +895,7 @@ export default {
 
           this.records = data.data;
 
-  
+
 
           this.total = data.total;
           this.loading = false;

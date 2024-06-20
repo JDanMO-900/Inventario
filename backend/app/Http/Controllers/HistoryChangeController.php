@@ -276,9 +276,19 @@ class HistoryChangeController extends Controller
 
     }
 
+    public function updateProcessState(Request $request)
+    {
 
+        Log::info($request);
+        $data = Encrypt::decryptArray($request->all(), 'id');
+        $historychange = HistoryChange::where('id', $data['id'])->first();
+        $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
+        $historychange->save();
 
-
+        return response()->json([
+            "message" => "El estado del proceso ha sido cambiado con exito",
+        ]);
+    }
 
 
 }

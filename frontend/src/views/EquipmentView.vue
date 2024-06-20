@@ -297,13 +297,13 @@
           <h2 class="black-secondary text-center mt-3 mb-3">
             <b>¿Desea cambiar el estado de disponibilidad del equipo de </b>
             <span
-              :class="{ 'green-text': this.editedItem.availability == 'Disponible', 'red-text': this.editedItem.availability == 'En uso' }">
+              :class="{ 'green-text': this.editedItem.availability.toLowerCase() == 'disponible', 'red-text': this.editedItem.availability == 'En uso' }">
               "{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() :
                 this.editedItem.availability }}"
             </span>
 
-            <span v-if='this.editedItem.availability == "Disponible"'> a "en uso"?</span>
-            <span v-if='this.editedItem.availability == "En uso"'> a "disponible"?</span>
+            <span v-if='this.editedItem.availability.toLowerCase() == "disponible"'> a "en uso"?</span>
+            <span v-if='this.editedItem.availability.toLowerCase() == "en uso"'> a "disponible"?</span>
           </h2>
           <v-row>
             <v-col align="center">
@@ -329,7 +329,7 @@
           <v-col cols="12" sm="12" md="12">
             <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
-                <span :class="{ 'green-text': this.allowable == 'Disponible', 'red-text': this.allowable == 'En uso' }">
+                <span :class="{ 'green-text': this.allowable.toLowerCase() == 'disponible', 'red-text': this.allowable.toLowerCase() == 'en uso' }">
                   {{ this.allowable }}
                 </span>
               </v-chip>
@@ -672,7 +672,7 @@ export default {
       return this.editedIndex === -1 ? "Agregar equipo" : "Editar equipo";
     },
     allowableColor() {
-      if (this.allowable == "Disponible") {
+      if (this.allowable.toLowerCase() == "disponible") {
         return 'green';
       }
       else {
