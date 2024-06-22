@@ -77,7 +77,9 @@ class Equipment extends Model
             ->orderBy("equipment.$sortBy", $sort)
             ->get();
 
-            Log::info(($search==='En uso')?0:(($search==='Dispo')?1:''));
+            
+
+        Log::info(($search === 'En uso') ? 0 : (($search === 'Dispo') ? 1 : ''));
 
         $data->each(function ($item) {
             $availability = $item->availability ? 'Disponible' : 'En uso';
@@ -189,11 +191,11 @@ class Equipment extends Model
             ->where('equipment.availability', 'like', 1)
             ->get();
 
-            $data->each(function ($item) {
-                $availability = $item->availability ? 'Disponible' : 'En uso';
-                $item->availability = $availability;
-                $item->format =  '(Tipo: ' . $item->equipment_type_id. ') ' . '(Modelo: ' . $item->model. ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
-            });
+        $data->each(function ($item) {
+            $availability = $item->availability ? 'Disponible' : 'En uso';
+            $item->availability = $availability;
+            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
+        });
 
 
         return $data;
@@ -223,22 +225,22 @@ class Equipment extends Model
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
-            ->join('history_change', 'equipment.id', '=','history_change.equipment_id')
+            ->join('history_change', 'equipment.id', '=', 'history_change.equipment_id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
-            ->join('history_user_detail', 'history_change.id', '=','history_user_detail.history_change_id')
-            ->join('users', 'users.id', '=','history_user_detail.user_id')
+            ->join('history_user_detail', 'history_change.id', '=', 'history_user_detail.history_change_id')
+            ->join('users', 'users.id', '=', 'history_user_detail.user_id')
             ->where('equipment.availability', 'like', 0)
             ->where('users.name', 'like', $username)
             ->whereNull('history_change.end_date')
             ->get();
 
-            $data->each(function ($item) {
-                $availability = $item->availability ? 'Disponible' : 'En uso';
-                $item->availability = $availability;
-                $item->format =  '(Tipo: ' . $item->equipment_type_id. ') ' . '(Modelo: ' . $item->model. ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
-            });
+        $data->each(function ($item) {
+            $availability = $item->availability ? 'Disponible' : 'En uso';
+            $item->availability = $availability;
+            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
+        });
 
-            
+
 
 
         return $data;

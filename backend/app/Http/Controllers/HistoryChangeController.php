@@ -255,11 +255,12 @@ class HistoryChangeController extends Controller
         ]);
     }
 
-    public function updateUserCancelMovement(Request $request){
-        
-        
+    public function updateUserCancelMovement(Request $request)
+    {
+
+
         $data = Encrypt::decryptArray($request->all(), 'id');
-        
+
         $historychange = HistoryChange::where('id', $request->history_change)->first();
         Log::info($request);
         $historychange->end_date = $request->finish_date;
@@ -284,11 +285,15 @@ class HistoryChangeController extends Controller
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->save();
+        if (strtolower($request->state_id) == 'cancelado' OR strtolower($request->state_id) == 'finalizado') {
+            $available1 = Equipment::where('serial_number', $request->serial_number)->first();
+            $available1->availability = true;
+            $available1->save();
+        }
 
         return response()->json([
             "message" => "El estado del proceso ha sido cambiado con exito",
         ]);
     }
-
 
 }

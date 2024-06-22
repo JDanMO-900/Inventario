@@ -31,7 +31,7 @@
     </v-card>
 
     <!-- Agregar y editar -->
-    <v-dialog v-model="dialog" max-width="800px">
+    <v-dialog v-model="dialog" max-width="800px" persistent>
       <v-card>
         <v-card-title>
           <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">
@@ -850,9 +850,22 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+      });
+
+       if(this.formTitle == "Agregar equipo"){
+
         this.editedItem.licenses.length = 0;
         this.editedItem.technicalAttributes.length = 0;
-      });
+        
+       }
+       else{
+        this.initialize();
+       }
+        
+      
+
+
+
     },
 
     async save() {
@@ -872,6 +885,9 @@ export default {
         try {
           const { data } = await backendApi.put(`/equipment/${edited.id}`, edited);
           alert.success(data.message);
+
+          this.editedItem.licenses.length = 0;
+          this.editedItem.technicalAttributes.length = 0;
           this.tab = null
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
@@ -892,9 +908,12 @@ export default {
       }
 
       this.close();
-      this.initialize();
+
       this.editedItem.licenses.length = 0;
       this.editedItem.technicalAttributes.length = 0;
+      this.initialize();
+
+      
       return;
     },
 

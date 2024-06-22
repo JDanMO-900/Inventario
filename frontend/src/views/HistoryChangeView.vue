@@ -109,12 +109,14 @@
               </v-col>
               <!-- name -->
 
+
               <!-- Numero de activo fijo 1 -->
               <v-col cols="4" sm="12" md="12">
                 <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipo(s)" :items="this.equipment"
-                  item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
-                  :rules="v$.editedItem.equipment">
+                  item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment_serial.$model"
+                  :rules="v$.editedItem.equipment_serial">
                 </base-select>
+                
 
                 <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
                   item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
@@ -479,11 +481,11 @@ export default {
 
       editedItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: "",
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment_serial: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
-        quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
+        quantity_in: 1, type_action_id: "", equipment_id: [], equipment_serial: "", state_id: "", start_date: "", end_date: ""
       },
 
       loading: false,
@@ -511,7 +513,8 @@ export default {
       },
       changeStatusProccess: {
         id: "",
-        state_id: ""
+        state_id: "",
+        serial_number: ""
 
       }
 
@@ -562,7 +565,7 @@ export default {
           required,
           minLength: minLength(1),
         },
-        equipment: {
+        equipment_serial: {
           minLength: minLength(1),
         },
         start_date: {
@@ -636,17 +639,17 @@ export default {
   methods: {
     addEquipment() {
       var isInArray = false;
-      if (this.editedItem.equipment != "") {
+      if (this.editedItem.equipment_serial != "") {
         this.editedItem.equipment_id.forEach(item => {
-          if (item == this.editedItem.equipment) {
-            this.editedItem.equipment = ''
+          if (item == this.editedItem.equipment_serial) {
+            this.editedItem.equipment_serial = ''
             isInArray = true;
           }
         });
 
         if (!isInArray) {
-          this.editedItem.equipment_id.push(this.editedItem.equipment);
-          this.editedItem.equipment = ''
+          this.editedItem.equipment_id.push(this.editedItem.equipment_serial);
+          this.editedItem.equipment_serial = ''
         }
       }
 
@@ -694,6 +697,8 @@ export default {
       this.initialize();
       this.closeMovementFinishDate();
       this.finishMovement.state_id = "";
+      this.finishMovement.finish_date = "";
+      this.finishMovement.description = "";
     },
 
     // Aqui va el nuevo elemento
@@ -712,7 +717,7 @@ export default {
     },
     async changeProcessStanteChange() {
       this.changeStatusProccess.id = this.editedItem.id;
-
+      this.changeStatusProccess.serial_number = this.editedItem.serial_number;
       this.v$.changeStatusProccess.$validate();
       if (this.v$.changeStatusProccess.$invalid) {
         alert.error("Campos obligatorios");
@@ -728,6 +733,7 @@ export default {
       } catch (error) {
         this.close();
       }
+      this.changeStatusProccess.state_id = "";
       this.initialize();
       this.closeProcessStanteChange();
     },
