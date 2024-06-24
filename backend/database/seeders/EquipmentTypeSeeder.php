@@ -13,45 +13,106 @@ class EquipmentTypeSeeder extends Seeder
      */
     public function run(): void
     {
-
         EquipmentType::insert([
             [
                 'name' => 'Laptop'
             ],
             [
-                'name' => 'All in One'
+                'name' => 'Laptop Gamer Nitro 5'
+            ],
+            [
+                'name' => 'Laptop Gamer ProArt Studio 16 OLED'
+            ],
+            [
+                'name' => 'Laptop Gamer Victus 16'
+            ],
+            [
+                'name' => 'MacBook Air'
+            ],
+            [
+                'name' => 'Tablet iPad'
+            ],
+            [
+                'name' => 'Tablet iPad Pro'
+            ],
+            [
+                'name' => 'Tablet A7 Lite'
+            ],
+            [
+                'name' => 'Tablet A8'
+            ],
+            [
+                'name' => 'Tablet Kindle '
+            ],
+            [
+                'name' => 'Tablet Kindle Kids'
+            ],
+            [
+                'name' => 'Tablet Fire 7'
+            ],
+            [
+                'name' => 'UPS'
+            ],
+            [
+                'name' => 'Pantalla Interactiva'
             ],
             [
                 'name' => 'Desktop'
             ],
             [
-                'name' => 'Teclado'
+                'name' => 'Desktop OptiPlex 7000 SSF'
+            ],
+            [
+                'name' => 'Desktop OptiPlex 7010 SSF'
+            ],
+            [
+                'name' => 'Desktop All In One'
+            ],
+            [
+                'name' => 'Impresor Multifuncional'
+            ],
+            [
+                'name' => 'Proyector'
+            ],
+            [
+                'name' => 'Proyector Interactivo'
+            ],
+            [
+                'name' => 'Teléfono'
             ],
             [
                 'name' => 'Mouse'
             ],
             [
-                'name' => 'Pantalla interactiva'
+                'name' => 'Teclado'
             ],
             [
-                'name' => 'HDMI'
+                'name' => 'Teclado Letra Grande'
             ],
             [
-                'name' => 'Televisor'
+                'name' => 'Disco Duro Externo'
             ],
             [
-                'name' => 'Kindle'
+                'name' => 'Lector Código de Barra'
             ],
             [
-                'name' => 'Tablet'
+                'name' => 'CPU'
             ],
             [
-                'name' => 'iPad'
-            ], 
+                'name' => 'CPU Gamer'
+            ],
             [
-                'name' => 'UPS'
+                'name' => 'Monitor'
+            ],
+            [
+                'name' => 'Monitor Curvo'
+            ],
+            [
+                'name' => 'Pantalla TV'
+            ],
+            [
+                'name' => 'Sopladora'
             ]
-        ]);
-        
+        ]);        
     }
 }

@@ -1,41 +1,36 @@
 <template>
-  <div class="menu-sidebar d-flex flex-column align-center" :class="stateSideBar">
-    <div class="menu-button mt-5 mb-4">
+  <div class="menu-sidebar" :class="stateSideBar">
+    <div class="menu-button mt-5 mb-4 d-flex flex-column align-center">
       <a href="#" @click="stateSideBar = 'inactive'">
         <v-icon icon="mdi-menu mt-1" :size="40"></v-icon>
       </a>
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
-        <!-- <RouterLink to="/" class="d-flex flex-column align-center mb-3 p-1">
-          <v-icon icon="mdi-home" size="20"></v-icon>
-          <span>Inicio</span>
-        </RouterLink> -->
-
-        <RouterLink to="/equipment" class="d-flex flex-column align-center mb-3 p-1">
+        <RouterLink to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
           <span>Inventario</span>
         </RouterLink>
 
-        <RouterLink to="/movements" class="d-flex flex-column align-center mb-3 p-1">
+        <RouterLink to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
           <span>Movimientos</span>
         </RouterLink>               
 
-        <RouterLink to="/dashboard" class="d-flex flex-column align-center mb-3 p-1">
+        <RouterLink to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-shield-home" size="20"></v-icon>
           <span>Catálogos</span>
         </RouterLink>        
         
         <v-menu location="end" open-on-hover>
           <template v-slot:activator="{ props }">
-            <div class="d-flex flex-column align-center mb-3 p-1" v-bind="props">
+            <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
               <v-icon icon="mdi-chart-line" size="20"></v-icon>
               <span>Reportes</span>
             </div>
           </template>
 
-          <v-list density="compact" variant="plain" class="my-list">
+          <v-list density="compact" variant="plain" class="my-list pt-2 pb-2">
             <RouterLink to="/">
                 <v-list-item>
                 Inventario general
@@ -54,20 +49,20 @@
           </v-list>
         </v-menu>
 
-        <RouterLink to="/ticket" class="d-flex flex-column align-center mb-3 p-1">
+        <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
         </RouterLink>  
 
         <!-- Cerrar sesion -->
-        <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1" @click="logout()">
+        <RouterLink to="/" class="d-flex flex-column align-center pt-2 pb-2 p-1" @click="logout()">
           <v-icon icon="mdi-logout" size="20"></v-icon>
           <span>Cerrar sesión</span>
         </RouterLink>
         
       </template>
       <template v-else>
-        <RouterLink to="/" class="d-flex flex-column align-center mb-4 p-1">
+        <RouterLink to="/" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-login" size="20"></v-icon>
           <span>Iniciar sesión</span>
         </RouterLink>
@@ -114,7 +109,7 @@ const { isLoggedIn, logout } = useAuth();
 .menu-options a:hover, .menu-options div:hover{
   color: #E0E5F1;
   background-color: #474F7A;
-  border-radius: 10px;
+  //border-radius: 10px;
 }
 
 .my-list {
