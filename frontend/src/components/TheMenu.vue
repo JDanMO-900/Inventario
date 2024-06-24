@@ -31,17 +31,17 @@
           </template>
 
           <v-list density="compact" variant="plain" class="my-list pt-2 pb-2">
-            <RouterLink to="/">
+            <RouterLink to="/generalReport">
                 <v-list-item>
                 Inventario general
               </v-list-item>
             </RouterLink>
-            <RouterLink to="/">
+            <RouterLink to="/equipmentTypeReport">
               <v-list-item> 
                 Tipo de equipos
               </v-list-item>
             </RouterLink>
-            <RouterLink to="/">
+            <RouterLink to="/locationReport">
               <v-list-item> 
                 Equipos por ubicación
               </v-list-item>

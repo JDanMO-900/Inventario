@@ -120,6 +120,24 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },  
     {
+      path: "/generalReport",
+      name: "generalReport",
+      component: () => import("../views/reports/GeneralReportView.vue"),
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+    }, 
+    {
+      path: "/equipmentTypeReport",
+      name: "equipmentTypeReport",
+      component: () => import("../views/reports/EquipmentTypeReportView.vue"),
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+    }, 
+    {
+      path: "/locationReport",
+      name: "locationReport",
+      component: () => import("../views/reports/LocationReportView.vue"),
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+    }, 
+    {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
       component: NotFoundView,
