@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\HistoryUserDetailController;
-use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\PDFDataController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\EquipmentController;
@@ -19,6 +19,7 @@ use App\Http\Controllers\EquipmentTypeController;
 use App\Http\Controllers\HistoryChangeController;
 use App\Http\Controllers\EquipmentStateController;
 use App\Http\Controllers\EquipmentDetailController;
+use App\Http\Controllers\HistoryUserDetailController;
 use App\Http\Controllers\TechnicalDescriptionController;
 use App\Http\Controllers\EquipmentLicenseDetailController;
 
@@ -101,4 +102,5 @@ Route::resource('/location', LocationController::class);
 Route::resource('/historyUserDetail', HistoryUserDetailController::class);
 Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
 
+Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
 

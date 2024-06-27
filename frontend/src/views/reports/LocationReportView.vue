@@ -5,38 +5,23 @@
                 <h2>{{ title }}</h2>
                 <v-row>
                     <v-col cols="12" lg="12" md="12" sm="12">
-                        <BaseSelect 
-                        label='Ubicación'
-                        :items="locations" 
-                        item-title='name'
-                        v-model.trim="v$.editedItem.location.$model" 
-                        :rules="v$.editedItem.location"
-                        clearable>
+                        <BaseSelect label='Ubicación' :items="locations" item-title='name'
+                            v-model.trim="v$.editedItem.location.$model" :rules="v$.editedItem.location" clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="6" md="6" sm="12">
-                        <BaseSelect 
-                        label='Tipo de equipo'
-                        :items="types" 
-                        item-title='name'
-                        v-model.trim="v$.editedItem.type.$model" 
-                        :rules="v$.editedItem.type"
-                        clearable>
+                        <BaseSelect label='Tipo de equipo' :items="types" item-title='name'
+                            v-model.trim="v$.editedItem.type.$model" :rules="v$.editedItem.type" clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="6" md="6" sm="12">
-                        <BaseSelect 
-                        label='Marca'
-                        :items="brands" 
-                        item-title='name'
-                        v-model.trim="v$.editedItem.brand.$model" 
-                        :rules="v$.editedItem.brand"
-                        clearable>
+                        <BaseSelect label='Marca' :items="brands" item-title='name'
+                            v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
-                        <base-button type="primary" title="Generar reporte"/>
-                    </v-col>                    
+                        <base-button type="primary" title="Generar reporte" @click="sendDataForReport" />
+                    </v-col>
                 </v-row>
             </v-container>
         </v-card>
@@ -47,7 +32,7 @@ import BaseSelect from "@/components/base-components/BaseSelect.vue";
 import BaseButton from "@/components/base-components/BaseButton.vue";
 import backendApi from "../../services/backendApi";
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@/lang/i18n";
+import { minLength, required } from "@/lang/i18n";
 
 
 export default {
@@ -76,9 +61,9 @@ export default {
     validations() {
         return {
             editedItem: {
-                brand: { required },
-                type: { required },
-                location: { required },
+                brand: { required, minLength: minLength(1), },
+                type: { required, minLength: minLength(1), },
+                location: { required, minLength: minLength(1), },
             }
         }
     },
@@ -88,15 +73,15 @@ export default {
     methods: {
         async initialize() {
             let requests = [
-            backendApi.get('/location', {
-                params: { itemsPerPage: -1 },
-            }),
-            backendApi.get('/equipmentType', {
-                params: { itemsPerPage: -1 },
-            }),
-            backendApi.get('/brand', {
-                params: { itemsPerPage: -1 },
-            })
+                backendApi.get('/location', {
+                    params: { itemsPerPage: -1 },
+                }),
+                backendApi.get('/equipmentType', {
+                    params: { itemsPerPage: -1 },
+                }),
+                backendApi.get('/brand', {
+                    params: { itemsPerPage: -1 },
+                })
             ];
 
             const responses = await Promise.all(requests).catch((error) => {
@@ -109,6 +94,32 @@ export default {
                 this.brands = responses[2].data.data
             }
         },
+
+        async sendDataForReport() {
+            this.v$.editedItem.$validate();
+            if (this.v$.editedItem.$invalid) {
+                alert.error("Campos obligatorios");
+                return;
+            }
+            try {
+                const reportData = await backendApi.post(`/reportpdf`, this.editedItem, {
+                    // blob: This retrieve the data as binary as information
+                    responseType: 'blob',
+                });
+                // This line tells the computer is a pdf and translate the binary information to get the url
+                const report_data = new Blob([reportData.data], { type: 'application/pdf' })
+                const url_report = window.URL.createObjectURL(report_data);
+                window.open(url_report);
+
+
+                // alert.success(endStatus.data.message);
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+
     }
 }
 </script>
