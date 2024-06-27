@@ -48,8 +48,12 @@ export default {
     data() {
         return {
             title: 'Reporte por tipo de equipos',
-            types: [],
-            brands: [],
+            types: [
+                { id: null, name: 'TODOS LOS TIPOS'}
+            ],
+            brands: [
+            { id: null, name: 'TODAS LAS MARCAS'}
+            ],
             editedItem: {
                 brand: '',
                 type: '',
@@ -87,10 +91,24 @@ export default {
             });
 
             if (responses) {
-                this.types = responses[0].data.data
-                this.brands = responses[1].data.data
+                this.types = this.selectTypes(responses[0].data.data)
+                this.brands = this.selectBrands(responses[1].data.data)
             }
         },
+        selectTypes(data) {
+            let typesList = this.types
+            data.forEach(function(item) {
+                typesList.push(item)
+            })
+            return typesList
+        },
+        selectBrands(data) {
+            let brandList = this.brands
+            data.forEach(function(item) {
+                brandList.push(item)
+            })
+            return brandList
+        }
     }
 }
 </script>

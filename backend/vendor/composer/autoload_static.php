@@ -605,6 +605,7 @@ class ComposerStaticInit38886b618cf65f3c0f5f2064e9d3d686
         'App\\Http\\Controllers\\HistoryUserDetailController' => __DIR__ . '/../..' . '/app/Http/Controllers/HistoryUserDetailController.php',
         'App\\Http\\Controllers\\LicenseController' => __DIR__ . '/../..' . '/app/Http/Controllers/LicenseController.php',
         'App\\Http\\Controllers\\LocationController' => __DIR__ . '/../..' . '/app/Http/Controllers/LocationController.php',
+        'App\\Http\\Controllers\\PDFDataController' => __DIR__ . '/../..' . '/app/Http/Controllers/PDFDataController.php',
         'App\\Http\\Controllers\\ProcessStateController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProcessStateController.php',
         'App\\Http\\Controllers\\ProviderController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProviderController.php',
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',

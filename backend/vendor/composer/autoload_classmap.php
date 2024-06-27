@@ -22,6 +22,7 @@ return array(
     'App\\Http\\Controllers\\HistoryUserDetailController' => $baseDir . '/app/Http/Controllers/HistoryUserDetailController.php',
     'App\\Http\\Controllers\\LicenseController' => $baseDir . '/app/Http/Controllers/LicenseController.php',
     'App\\Http\\Controllers\\LocationController' => $baseDir . '/app/Http/Controllers/LocationController.php',
+    'App\\Http\\Controllers\\PDFDataController' => $baseDir . '/app/Http/Controllers/PDFDataController.php',
     'App\\Http\\Controllers\\ProcessStateController' => $baseDir . '/app/Http/Controllers/ProcessStateController.php',
     'App\\Http\\Controllers\\ProviderController' => $baseDir . '/app/Http/Controllers/ProviderController.php',
     'App\\Http\\Controllers\\RoleController' => $baseDir . '/app/Http/Controllers/RoleController.php',

@@ -38,7 +38,9 @@ export default {
     data() {
         return {
             title: 'Reporte general de inventario',
-            brands: [],
+            brands: [
+                { id: null, name: 'TODAS LAS MARCAS'}
+            ],
             editedItem: {
                 brand: '',
             },
@@ -70,9 +72,17 @@ export default {
             });
 
             if (responses) {
-                this.brands = responses[0].data.data
+                this.brands = this.selectBrands(responses[0].data.data)
             }
         },
+        selectBrands(data) {
+            let brandList = this.brands
+            data.forEach(function(item) {
+                brandList.push(item)
+            })
+            return brandList
+        }
+        
     }
 }
 </script>
