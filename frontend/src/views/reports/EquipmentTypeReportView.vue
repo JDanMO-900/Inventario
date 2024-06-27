@@ -7,10 +7,11 @@
                     <v-col cols="12" lg="4" md="6" sm="12">
                         <BaseSelect 
                         label='Tipo de equipo'
-                        :items="type" 
+                        :items="types" 
                         item-title='name'
                         v-model.trim="v$.editedItem.type.$model" 
-                        :rules="v$.editedItem.type">
+                        :rules="v$.editedItem.type"
+                        clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="4" md="6" sm="12">
@@ -19,7 +20,8 @@
                         :items="brands" 
                         item-title='name'
                         v-model.trim="v$.editedItem.brand.$model" 
-                        :rules="v$.editedItem.brand">
+                        :rules="v$.editedItem.brand"
+                        clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="4" md="12" sm="12">
@@ -33,6 +35,7 @@
 <script>
 import BaseSelect from "@/components/base-components/BaseSelect.vue";
 import BaseButton from "@/components/base-components/BaseButton.vue";
+import backendApi from "../../services/backendApi";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@/lang/i18n";
 
@@ -65,5 +68,29 @@ export default {
             }
         }
     },
+    created() {
+        this.initialize()
+    },
+    methods: {
+        async initialize() {
+            let requests = [
+            backendApi.get('/equipmentType', {
+                params: { itemsPerPage: -1 },
+            }),
+            backendApi.get('/brand', {
+                params: { itemsPerPage: -1 },
+            })
+            ];
+
+            const responses = await Promise.all(requests).catch((error) => {
+                alert.error("No fue posible obtener el registro.")
+            });
+
+            if (responses) {
+                this.types = responses[0].data.data
+                this.brands = responses[1].data.data
+            }
+        },
+    }
 }
 </script>

@@ -10,7 +10,8 @@
                         :items="brands" 
                         item-title='name'
                         v-model.trim="v$.editedItem.brand.$model" 
-                        :rules="v$.editedItem.brand">
+                        :rules="v$.editedItem.brand"
+                        clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="3" md="4" sm="12">
@@ -24,6 +25,7 @@
 <script>
 import BaseSelect from "@/components/base-components/BaseSelect.vue";
 import BaseButton from "@/components/base-components/BaseButton.vue";
+import backendApi from "../../services/backendApi";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@/lang/i18n";
 
@@ -52,5 +54,25 @@ export default {
             }
         }
     },
+    created() {
+        this.initialize()
+    },
+    methods: {
+        async initialize() {
+            let requests = [
+            backendApi.get('/brand', {
+                params: { itemsPerPage: -1 },
+            })
+            ];
+
+            const responses = await Promise.all(requests).catch((error) => {
+                alert.error("No fue posible obtener el registro.")
+            });
+
+            if (responses) {
+                this.brands = responses[0].data.data
+            }
+        },
+    }
 }
 </script>
