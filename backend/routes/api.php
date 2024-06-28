@@ -103,4 +103,5 @@ Route::resource('/historyUserDetail', HistoryUserDetailController::class);
 Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
 
 Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
+Route::post('/typepdf', [PDFDataController::class, 'typeReport']);
 
