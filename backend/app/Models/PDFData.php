@@ -1,19 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Models\HistoryChange;
-use Illuminate\Routing\Controller;
+use App\Models\Equipment;
 use Illuminate\Support\Facades\Log;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PDFDataController extends Controller
+class PDFData extends Model
 {
-    public function locationReport(Request $request)
+    use HasFactory;
+
+    public static function typeReport($search)
     {
-        Log::info($request);
+
+        $data = Equipment::select()
+            ->join('brand', 'brand.id', '=', 'equipment.brand_id')
+            ->where('brand_id', $search['brand_condition'], $search['brand'])
+            ->where('equipment_type_id', $search['type_condition'], $search['type'])
+            ->get();
+
+        return $data;
+    }
+
+    public static function locationReport($search)
+    {
         $data =  HistoryChange::select('history_change.*', 
         'type_action.*', 
         'equipment_id.*', 
@@ -42,17 +53,9 @@ class PDFDataController extends Controller
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
-            ->where('location.name', 'like', $request->location)
-            ->where('brand.name', 'like', $request->brand)
-            ->where('equipment_type.name', 'like', $request->type)
-
-            
-            // ->where('location.name', 'like', $search)
-            // ->orWhere('dependency.name', 'like', $search)
-            // ->orWhere('process_state.name', 'like', $search)
-            // ->orWhere('type_action.name', 'like', $search)
-            // ->orderBy("history_change.$sortBy", $sort)
-
+            ->where('location.name', 'like', $search->location)
+            ->where('brand.name', 'like', $search->brand)
+            ->where('equipment_type.name', 'like', $search->type)
             ->get();
 
             $data->each(function($item){
@@ -71,10 +74,7 @@ class PDFDataController extends Controller
                 $item->technician = $technician;
             });
 
-
-
-        $pdf = PDF::loadView('LocationReport', compact('data'));
-        return $pdf->stream('LocationReport.pdf');
+        return $data;
 
     }
 

@@ -4,105 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Reporte</title>
-  
+
     <style>
         body {
             margin: 0;
+            font-family: arial, sans-serif;
         }
 
         .header {
-            padding: 1rem;
-            max-width: 62.5rem;
-            margin: 0 auto;
-            display: flex;
-            align-content: center;
-        }
-
-        .header-text {
-            flex-grow: 1;
-            line-height: 1.4;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            align-items: center;
             text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
 
+        .header img {
+            padding-top: 2rem;
+            position: absolute;
+            top: 0;
+
+        }
+
+        .header img.left {
+            left: 0;
+            width: 4.5rem;
+            height: auto;
+        }
+
+        .header img.right {
+            width: 7.5rem;
+            height: auto;
+            right: 0;
+        }
+
+        .header .title {
+            margin: 1.5rem 7.5rem 0 4.5rem;
+            font-weight: bold;
             text-transform: uppercase;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
-        .left-img {
-            max-width: 14.5%;
-            max-height: 14.5%;
-            margin-right: 3%;
-            float: left;
+        h1 {
+            font-size: 1.4rem;
         }
-        .rigth-img {
-            max-width: 14.5%;
-            max-height: 14.5%;
-            margin-right: 3%;
-            float: right;
-        }
-
 
         h2 {
-            text-align: center;
-            text-transform: uppercase;
+            font-size: 1.2rem;
         }
 
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td,
-        th {
-            border: 1px solid #dddddd;
-            text-align: left;
+        p {
+            margin: 0;
+            font-size: 0.85rem
         }
 
         .contenido {
-            font-size: 1.25rem;
-            margin: 3rem auto;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            
+
+        }
+
+        th,
+        td {
+            border: 1px solid #3b4494;
+            text-align: left;
+            padding: 0.4 rem;
+        }
+
+        th {
+            background: #b4c6e7;
+        }
+
+        .section-title {
+            margin-top: 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
         }
     </style>
+
 </head>
 @foreach ($data as $report)
 
     <body>
         <div class="header">
-            <div class="header-text">
-
-                <img class="left-img" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo" >
-                <h1> <b>Biblioteca Nacional de El Salvador</b></h1>
-                <img class="left-img" src="{{ public_path('images/MCLogo.png') }}" alt="Logo" >
-                <h1> Sección de informática</h1>
+            <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
+            <div class="title">
+                <h1>Biblioteca Nacional de El Salvador</h1>
+                <h2>Sección de informática</h2>
 
             </div>
-
-            <h2> Acta del equipo </h2>
-
+            <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
         </div>
 
 
 
-        {{ $report }}
 
 
-        <hr>
+
         <div class="contenido">
+
             <table>
                 <tr>
-                    <th colspan="2">Fecha:</th>
+                    <th colspan="2">Fecha de {{ $report->type_action_id }}</th>
                     <td colspan="2"> {{ $report->start_date }}</td>
 
                 </tr>
-                <tr>
-                    <th colspan="2">Área:</th>
-                    <td colspan="2">Servicios de Información</td>
 
-                </tr>
                 <tr>
-                    <th>Dependencia:</th>
-                    <td>{{ $report->dependency_id }}</td>
-                    <th>Ubicación:</th>
+                    <th>Dependencia</th>
+                    <td>{{ $report->dependency_id }} </td>
+                    <th>Ubicación</th>
                     <td>{{ $report->location_id }}</td>
                 </tr>
             </table>
@@ -111,28 +129,105 @@
         <div class="contenido">
             <table>
                 <tr>
-                    <th>Tipo de equipo:</th>
-                    <td>Laptop</td>
-                    <th>Número activo fijo:</th>
+                    <th>Tipo de equipo</th>
+                    <td>{{ $report->type1 }}</td>
+                    <th>Número activo fijo</th>
                     <td>{{ $report->number_internal_active }}</td>
 
                 </tr>
                 <tr>
-                    <th>Modelo:</th>
+                    <th>Modelo</th>
                     <td>{{ $report->model }}</td>
 
-                    <th>Serial:</th>
+                    <th>Serial</th>
                     <td>{{ $report->equipment_id }}</td>
 
                 </tr>
                 <tr>
-                    <th>Marca:</th>
+                    <th>Marca</th>
                     <td> {{ $report->brand }}</td>
-                    <th>Estado del equipo:</th>
-                    <td>Buen estado</td>
+                    <th>Estado del proceso</th>
+                    <td>{{ $report->state_id }}</td>
                 </tr>
             </table>
         </div>
+
+
+        <div class="contenido">
+            <table>
+                <tr>
+                    <th colspan="2">Responsables</th>
+                </tr>
+                @foreach ($report->users as $user)
+                    <tr>
+
+
+                        <th>Nombre</th>
+                        <td>{{ $user }}</td>
+
+
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
+        
+
+
+
+        <div class="contenido">
+            <table>
+                <tr>
+                    <th colspan="2">{{ $report->type_action_id }} realizado por</th>
+                </tr>
+                @foreach ($report->technician as $technician)
+                    <tr>
+
+
+                        <th>Nombre</th>
+                        <td>{{ $technician }}</td>
+
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
+        <div class="contenido">
+            <p><b>Observaciones: <b/>{{$report->description}}</p>
+        </div>
+
+        <div class="contenido">
+            <p>
+                <b>CLÁUSULA DE COMPROMISO:</b> Declaro mi conocimiento y compromiso de mantener en un lugar seguro y en óptimas
+                condiciones de uso el equipo y los accesorios propiedad de la BIBLIOTECA NACIONAL DE EL SALVADOR,
+                identificados en este documento, prohibiendo su utilización a cualquier otra persona.
+
+                Asimismo, reconozco que cualquier daño causado por un uso inadecuado o una conservación deficiente hasta
+                la fecha de su devolución será de mi entera responsabilidad, incluyendo los costos asociados a las
+                reparaciones necesarias. En caso de robo o hurto, me comprometo a informar de inmediato a la Sección de
+                Informática. La omisión de esta notificación conllevará la obligación de cubrir los costos
+                correspondientes a la restitución de los aparatos y accesorios.
+
+                Además, declaro haber recibido en buen estado el equipo y los accesorios detallados, y reconozco que
+                están bajo mi custodia. Autorizo a la BIBLIOTECA NACIONAL DE EL SALVADOR a descontar de mi salario la
+                suma equivalente a cada accesorio en caso de pérdida o daño comprobado.
+
+                Esta disposición no aplicará en casos de fuerza mayor o pérdida por caso fortuito debidamente
+                comprobados, o por la existencia de explicaciones razonables que excluyan conductas dolosas o
+                negligentes por parte del Usuario. También autorizó que, en caso de terminación de mi contrato laboral
+                por cualquier motivo y de no devolver el equipo, se descuente de mi liquidación el saldo pendiente por
+                pérdida de los accesorios y/o el Equipo.
+
+                La firma de este documento implica mi conformidad con el adecuado funcionamiento del equipo en el
+                momento de la entrega y mi aceptación de todos los términos establecidos en esta declaración de
+                responsabilidad.
+
+            </p>
+        </div>
+
+
+
+
 
 
     </body>
