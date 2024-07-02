@@ -298,24 +298,44 @@ class EquipmentController extends Controller
     public function testEquipment()
     {
         /* $id = $request->id; */
-        $equipBrand = [];
+        $newBrand = [];
+        $equip = [];
         $id = 1;
         if ($id) {
+            // trayendo las marcas
             $data = Brand::with(
                 'equipments'
             )->get();
+
+            //trayendo el estado
+            $dataES = EquipmentState::with(
+                'stateEquipment'
+            )->get();
+
+            //trayendo el tipo de quipo
+            $dataET = EquipmentType::with(
+                'typeEquipment'
+            )->get();
+
+            $equiptments = Equipment::with('equipments_state_type')->get();
+
 
             //Permite validar que solo los equipos que tienen una marca asiganda
             foreach ($data as $brands) {
                 if ($brands->equipments->isEmpty()) { //Se evalúa que existan elementos dentro de equipments y se cumple no guarda nada
 
                 } else { //Pero si el equiments tiene valores, se procede a llenar un nuevo arreglo para luego enviarlo en formato Json
-                    $equipBrand[] = $brands;
+                    $newBrand[] = array(
+                        "id" => $brands->id,
+                        "nameBrand" => $brands->name,
+                        "equipments" => $brands->equipments,
+
+                    );
                 }
             }
 
             return  response()->json([
-                "brands: " =>  $equipBrand,
+                "brands: " =>  $equiptments,
             ]);
         } else {
             return  response()->json([

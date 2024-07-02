@@ -15,7 +15,7 @@ class EquipmentType extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at', 'deleted_at', 
+        'id', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public $hidden = [
@@ -29,7 +29,7 @@ class EquipmentType extends Model
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         return EquipmentType::select('equipment_type.*', 'equipment_type.id as id')
-        
+
 		->where('equipment_type.name', 'like', $search)
 
         ->skip($skip)
@@ -41,9 +41,14 @@ class EquipmentType extends Model
     public static function counterPagination($search)
     {
         return EquipmentType::select('equipment_type.*', 'equipment_type.id as id')
-        
+
 		->where('equipment_type.name', 'like', $search)
 
         ->count();
+    }
+
+    public function equipment()
+    {
+        return $this->hasMany(Equipment::class, 'equipment_type_id', 'id');
     }
 }

@@ -31,26 +31,36 @@ class Brand extends Model
     {
         return Brand::select('brand.*', 'brand.id as id')
 
-		->where('brand.name', 'like', $search)
+            ->where('brand.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
-        ->orderBy("brand.$sortBy", $sort)
-        ->get();
+            ->skip($skip)
+            ->take($itemsPerPage)
+            ->orderBy("brand.$sortBy", $sort)
+            ->get();
     }
 
     public static function counterPagination($search)
     {
         return Brand::select('brand.*', 'brand.id as id')
 
-		->where('brand.name', 'like', $search)
+            ->where('brand.name', 'like', $search)
 
-        ->count();
+            ->count();
     }
 
-    //Relasionando la tabla Equipments
+    //Relacionando la tabla Equipments
     public function equipments()
     {
         return $this->hasMany(Equipment::class, 'brand_id');
     }
+
+    /* public function historyChange()
+    {
+        return $this->hasMany(HistoryChange::class);
+    }
+
+    public function locationEquipment()
+    {
+        return $this->hasManyThrough(Location::class, Brand::class);
+    } */
 }

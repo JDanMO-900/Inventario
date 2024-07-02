@@ -47,11 +47,16 @@ class Location extends Model
 
     public static function counterPagination($search)
     {
-        return Location::select('location.*','location.id as id')
+        return Location::select('location.*', 'location.id as id')
 
 
             ->where('location.name', 'like', $search)
 
             ->count();
+    }
+
+    public function historyChange()
+    {
+        return $this->belongsTo(HistoryChange::class);
     }
 }

@@ -247,14 +247,28 @@ class Equipment extends Model
         return $data;
     }
 
-    public function historyChange()
+    /* public function historyChange()
     {
         return $this->hasMany(HistoryChange::class, 'id');
+    } */
+
+    public function stateEquipment()
+    {
+        return $this->belongsTo(EquipmentState::class, 'equipment_state_id');
     }
+    public function typeEquipment()
+    {
+        return $this->hasMany(EquipmentType::class, 'equipment_type_id');
+    }
+
     //Relasionando la tabla Brand
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+    public function equipments_state_type(){
+        return $this->belongsTo(EquipmentState::class,'equipment_state_id');
     }
 
 
