@@ -118,7 +118,6 @@ class EquipmentController extends Controller
                     "message" => "Alerta: No fue posible realizar el registro ¡Este equipo ya esta registrado!"
                 ]
             );
-
         } else {
             // availability
             $equipment = new Equipment;
@@ -135,8 +134,6 @@ class EquipmentController extends Controller
 
             if ($request->provider != "") {
                 $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
-
-
             } else {
                 $equipment->provider_id = null;
             }
@@ -160,7 +157,6 @@ class EquipmentController extends Controller
                     $detalleEquipment->equipment_id = Equipment::where('number_active', $request->number_active)->first()->id;
                     $detalleEquipment->technical_description_id = TechnicalDescription::where('name', $technicalAttributes['technicalDescription'])->first()->id;
                     $detalleEquipment->save();
-
                 }
             }
             // Recibe las licencias
@@ -219,7 +215,6 @@ class EquipmentController extends Controller
 
             if ($request->provider != "") {
                 $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
-
             } else {
                 $equipment->provider_id = null;
             }
@@ -251,7 +246,6 @@ class EquipmentController extends Controller
             return response()->json([
                 "message" => "Registro modificado correctamente.",
             ]);
-
         } else {
             return response()->json(
                 [
@@ -259,7 +253,6 @@ class EquipmentController extends Controller
                 ]
             );
         }
-
     }
 
 
@@ -300,5 +293,34 @@ class EquipmentController extends Controller
         return response()->json([
             "message" => "Registro eliminado correctamente.",
         ]);
+    }
+
+    public function testEquipment()
+    {
+        /* $id = $request->id; */
+        $equipBrand = [];
+        $id = 1;
+        if ($id) {
+            $data = Brand::with(
+                'equipments'
+            )->get();
+
+            //Permite validar que solo los equipos que tienen una marca asiganda
+            foreach ($data as $brands) {
+                if ($brands->equipments->isEmpty()) { //Se evalúa que existan elementos dentro de equipments y se cumple no guarda nada
+
+                } else { //Pero si el equiments tiene valores, se procede a llenar un nuevo arreglo para luego enviarlo en formato Json
+                    $equipBrand[] = $brands;
+                }
+            }
+
+            return  response()->json([
+                "brands: " =>  $equipBrand,
+            ]);
+        } else {
+            return  response()->json([
+                "brands: " =>  'error',
+            ]);
+        }
     }
 }

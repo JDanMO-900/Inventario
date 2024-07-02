@@ -19,19 +19,19 @@ class HistoryChange extends Model
 
     protected $fillable = [
         'id',
-        
+
         'description',
         'quantity_out',
         'quantity_in',
         'start_date',
         'end_date',
-   
+
         'type_action_id',
         'equipment_id',
         'state_id',
         'location_id',
         'dependency_id',
-        
+
         'created_at',
         'updated_at',
         'deleted_at',
@@ -51,7 +51,7 @@ class HistoryChange extends Model
     // {
     //     return [
     //         'id' => Encrypt::encryptValue($this->id),
-            
+
     //         'description' => $this->description,
     //         'quantity_out' => $this->quantity_out,
     //         'quantity_in' => $this->quantity_in,
@@ -70,12 +70,12 @@ class HistoryChange extends Model
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
 
-        $data =  HistoryChange::select('history_change.*', 
-        'type_action.*', 
-        'equipment_id.*', 
-        'process_state.*', 
-        'location.*', 
-        'dependency.*', 
+        $data =  HistoryChange::select('history_change.*',
+        'type_action.*',
+        'equipment_id.*',
+        'process_state.*',
+        'location.*',
+        'dependency.*',
         'history_change.id as id',
 
 
@@ -100,18 +100,18 @@ class HistoryChange extends Model
             ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
             ->join('equipment_type as equipment_type1', 'equipment_id.equipment_type_id', '=', 'equipment_type1.id')
             ->join('brand as brand1', 'equipment_id.brand_id', '=', 'brand1.id')
- 
+
 
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
 
-            
+
             ->where('location.name', 'like', $search)
             ->orWhere('dependency.name', 'like', $search)
             ->orWhere('process_state.name', 'like', $search)
             ->orWhere('type_action.name', 'like', $search)
-            
+
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("history_change.$sortBy", $sort)
@@ -134,7 +134,7 @@ class HistoryChange extends Model
             });
 
             return $data;
-            
+
     }
 
     public static function counterPagination($search)
@@ -149,4 +149,10 @@ class HistoryChange extends Model
 
             ->count();
     }
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class, 'equipment_id');
+    }
+
 }

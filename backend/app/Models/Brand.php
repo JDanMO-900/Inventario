@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\EquipmentController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ class Brand extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at', 'deleted_at', 
+        'id', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public $hidden = [
@@ -29,7 +30,7 @@ class Brand extends Model
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         return Brand::select('brand.*', 'brand.id as id')
-        
+
 		->where('brand.name', 'like', $search)
 
         ->skip($skip)
@@ -41,9 +42,15 @@ class Brand extends Model
     public static function counterPagination($search)
     {
         return Brand::select('brand.*', 'brand.id as id')
-        
+
 		->where('brand.name', 'like', $search)
 
         ->count();
+    }
+
+    //Relasionando la tabla Equipments
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class, 'brand_id');
     }
 }

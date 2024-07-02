@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\BrandController;
 use Encrypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
@@ -77,7 +78,7 @@ class Equipment extends Model
             ->orderBy("equipment.$sortBy", $sort)
             ->get();
 
-            
+
 
         Log::info(($search === 'En uso') ? 0 : (($search === 'Dispo') ? 1 : ''));
 
@@ -245,6 +246,18 @@ class Equipment extends Model
 
         return $data;
     }
+
+    public function historyChange()
+    {
+        return $this->hasMany(HistoryChange::class, 'id');
+    }
+    //Relasionando la tabla Brand
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+
 
 }
 

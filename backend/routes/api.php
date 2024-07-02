@@ -22,6 +22,7 @@ use App\Http\Controllers\EquipmentDetailController;
 use App\Http\Controllers\HistoryUserDetailController;
 use App\Http\Controllers\TechnicalDescriptionController;
 use App\Http\Controllers\EquipmentLicenseDetailController;
+use App\Http\Controllers\PDFReportGController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +73,7 @@ Route::get('/equipment-user/{username}', [EquipmentController::class, 'equipment
 
 
 Route::resource('/technicalDescription', TechnicalDescriptionController::class);
-Route::resource('/equipmentDetail', EquipmentDetailController::class);  
+Route::resource('/equipmentDetail', EquipmentDetailController::class);
 
 Route::resource('/license', LicenseController::class);
 Route::resource('/equipmentLicenseDetail', EquipmentLicenseDetailController::class);
@@ -103,4 +104,6 @@ Route::resource('/historyUserDetail', HistoryUserDetailController::class);
 Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
 
 Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
+Route::post('/reportgeneralpdf', [PDFReportGController::class, 'locationReport']);
 
+Route::post('/testEquip', [EquipmentController::class, 'testEquipment']);
