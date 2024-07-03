@@ -15,7 +15,7 @@ class TypeAction extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at', 
+        'id', 'name', 'created_at', 'updated_at',
     ];
 
     public $hidden = [
@@ -29,13 +29,13 @@ class TypeAction extends Model
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         $data =  TypeAction::select('type_action.*', 'type_action.id as id')
-        
-		->where('type_action.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
-        ->orderBy("type_action.$sortBy", $sort)
-        ->get();
+            ->where('type_action.name', 'like', $search)
+
+            ->skip($skip)
+            ->take($itemsPerPage)
+            ->orderBy("type_action.$sortBy", $sort)
+            ->get();
 
         $data->each(function ($item) {
             $is_internal = $item->is_internal ? 'Personal interno' : 'Personal externo';
@@ -48,9 +48,14 @@ class TypeAction extends Model
     public static function counterPagination($search)
     {
         return TypeAction::select('type_action.*', 'type_action.id as id')
-        
-		->where('type_action.name', 'like', $search)
 
-        ->count();
+            ->where('type_action.name', 'like', $search)
+
+            ->count();
+    }
+
+    public function historyChange()
+    {
+        return $this->hasMany(HistoryChange::class);
     }
 }

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\TechnicalDescription;
 use App\Models\EquipmentLicenseDetail;
 
+
 class EquipmentController extends Controller
 {
     /**
@@ -295,33 +296,58 @@ class EquipmentController extends Controller
         ]);
     }
 
-    public function testEquipment()
+    public function getReportGeneral()
     {
         /* $id = $request->id; */
         $newBrand = [];
         $equip = [];
-        $id = 1;
-        if ($id) {
+        $marca = "HP";
+        /* $equiptments_state = Equipment::with(
+            'equipments_state'
+            )->get();
+        $equiptments_stype = Equipment::with(
+            'typeEquipment'
+        )->get();
+        $brand = Equipment::with(
+            'brand'
+        )->get();
+        $history_for_location = HistoryChange::with('locations'
+        )->where('type_action_id', '=', '2')->get(); */
+
+
+
+        if ($marca) {
             // trayendo las marcas
-            $data = Brand::with(
+            /*  $data = Brand::with(
                 'equipments'
-            )->get();
+            )->get(); */
 
-            //trayendo el estado
-            $dataES = EquipmentState::with(
-                'stateEquipment'
-            )->get();
+            $history = HistoryChange::with(['equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions'
+            ])->where('type_action_id', '=', '2')->get();
 
-            //trayendo el tipo de quipo
-            $dataET = EquipmentType::with(
-                'typeEquipment'
-            )->get();
+            $data = $history->map(function ($history) {
 
-            $equiptments = Equipment::with('equipments_state_type')->get();
+                $brand = $history->equipment->brand->name;
+
+
+                return [
+                    //'data' => $history->toArray(),
+                    'equipment_id' => $history->equipment->id,
+                    'brand_id' => $history->equipment->brand->id,
+                    'marca' => $history->equipment->brand->name,
+                    'modelo' => $history->equipment->model,
+                    'serial' => $history->equipment->serial_number,
+                    'n_active' => $history->equipment->number_active,
+                    'type' => $history->equipment->type->name,
+                    'state' => $history->equipment->state->name,
+                    'type_action' => $history->typeActions->name,
+                    'locations' => $history->locations->name,
+                ];
+            });
 
 
             //Permite validar que solo los equipos que tienen una marca asiganda
-            foreach ($data as $brands) {
+            /* foreach ($data as $brands) {
                 if ($brands->equipments->isEmpty()) { //Se evalúa que existan elementos dentro de equipments y se cumple no guarda nada
 
                 } else { //Pero si el equiments tiene valores, se procede a llenar un nuevo arreglo para luego enviarlo en formato Json
@@ -332,10 +358,10 @@ class EquipmentController extends Controller
 
                     );
                 }
-            }
+            } */
 
             return  response()->json([
-                "brands: " =>  $equiptments,
+                "data: " =>  $data,
             ]);
         } else {
             return  response()->json([

@@ -152,12 +152,18 @@ class HistoryChange extends Model
 
     public function equipment()
     {
-        return $this->belongsTo(Equipment::class, 'equipment_id');
+        return $this->belongsTo(Equipment::class);
     }
 
-    /* public function equipment()
+    public function locations()
     {
-        return $this->belongsTo(Equipment::class, 'equipment_id');
-    }*/
+        return $this->belongsTo(Location::class, 'location_id');
+    }
+    public function typeActions()
+    {
+        return $this->belongsTo(TypeAction::class, 'type_action_id');
+    }
+
+
 
 }

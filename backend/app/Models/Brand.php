@@ -51,7 +51,7 @@ class Brand extends Model
     //Relacionando la tabla Equipments
     public function equipments()
     {
-        return $this->hasMany(Equipment::class, 'brand_id');
+        return $this->hasMany(Equipment::class);
     }
 
     /* public function historyChange()

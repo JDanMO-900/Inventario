@@ -57,6 +57,6 @@ class Location extends Model
 
     public function historyChange()
     {
-        return $this->belongsTo(HistoryChange::class);
+        return $this->hasMany(HistoryChange::class);
     }
 }

@@ -106,4 +106,4 @@ Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'user
 Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
 Route::post('/reportgeneralpdf', [PDFReportGController::class, 'locationReport']);
 
-Route::post('/testEquip', [EquipmentController::class, 'testEquipment']);
+Route::post('/testEquip', [EquipmentController::class, 'getReportGeneral']);

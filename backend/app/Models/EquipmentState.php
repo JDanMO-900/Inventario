@@ -47,9 +47,9 @@ class EquipmentState extends Model
         ->count();
     }
 
-    public function equipment()
+    public function equipments()
     {
-        return $this->hasMany(Equipment::class, 'equipment_state_id', 'id');
+        return $this->hasMany(Equipment::class);
     }
 
 }
