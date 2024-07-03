@@ -326,6 +326,8 @@
 
       <v-card-text>
         <v-container>
+          
+          <base-button class="ms-1" type="secondary" title="Generar reporte de equipo" @click="generateIndividualReport(this.equipmentData)"/>
           <v-col cols="12" sm="12" md="12">
             <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
@@ -793,6 +795,17 @@ export default {
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
       this.dialogInfo = true;
+    },
+
+    async generateIndividualReport(item){
+      const generate_report = await backendApi.get(`/individual-reportpdf/${item.serial_number}`, {
+                    // blob: This retrieve the data as binary as information
+                    responseType: 'blob',
+                });
+                // This line tells the computer is a pdf and translate the binary information to get the url
+                const report_data = new Blob([generate_report.data], { type: 'application/pdf' })
+                const url_report = window.URL.createObjectURL(report_data);
+                window.open(url_report);
     },
 
     closeDetails() {

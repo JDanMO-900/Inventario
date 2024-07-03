@@ -91,7 +91,9 @@ export default {
             if (responses) {
                 this.locations = responses[0].data.data
                 this.types = responses[1].data.data
+                this.types.push({"name": "Todos"})
                 this.brands = responses[2].data.data
+                this.brands.push({"name": "Todos"})
             }
         },
 
