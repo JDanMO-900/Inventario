@@ -104,3 +104,5 @@ Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'user
 
 Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
 
+Route::get('/individual-reportpdf/{serial_number}', [PDFDataController::class, 'individualReport']);
+

@@ -14,15 +14,24 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class PDFDataController extends Controller
 {
+
+    public function individualReport($serial_number)
+    {
+
+        $data = PDFData::individualReport($serial_number);
+        $pdf = PDF::loadView('IndividualReport', compact('data'));
+        return $pdf->stream('IndividualReport.pdf');
+    }
+
     public function locationReport(Request $request)
     {
         
         $data = PDFData::locationReport($request);
-        Log::info($data);
         $pdf = PDF::loadView('LocationReport', compact('data'));
         return $pdf->stream('LocationReport.pdf');
 
     }
+
 
     public function typeReport(Request $request)
     {
