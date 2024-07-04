@@ -163,6 +163,10 @@ class HistoryChange extends Model
     {
         return $this->belongsTo(TypeAction::class, 'type_action_id');
     }
+    public function dependencys()
+    {
+        return $this->belongsTo(Dependency::class, 'dependency_id');
+    }
 
 
 

@@ -15,7 +15,7 @@ class Dependency extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at', 'deleted_at', 
+        'id', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public $hidden = [
@@ -29,7 +29,7 @@ class Dependency extends Model
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         return Dependency::select('dependency.*', 'dependency.id as id')
-        
+
 		->where('dependency.name', 'like', $search)
 
         ->skip($skip)
@@ -41,9 +41,14 @@ class Dependency extends Model
     public static function counterPagination($search)
     {
         return Dependency::select('dependency.*', 'dependency.id as id')
-        
+
 		->where('dependency.name', 'like', $search)
 
         ->count();
+    }
+
+    public function historyChange()
+    {
+        return $this->hasMany(HistoryChange::class);
     }
 }

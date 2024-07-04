@@ -12,70 +12,74 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 class PDFReportGController extends Controller
 {
     //
-    public function locationReport(Request $request)
+    public function reportGeneral(Request $request)
     {
-        Log::info($request);
-        $data =  HistoryChange::select(
-            'history_change.*',
-            'type_action.*',
-            'equipment_id.*',
-            'process_state.*',
-            'location.*',
-            'dependency.*',
-            'history_change.id as id',
-            // Ubicacion
-            'location.name as location_id',
-            'dependency.name as dependency_id',
-            //Equipo1
-            'equipment_id.serial_number as equipment_id',
-            'equipment_id.model as model1',
-            'equipment_type.name as type1',
-            'brand.name as brand',
-            'process_state.name as state_id',
-            'type_action.name as type_action_id'
-        )
-            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
-            // Equipo principal
-            ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
-            ->join('equipment_type as equipment_type', 'equipment_id.equipment_type_id', '=', 'equipment_type.id')
-            ->join('brand', 'equipment_id.brand_id', '=', 'brand.id')
+        $brandId = $request->input('brand');
+        echo ($brandId);
+        echo ('CONTROLADOR AQUI');
 
+        if ($brandId == 'TODAS LAS MARCAS') {
+            echo ('si entra EN GENERAL');
 
-            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->join('location', 'history_change.location_id', '=', 'location.id')
-            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
-            /*  ->where('location.name', 'like', $request->location)
-            ->where('brand.name', 'like', $request->brand)
-            ->where('equipment_type.name', 'like', $request->type) */
+            $history = HistoryChange::with([
+                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
+            ])->where('type_action_id', '=', '2')->get();
 
+            $data = $history->map(function ($history) {
 
-            // ->where('location.name', 'like', $search)
-            // ->orWhere('dependency.name', 'like', $search)
-            // ->orWhere('process_state.name', 'like', $search)
-            // ->orWhere('type_action.name', 'like', $search)
-            // ->orderBy("history_change.$sortBy", $sort)
+                return [
+                    'equipment_id' => $history->equipment->id,
+                    'brand_id' => $history->equipment->brand->id,
+                    'assignment_date' => $history->start_date,
+                    'marca' => $history->equipment->brand->name,
+                    'modelo' => $history->equipment->model,
+                    'serial' => $history->equipment->serial_number,
+                    'n_active' => $history->equipment->number_active,
+                    'type' => $history->equipment->type->name,
+                    'state' => $history->equipment->state->name,
+                    'type_action' => $history->typeActions->name,
+                    'locations' => $history->locations->name,
+                    'dependency' => $history->dependencys->name,
+                ];
+            });
+            $pdf = PDF::loadView('ReportGeneral', compact('data'));
+            return $pdf->stream('ReportGeneral.pdf');
+        } else {
+            echo ('si entra POR MARCA');
+            $query = HistoryChange::with([
+                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
+            ])->where('type_action_id', '=', '2');
 
-            ->get();
+            if ($brandId) {
+                $query->whereHas('equipment', function ($q) use ($brandId) {
+                    $q->where('brand_id', $brandId);
+                });
+            }
 
-        $data->each(function ($item) {
-            $users = User::Join('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
-                ->where('history_user_detail.history_change_id', $item->id)
-                ->pluck('users.name')
-                ->toArray();
-            $item->users = $users;
-        });
+            $history = $query->get();
 
-        $data->each(function ($item) {
-            $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
-                ->where('history_tech.history_change_id', $item->id)
-                ->pluck('users.name')
-                ->toArray();
-            $item->technician = $technician;
-        });
+            $data = $history->map(function ($history) {
 
+                return [
+                    'equipment_id' => $history->equipment->id,
+                    'brand_id' => $history->equipment->brand->id,
+                    'assignment_date' => $history->start_date,
+                    'marca' => $history->equipment->brand->name,
+                    'modelo' => $history->equipment->model,
+                    'serial' => $history->equipment->serial_number,
+                    'n_active' => $history->equipment->number_active,
+                    'type' => $history->equipment->type->name,
+                    'state' => $history->equipment->state->name,
+                    'type_action' => $history->typeActions->name,
+                    'locations' => $history->locations->name,
+                    'dependency' => $history->dependencys->name,
+                ];
+            });
+            $pdf = PDF::loadView('ReportGeneral', compact('data'));
+            echo ( $data);
+            return $pdf->stream('ReportGeneral.pdf');
+        }
 
-
-        $pdf = PDF::loadView('ReportGeneral', compact('data'));
-        return $pdf->stream('ReportGeneral.pdf');
+        //return $pdf->stream('ReportGeneral.pdf');
     }
 }

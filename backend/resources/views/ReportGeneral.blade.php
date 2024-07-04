@@ -32,6 +32,7 @@
             margin-right: 3%;
             float: left;
         }
+
         .rigth-img {
             max-width: 14.5%;
             max-height: 14.5%;
@@ -64,40 +65,47 @@
     </style>
 </head>
 @foreach ($data as $report)
+    </div>
 
     <body>
         <div class="header">
             <div class="header-text">
-                <img class="left-img" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo" >
-                <img class="rigth-img" src="{{ public_path('images/MCLogo.png') }}" alt="Logo" >
+                <img class="left-img" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
+                <img class="rigth-img" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
                 <h3> <b>Biblioteca Nacional de El Salvador</b> Sección de informática</h3>
             </div>
             <h2> Reporte General de Equipos por Marca </h2>
+
+            <div class="header-text">
+                <h3> <b>Equipos: </b> {{ $report['marca'] }}</h3>
+            </div>
         </div>
 
+        {{-- @php dd($report); @endphp --}}
 
 
-       {{--  {{ $report }} --}}
+
+        {{-- {{ $report }} --}}
 
 
         <hr>
         <div class="contenido">
             <table>
                 <tr>
-                    <th colspan="2">Fecha:</th>
-                    <td colspan="2"> {{ $report->start_date }}</td>
+                    <th colspan="2">Fecha de Asignación:</th>
+                    <td colspan="2"> {{ $report['assignment_date'] }}</td>
 
                 </tr>
                 <tr>
                     <th colspan="2">Área:</th>
-                    <td colspan="2">Servicios de Información</td>
+                    <td colspan="2">{{ $report['type'] }}</td>
 
                 </tr>
                 <tr>
                     <th>Dependencia:</th>
-                    <td>{{ $report->dependency_id }}</td>
+                    <td>{{ $report['dependency'] }}</td>
                     <th>Ubicación:</th>
-                    <td>{{ $report->location_id }}</td>
+                    <td>{{ $report['locations'] }}</td>
                 </tr>
             </table>
         </div>
@@ -106,24 +114,24 @@
             <table>
                 <tr>
                     <th>Tipo de equipo:</th>
-                    <td>Laptop</td>
+                    <td>{{ $report['type'] }}</td>
                     <th>Número activo fijo:</th>
-                    <td>{{ $report->number_internal_active }}</td>
+                    <td>{{ $report['n_active'] }}</td>
 
                 </tr>
                 <tr>
                     <th>Modelo:</th>
-                    <td>{{ $report->model }}</td>
+                    <td>{{ $report['modelo'] }}</td>
 
                     <th>Serial:</th>
-                    <td>{{ $report->equipment_id }}</td>
+                    <td>{{ $report['serial'] }}</td>
 
                 </tr>
                 <tr>
                     <th>Marca:</th>
-                    <td> {{ $report->brand }}</td>
+                    <td> {{ $report['marca'] }}</td>
                     <th>Estado del equipo:</th>
-                    <td>Buen estado</td>
+                    <td>{{ $report['state'] }}</td>
                 </tr>
             </table>
         </div>

@@ -304,7 +304,7 @@ class EquipmentController extends Controller
 
 
             $query = HistoryChange::with([
-                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions'
+                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
             ])->where('type_action_id', '=', '2');
 
             if ($brandId) {
@@ -321,6 +321,7 @@ class EquipmentController extends Controller
                     //'data' => $history->toArray(),
                     'equipment_id' => $history->equipment->id,
                     'brand_id' => $history->equipment->brand->id,
+                    'assignment_date' =>$history->start_date,
                     'marca' => $history->equipment->brand->name,
                     'modelo' => $history->equipment->model,
                     'serial' => $history->equipment->serial_number,
@@ -329,6 +330,7 @@ class EquipmentController extends Controller
                     'state' => $history->equipment->state->name,
                     'type_action' => $history->typeActions->name,
                     'locations' => $history->locations->name,
+                    'dependency' => $history->dependencys->name,
                 ];
             });
             return  response()->json([
