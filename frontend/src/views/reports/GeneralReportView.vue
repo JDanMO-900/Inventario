@@ -37,13 +37,13 @@ export default {
         return {
             title: 'Reporte general de inventario',
             brands: [
-                { id: null, name: 'TODAS LAS MARCAS' }
+               
             ],
             editedItem: {
-                brand: '',
+                brand:[],
             },
             defaultItem: {
-                brand: '',
+                brand: [],
             },
         }
     },
@@ -87,16 +87,17 @@ export default {
                 return;
             }
             try {
-                isLoading.value = true;
-                const reportData = await backendApi.post(`/reportgeneralpdf`, this.editedItem, {
-                    // blob: This retrieve the data as binary as information
-                    responseType: 'blob',
-                });
-                // This line tells the computer is a pdf and translate the binary information to get the url
-                const report_data = new Blob([reportData.data], { type: 'application/pdf' })
-                const url_report = window.URL.createObjectURL(report_data);
-                window.open(url_report);
-
+                
+                // const reportData = await backendApi.get(`/reportgeneralpdf`, this.editedItem, {
+                //     // blob: This retrieve the data as binary as information
+                //     responseType: 'blob',
+                // });
+                // console.log(reportData);
+                // // This line tells the computer is a pdf and translate the binary information to get the url
+                // const report_data = new Blob([reportData.data], { type: 'application/pdf' })
+                // const url_report = window.URL.createObjectURL(report_data);
+                // window.open('http://localhost:8000/api/reportgeneralpdf/');
+                window.open('http://localhost:8000/api/reportgeneralpdf/');
 
                 // alert.success(endStatus.data.message);
                 isLoading.value = false;
