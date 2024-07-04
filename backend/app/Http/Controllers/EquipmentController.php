@@ -296,39 +296,26 @@ class EquipmentController extends Controller
         ]);
     }
 
-    public function getReportGeneral()
+    public function getReportGeneral(Request $request)
     {
-        /* $id = $request->id; */
-        $newBrand = [];
-        $equip = [];
-        $marca = "HP";
-        /* $equiptments_state = Equipment::with(
-            'equipments_state'
-            )->get();
-        $equiptments_stype = Equipment::with(
-            'typeEquipment'
-        )->get();
-        $brand = Equipment::with(
-            'brand'
-        )->get();
-        $history_for_location = HistoryChange::with('locations'
-        )->where('type_action_id', '=', '2')->get(); */
+        $brandId = $request->input('brand_id');
+
+        if ($brandId) {
 
 
+            $query = HistoryChange::with([
+                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions'
+            ])->where('type_action_id', '=', '2');
 
-        if ($marca) {
-            // trayendo las marcas
-            /*  $data = Brand::with(
-                'equipments'
-            )->get(); */
+            if ($brandId) {
+                $query->whereHas('equipment', function ($q) use ($brandId) {
+                    $q->where('brand_id', $brandId);
+                });
+            }
 
-            $history = HistoryChange::with(['equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions'
-            ])->where('type_action_id', '=', '2')->get();
+            $history = $query->get();
 
             $data = $history->map(function ($history) {
-
-                $brand = $history->equipment->brand->name;
-
 
                 return [
                     //'data' => $history->toArray(),
@@ -344,25 +331,10 @@ class EquipmentController extends Controller
                     'locations' => $history->locations->name,
                 ];
             });
-
-
-            //Permite validar que solo los equipos que tienen una marca asiganda
-            /* foreach ($data as $brands) {
-                if ($brands->equipments->isEmpty()) { //Se evalúa que existan elementos dentro de equipments y se cumple no guarda nada
-
-                } else { //Pero si el equiments tiene valores, se procede a llenar un nuevo arreglo para luego enviarlo en formato Json
-                    $newBrand[] = array(
-                        "id" => $brands->id,
-                        "nameBrand" => $brands->name,
-                        "equipments" => $brands->equipments,
-
-                    );
-                }
-            } */
-
             return  response()->json([
                 "data: " =>  $data,
             ]);
+
         } else {
             return  response()->json([
                 "brands: " =>  'error',
