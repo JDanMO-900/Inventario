@@ -83,18 +83,42 @@ class PDFDataController extends Controller
 
     public function typeReport(Request $request)
     {
-        Log::info($request['brand']);
         $search = [
             'brand' => ($request['brand']==-1)?-1:(Encrypt::decryptValue($request['brand'])),
             'brand_condition' => ($request['brand']==-1)?'>':'=',
             'type' => ($request['type']==-1)?-1:(Encrypt::decryptValue($request['type'])),
             'type_condition' => ($request['type']==-1)?'>':'='
         ];
-        Log::info($search);
-        $data = PDFData::typeReport($search);
 
-        $pdf = PDF::loadView('TypeReport', compact('data'));
+        $data = [];
+        $equipments = PDFData::typeReport($search);
+
+        foreach ($equipments as $key => $value) {            
+            $id = $value->id;
+            $descriptions = PDFData::technicalDescriptions($id);
+            $text = "";
+            foreach ($descriptions as $item) {
+                $text .= "{$item['item']}: {$item['value']} \n";
+            }
+
+            $equipment = [
+                'id' => $id,
+                'type' => $value->type,
+                'brand' => $value->brand,
+                'model' => $value->model,
+                'number_active' => $value->number_active,
+                'state' => $value->state,
+                'location' => PDFData::getEquipmentLocation($id),
+                'descriptions' => $text
+            ];  
+
+            $data[] = $equipment;            
+        }
+
+        // Log::info($data);
+        $pdf = PDF::loadView('TypeReport', compact('data'));  
+        $pdf->setPaper('A4', 'landscape');      
+
         return $pdf->stream('Tipos de equipos.pdf');
     }
-
 }

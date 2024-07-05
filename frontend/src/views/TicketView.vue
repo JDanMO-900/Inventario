@@ -17,7 +17,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" />
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Finalizar proceso"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>

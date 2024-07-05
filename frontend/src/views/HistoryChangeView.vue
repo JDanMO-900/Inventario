@@ -16,9 +16,9 @@
 
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"/>
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información"/>
           <template
             v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' && item.raw.state_id.toLowerCase() != 'cancelado' && item.raw.state_id.toLowerCase() != 'pendiente')">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
@@ -26,7 +26,7 @@
           </template>
 
           <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente')">
-            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" />
+            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" title="Cambiar estado"/>
           </template>
 
 
