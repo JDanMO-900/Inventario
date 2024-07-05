@@ -20,7 +20,8 @@
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" v-if="rolRetrieveUser == 'Jefe' "/>
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
           <template
-            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' && item.raw.state_id.toLowerCase() != 'cancelado' && item.raw.state_id.toLowerCase() != 'pendiente')">
+            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' 
+            && item.raw.state_id.toLowerCase() != 'cancelado')">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
 
           </template>
