@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Carbon\Carbon;
 use Encrypt;
 use App\Models\User;
 use App\Models\Location;
@@ -275,6 +277,7 @@ class HistoryChangeController extends Controller
         $historychange = HistoryChange::where('id', $request->history_change)->first();
         $historychange->end_date = $request->finish_date;
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
+         
         $historychange->save();
         $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
         $available1->availability = true;
@@ -292,12 +295,17 @@ class HistoryChangeController extends Controller
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
-        $historychange->save();
+
+
         if (strtolower($request->state_id) == 'cancelado' or strtolower($request->state_id) == 'finalizado') {
             $available1 = Equipment::where('serial_number', $request->serial_number)->first();
             $available1->availability = true;
             $available1->save();
+            $historychange->end_date = Carbon::now();
         }
+ 
+
+        $historychange->save();
 
         return response()->json([
             "message" => "El estado del proceso ha sido cambiado con exito",
