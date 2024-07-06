@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Encrypt;
-use Encrypt;
 use App\Models\User;
-use App\Models\PDFData;
-use App\Models\Equipment;
 use App\Models\PDFData;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
