@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Encrypt;
+use Encrypt;
 use App\Models\User;
+use App\Models\PDFData;
+use App\Models\Equipment;
 use App\Models\PDFData;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
@@ -31,7 +34,6 @@ class PDFDataController extends Controller
         return $pdf->stream('LocationReport.pdf');
 
     }
-
 
     public function typeReport(Request $request)
     {
