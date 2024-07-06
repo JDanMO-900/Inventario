@@ -275,7 +275,7 @@ class HistoryChangeController extends Controller
 
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $request->history_change)->first();
-        $historychange->end_date = $request->finish_date;
+        $historychange->end_date = Carbon::now();;
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
          
         $historychange->save();
