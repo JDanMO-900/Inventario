@@ -5,46 +5,19 @@
     <meta charset="UTF-8">
     <title>Reporte</title>
 
-
     <style>
         body {
             margin: 0;
-            font-family: arial, sans-serif;
             font-family: arial, sans-serif;
         }
 
         .header {
             align-items: center;
             text-align: center;
-            align-items: center;
-            text-align: center;
             display: flex;
             justify-content: space-between;
-            justify-content: space-between;
         }
 
-        .header img {
-            padding-top: 2rem;
-            position: absolute;
-            top: 0;
-
-        }
-
-        .header img.left {
-            left: 0;
-            width: 4.5rem;
-            height: auto;
-        }
-
-        .header img.right {
-            width: 7.5rem;
-            height: auto;
-            right: 0;
-        }
-
-        .header .title {
-            margin: 1.5rem 7.5rem 0 4.5rem;
-            font-weight: bold;
         .header img {
             padding-top: 2rem;
             position: absolute;
@@ -74,12 +47,6 @@
 
         h1 {
             font-size: 1.4rem;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        h1 {
-            font-size: 1.4rem;
         }
 
         h2 {
@@ -89,24 +56,13 @@
         p {
             margin: 0;
             font-size: 0.85rem
-
-        h2 {
-            font-size: 1.2rem;
         }
 
-        p {
-            margin: 0;
-            font-size: 0.85rem
-        }
-
-        .contenido {
-            margin-top: 2rem;
         .contenido {
             margin-top: 2rem;
         }
 
         table {
-            width: 100%;
             width: 100%;
             border-collapse: collapse;
             font-size: 1rem;
@@ -123,18 +79,8 @@
 
         th {
             background: #b4c6e7;
-            padding: 0.4 rem;
         }
 
-        th {
-            background: #b4c6e7;
-        }
-
-        .section-title {
-            margin-top: 2rem;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #333;
         .section-title {
             margin-top: 2rem;
             font-size: 1rem;
@@ -142,7 +88,6 @@
             color: #333;
         }
     </style>
-
 
 </head>
 
@@ -160,7 +105,6 @@
 
     @foreach ($data as $report)
         <div class="contenido">
-
 
             <table>
                 <tr>
