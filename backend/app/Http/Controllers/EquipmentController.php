@@ -303,6 +303,8 @@ class EquipmentController extends Controller
         if ($brandId) {
 
 
+
+
             $query = HistoryChange::with([
                 'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
             ])->where('type_action_id', '=', '2');
@@ -315,10 +317,25 @@ class EquipmentController extends Controller
 
             $history = $query->get();
 
+            $equipment_id = $history->map(function ($history) {
+                return [
+                   'equipment_id' => $history->equipment->id,
+                ];
+            });
+
+            /* GET DETAIL OF EQUIPMENTS FOR ID */
+            $querytc = EquipmentDetail::with(['equipment', 'technical'])->where('equipment_id', '=', $equipment_id->toArray()[1])->get();
+
+            $technicalDetail = $querytc->map(function($querytc){
+                return [
+                    'technical_detail' => $querytc->technical->name
+                ];
+            });
+
             $data = $history->map(function ($history) {
 
                 return [
-                    //'data' => $history->toArray(),
+                    'data' => $history->toArray(),
                     'equipment_id' => $history->equipment->id,
                     'brand_id' => $history->equipment->brand->id,
                     'assignment_date' =>$history->start_date,
@@ -334,7 +351,7 @@ class EquipmentController extends Controller
                 ];
             });
             return  response()->json([
-                "data: " =>  $data,
+                "data: " =>  $technicalDetail
             ]);
 
         } else {

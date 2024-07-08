@@ -33,7 +33,7 @@ class EquipmentDetailController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $equipmentdetail = EquipmentDetail::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        
+
 
 
 
@@ -56,12 +56,12 @@ class EquipmentDetailController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $equipment = Equipment::findOrFail( $request->equipment_id );
         $technicalDescription = TechnicalDescription::findOrFail( $request->technical_description_id );
 
-   
-		
+
+
 		$equipmentDetail = new EquipmentDetail([
             'attribute' =>$request->attribute,
             'equipment_id' =>$equipment->id,
@@ -126,4 +126,6 @@ class EquipmentDetailController extends Controller
             "message"=>"Registro eliminado correctamente.",
         ]);
     }
+
+
 }

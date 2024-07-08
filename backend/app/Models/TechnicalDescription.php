@@ -15,7 +15,7 @@ class TechnicalDescription extends Model
     protected $data = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at', 'deleted_at', 
+        'id', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     public $hidden = [
@@ -31,10 +31,12 @@ class TechnicalDescription extends Model
         return $this->hasMany(Equipment::class,'equipments_details', 'equipment_id', 'technical_description_id')->withPivot('value');
     }
 
+
+
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         return TechnicalDescription::select('technical_description.*', 'technical_description.id as id')
-        
+
 		->where('technical_description.name', 'like', $search)
         ->skip($skip)
         ->take($itemsPerPage)
@@ -45,9 +47,13 @@ class TechnicalDescription extends Model
     public static function counterPagination($search)
     {
         return TechnicalDescription::select('technical_description.*', 'technical_description.id as id')
-        
+
 		->where('technical_description.name', 'like', $search)
 
         ->count();
+    }
+    public function equipmentDetail()
+    {
+        return $this->hasMany(EquipmentDetail::class);
     }
 }

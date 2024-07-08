@@ -14,11 +14,14 @@ class PDFReportGController extends Controller
     //
     public function reportGeneral(Request $request)
     {
-        $brandId = $request->input('brand');
-        echo ($brandId);
-        echo ('CONTROLADOR AQUI');
+        $brand = 'APPLE';
+        // dd($brand);$request->brand;
+        // echo ($brand);
+        // echo ('CONTROLADOR AQUI');
 
-        if ($brandId == 'TODAS LAS MARCAS') {
+        //$brand = $_POST['brand'];
+
+        if ($brand) {
             echo ('si entra EN GENERAL');
 
             $history = HistoryChange::with([
@@ -43,16 +46,17 @@ class PDFReportGController extends Controller
                 ];
             });
             $pdf = PDF::loadView('ReportGeneral', compact('data'));
-            return $pdf->stream('ReportGeneral.pdf');
+            //return $pdf->stream('ReportGeneral.pdf');
         } else {
+
             echo ('si entra POR MARCA');
             $query = HistoryChange::with([
                 'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
             ])->where('type_action_id', '=', '2');
 
-            if ($brandId) {
-                $query->whereHas('equipment', function ($q) use ($brandId) {
-                    $q->where('brand_id', $brandId);
+            if ($brand) {
+                $query->whereHas('equipment', function ($q) use ($brand) {
+                    $q->where('brand_id', $brand);
                 });
             }
 
@@ -76,10 +80,8 @@ class PDFReportGController extends Controller
                 ];
             });
             $pdf = PDF::loadView('ReportGeneral', compact('data'));
-            echo ( $data);
-            return $pdf->stream('ReportGeneral.pdf');
         }
 
-        //return $pdf->stream('ReportGeneral.pdf');
+        return $pdf->stream('ReportGeneral.pdf');
     }
 }

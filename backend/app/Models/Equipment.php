@@ -273,4 +273,9 @@ class Equipment extends Model
         return $this->hasMany(HistoryChange::class);
     }
 
+    public function equipmentDetail()
+    {
+        return $this->hasMany(EquipmentDetail::class);
+    }
+
 }

@@ -81,7 +81,7 @@
             </div>
         </div>
 
-        {{-- @php dd($report); @endphp --}}
+ @php dd($report); @endphp
 
 
 
