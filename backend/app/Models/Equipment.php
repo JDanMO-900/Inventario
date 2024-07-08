@@ -46,6 +46,7 @@ class Equipment extends Model
 
 
 
+
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
         $data = Equipment::select(

@@ -77,11 +77,11 @@
             <h2> Reporte General de Equipos por Marca </h2>
 
             <div class="header-text">
-                <h3> <b>Equipos: </b> {{ $report['marca'] }}</h3>
+                <h3> <b>Equipos: </b> {{ $report['brand'] }}</h3>
             </div>
         </div>
 
- @php dd($report); @endphp
+{{--  @php dd($report); @endphp --}}
 
 
 
@@ -93,7 +93,7 @@
             <table>
                 <tr>
                     <th colspan="2">Fecha de Asignación:</th>
-                    <td colspan="2"> {{ $report['assignment_date'] }}</td>
+                   {{--  <td colspan="2"> {{ $report['assignment_date'] }}</td> --}}
 
                 </tr>
                 <tr>
@@ -105,7 +105,7 @@
                     <th>Dependencia:</th>
                     <td>{{ $report['dependency'] }}</td>
                     <th>Ubicación:</th>
-                    <td>{{ $report['locations'] }}</td>
+                    <td>{{ $report['location'] }}</td>
                 </tr>
             </table>
         </div>
@@ -116,20 +116,20 @@
                     <th>Tipo de equipo:</th>
                     <td>{{ $report['type'] }}</td>
                     <th>Número activo fijo:</th>
-                    <td>{{ $report['n_active'] }}</td>
+                    <td>{{ $report['number_active'] }}</td>
 
                 </tr>
                 <tr>
                     <th>Modelo:</th>
-                    <td>{{ $report['modelo'] }}</td>
+                    <td>{{ $report['model'] }}</td>
 
                     <th>Serial:</th>
-                    <td>{{ $report['serial'] }}</td>
+                    <td>{{ $report['serial_number'] }}</td>
 
                 </tr>
                 <tr>
                     <th>Marca:</th>
-                    <td> {{ $report['marca'] }}</td>
+                    <td> {{ $report['brand'] }}</td>
                     <th>Estado del equipo:</th>
                     <td>{{ $report['state'] }}</td>
                 </tr>

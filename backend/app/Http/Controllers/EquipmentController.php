@@ -19,7 +19,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use App\Models\TechnicalDescription;
 use App\Models\EquipmentLicenseDetail;
-
+use App\Models\Location;
+use App\Models\TypeAction;
 
 class EquipmentController extends Controller
 {
@@ -298,66 +299,36 @@ class EquipmentController extends Controller
 
     public function getReportGeneral(Request $request)
     {
-        $brandId = $request->input('brand_id');
+        $brand = $request->input('brand');
 
-        if ($brandId) {
+        if ($brand != 'TODAS LAS MARCAS' && $brand != '') {
+            $data = HistoryChange::getEquipmentData($brand);
+        } else if ($brand = 'TODAS LAS MARCAS' || $brand = '') {
 
-
-
-
-            $query = HistoryChange::with([
+            $history = HistoryChange::with([
                 'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
-            ])->where('type_action_id', '=', '2');
-
-            if ($brandId) {
-                $query->whereHas('equipment', function ($q) use ($brandId) {
-                    $q->where('brand_id', $brandId);
-                });
-            }
-
-            $history = $query->get();
-
-            $equipment_id = $history->map(function ($history) {
-                return [
-                   'equipment_id' => $history->equipment->id,
-                ];
-            });
-
-            /* GET DETAIL OF EQUIPMENTS FOR ID */
-            $querytc = EquipmentDetail::with(['equipment', 'technical'])->where('equipment_id', '=', $equipment_id->toArray()[1])->get();
-
-            $technicalDetail = $querytc->map(function($querytc){
-                return [
-                    'technical_detail' => $querytc->technical->name
-                ];
-            });
+            ])->where('type_action_id', '=', '2')->get();
 
             $data = $history->map(function ($history) {
-
                 return [
-                    'data' => $history->toArray(),
                     'equipment_id' => $history->equipment->id,
-                    'brand_id' => $history->equipment->brand->id,
-                    'assignment_date' =>$history->start_date,
-                    'marca' => $history->equipment->brand->name,
-                    'modelo' => $history->equipment->model,
-                    'serial' => $history->equipment->serial_number,
-                    'n_active' => $history->equipment->number_active,
+                    'assignment_date' => $history->start_date,
+                    'brand' => $history->equipment->brand->name,
+                    'model' => $history->equipment->model,
+                    'serial_number' => $history->equipment->serial_number,
+                    'number_active' => $history->equipment->number_active,
                     'type' => $history->equipment->type->name,
                     'state' => $history->equipment->state->name,
+                    'description' => $history->description,
                     'type_action' => $history->typeActions->name,
-                    'locations' => $history->locations->name,
+                    'location' => $history->locations->name,
                     'dependency' => $history->dependencys->name,
+
                 ];
             });
-            return  response()->json([
-                "data: " =>  $technicalDetail
-            ]);
-
-        } else {
-            return  response()->json([
-                "brands: " =>  'error',
-            ]);
         }
+        return  response()->json([
+            "data: " =>  $data
+        ]);
     }
 }

@@ -19,19 +19,16 @@ class HistoryChange extends Model
 
     protected $fillable = [
         'id',
-
         'description',
         'quantity_out',
         'quantity_in',
         'start_date',
         'end_date',
-
         'type_action_id',
         'equipment_id',
         'state_id',
         'location_id',
         'dependency_id',
-
         'created_at',
         'updated_at',
         'deleted_at',
@@ -47,53 +44,55 @@ class HistoryChange extends Model
 
 
 
-    // public function format()
-    // {
-    //     return [
-    //         'id' => Encrypt::encryptValue($this->id),
+    public function format()
+    {
+        return [
+            'equipment_id' => $this->equipment_id,
+            'description' => $this->description,
+            'serial'=> $this->equipment()->get()->toArray()[0]['serial_number'],
+            'model'=> $this->equipment()->get()->toArray()[0]['model'],
+            'number_active'=> $this->equipment()->get()->toArray()[0]['number_active'],
+            'brand' => $this->equipment()->get()->toArray()[0]['brand_id'],
+            'state' => $this->equipment()->get()->toArray()[0]['equipment_state_id'],
+            'type' => $this->equipment()->get()->toArray()[0]['equipment_type_id'],
+            'location' => $this->locations()->get()->toArray()[0]['name'],
+            'dependency' => $this->dependencys()->get()->toArray()[0]['name'],
+            'type_action' => $this->typeActions()->get()->toArray()[0]['name'],
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
 
-    //         'description' => $this->description,
-    //         'quantity_out' => $this->quantity_out,
-    //         'quantity_in' => $this->quantity_in,
-    //         'type_action_id' => $this->type_action_id,
-    //         'equipment_id' => $this->equipment_id,
-    //         'state_id' => $this->state_id,
-    //         'location_id' => $this->location_id,
-    //         'dependency_id' => $this->location_id,
 
-    //         'created_at' => $this->created_at,
-    //         'updated_at' => $this->updated_at,
-    //     ];
-
-    // }
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
 
-        $data =  HistoryChange::select('history_change.*',
-        'type_action.*',
-        'equipment_id.*',
-        'process_state.*',
-        'location.*',
-        'dependency.*',
-        'history_change.id as id',
+        $data =  HistoryChange::select(
+            'history_change.*',
+            'type_action.*',
+            'equipment_id.*',
+            'process_state.*',
+            'location.*',
+            'dependency.*',
+            'history_change.id as id',
 
 
 
-        // Ubicacion
-        'location.name as location_id',
-        'dependency.name as dependency_id',
+            // Ubicacion
+            'location.name as location_id',
+            'dependency.name as dependency_id',
 
-        //Equipo1
-        'equipment_id.serial_number as equipment_id',
-        'equipment_id.model as model1',
-        'equipment_type1.name as type1',
-        'brand1.name as brand1',
+            //Equipo1
+            'equipment_id.serial_number as equipment_id',
+            'equipment_id.model as model1',
+            'equipment_type1.name as type1',
+            'brand1.name as brand1',
 
 
 
-        'process_state.name as state_id',
-        'type_action.name as type_action_id'
+            'process_state.name as state_id',
+            'type_action.name as type_action_id'
         )
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             // Equipo principal
@@ -117,24 +116,23 @@ class HistoryChange extends Model
             ->orderBy("history_change.$sortBy", $sort)
             ->get();
 
-            $data->each(function($item){
-                $users = User::Join('history_user_detail', 'users.id','=', 'history_user_detail.user_id')
+        $data->each(function ($item) {
+            $users = User::Join('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
                 ->where('history_user_detail.history_change_id', $item->id)
                 ->pluck('users.name')
                 ->toArray();
-                $item->users = $users;
-            });
+            $item->users = $users;
+        });
 
-            $data->each(function($item){
-                $technician = User::leftJoin('history_tech', 'users.id','=', 'history_tech.user_tech_id')
+        $data->each(function ($item) {
+            $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
                 ->where('history_tech.history_change_id', $item->id)
                 ->pluck('users.name')
                 ->toArray();
-                $item->technician = $technician;
-            });
+            $item->technician = $technician;
+        });
 
-            return $data;
-
+        return $data;
     }
 
     public static function counterPagination($search)
@@ -148,6 +146,34 @@ class HistoryChange extends Model
             ->where('history_change.location_id', 'like', $search)
 
             ->count();
+    }
+
+    public static function getEquipmentData($brand)
+    {
+
+        return HistoryChange::select(
+            'equipment.id',
+            'brand.name as brand',
+            'equipment_state.name as state',
+            'equipment_type.name as type',
+            'type_action.name as type_action',
+            'location.name as location',
+            'dependency.name as dependency',
+            'equipment.number_active',
+            'equipment.model',
+            'equipment.serial_number',
+            'history_change.description'
+        )
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            ->where('type_action.id', 2)
+            ->where('brand.name', $brand)
+            ->get();
     }
 
     public function equipment()
@@ -167,7 +193,4 @@ class HistoryChange extends Model
     {
         return $this->belongsTo(Dependency::class, 'dependency_id');
     }
-
-
-
 }

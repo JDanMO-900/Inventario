@@ -54,11 +54,11 @@ class Brand extends Model
         return $this->hasMany(Equipment::class);
     }
 
-    /* public function historyChange()
+     /* public function historyChange()
     {
         return $this->hasMany(HistoryChange::class);
-    }
-
+    } */
+/*
     public function locationEquipment()
     {
         return $this->hasManyThrough(Location::class, Brand::class);

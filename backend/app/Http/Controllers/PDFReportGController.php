@@ -14,74 +14,37 @@ class PDFReportGController extends Controller
     //
     public function reportGeneral(Request $request)
     {
-        $brand = 'APPLE';
-        // dd($brand);$request->brand;
-        // echo ($brand);
-        // echo ('CONTROLADOR AQUI');
 
-        //$brand = $_POST['brand'];
+        $brand = $request->input('brand');
 
-        if ($brand) {
-            echo ('si entra EN GENERAL');
+        if ($brand != 'TODAS LAS MARCAS' && $brand != '') {
+            $data = HistoryChange::getEquipmentData($brand);
+        } else if ($brand = 'TODAS LAS MARCAS' || $brand = '') {
 
             $history = HistoryChange::with([
                 'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
             ])->where('type_action_id', '=', '2')->get();
 
             $data = $history->map(function ($history) {
-
                 return [
                     'equipment_id' => $history->equipment->id,
-                    'brand_id' => $history->equipment->brand->id,
                     'assignment_date' => $history->start_date,
-                    'marca' => $history->equipment->brand->name,
-                    'modelo' => $history->equipment->model,
-                    'serial' => $history->equipment->serial_number,
-                    'n_active' => $history->equipment->number_active,
+                    'brand' => $history->equipment->brand->name,
+                    'model' => $history->equipment->model,
+                    'serial_number' => $history->equipment->serial_number,
+                    'number_active' => $history->equipment->number_active,
                     'type' => $history->equipment->type->name,
                     'state' => $history->equipment->state->name,
+                    'description' => $history->description,
                     'type_action' => $history->typeActions->name,
-                    'locations' => $history->locations->name,
+                    'location' => $history->locations->name,
                     'dependency' => $history->dependencys->name,
+
                 ];
             });
-            $pdf = PDF::loadView('ReportGeneral', compact('data'));
-            //return $pdf->stream('ReportGeneral.pdf');
-        } else {
-
-            echo ('si entra POR MARCA');
-            $query = HistoryChange::with([
-                'equipment.brand', 'equipment.state', 'equipment.type', 'locations', 'typeActions', 'dependencys'
-            ])->where('type_action_id', '=', '2');
-
-            if ($brand) {
-                $query->whereHas('equipment', function ($q) use ($brand) {
-                    $q->where('brand_id', $brand);
-                });
-            }
-
-            $history = $query->get();
-
-            $data = $history->map(function ($history) {
-
-                return [
-                    'equipment_id' => $history->equipment->id,
-                    'brand_id' => $history->equipment->brand->id,
-                    'assignment_date' => $history->start_date,
-                    'marca' => $history->equipment->brand->name,
-                    'modelo' => $history->equipment->model,
-                    'serial' => $history->equipment->serial_number,
-                    'n_active' => $history->equipment->number_active,
-                    'type' => $history->equipment->type->name,
-                    'state' => $history->equipment->state->name,
-                    'type_action' => $history->typeActions->name,
-                    'locations' => $history->locations->name,
-                    'dependency' => $history->dependencys->name,
-                ];
-            });
-            $pdf = PDF::loadView('ReportGeneral', compact('data'));
         }
 
+        $pdf = PDF::loadView('ReportGeneral', compact('data'));
         return $pdf->stream('ReportGeneral.pdf');
     }
 }
