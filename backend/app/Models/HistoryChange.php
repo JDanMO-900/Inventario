@@ -49,9 +49,9 @@ class HistoryChange extends Model
         return [
             'equipment_id' => $this->equipment_id,
             'description' => $this->description,
-            'serial'=> $this->equipment()->get()->toArray()[0]['serial_number'],
-            'model'=> $this->equipment()->get()->toArray()[0]['model'],
-            'number_active'=> $this->equipment()->get()->toArray()[0]['number_active'],
+            'serial' => $this->equipment()->get()->toArray()[0]['serial_number'],
+            'model' => $this->equipment()->get()->toArray()[0]['model'],
+            'number_active' => $this->equipment()->get()->toArray()[0]['number_active'],
             'brand' => $this->equipment()->get()->toArray()[0]['brand_id'],
             'state' => $this->equipment()->get()->toArray()[0]['equipment_state_id'],
             'type' => $this->equipment()->get()->toArray()[0]['equipment_type_id'],
@@ -150,8 +150,7 @@ class HistoryChange extends Model
 
     public static function getEquipmentData($brand)
     {
-
-        return HistoryChange::select(
+        $data = HistoryChange::select(
             'equipment.id',
             'brand.name as brand',
             'equipment_state.name as state',
@@ -162,7 +161,8 @@ class HistoryChange extends Model
             'equipment.number_active',
             'equipment.model',
             'equipment.serial_number',
-            'history_change.description'
+            'history_change.description',
+            'history_change.start_date as assignment_date'
         )
             ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
@@ -171,10 +171,23 @@ class HistoryChange extends Model
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
-            ->where('type_action.id', 2)
-            ->where('brand.name', $brand)
-            ->get();
+            ->where('type_action.id', 2);
+
+        if (!empty($brand) && $brand !== 'TODAS LAS MARCAS') {
+            $data->where('brand.name', $brand);
+        }
+        return $data->get();
     }
+    public static function getTechniacalDetailData($equipment)
+    {
+        return EquipmentDetail::select(
+            'technical_description.name as component',
+            'equipment_detail.attribute as capacity',
+        )
+            ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
+            ->where('equipment_detail.equipment_id', $equipment)->get();
+    }
+
 
     public function equipment()
     {

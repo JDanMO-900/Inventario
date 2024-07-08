@@ -62,6 +62,22 @@
             font-size: 1.25rem;
             margin: 3rem auto;
         }
+
+        .tableDetail {
+            width: 50%;
+            border-collapse: collapse;
+        }
+
+        .thDetail,
+        .tdDetail {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .thDetail {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 @foreach ($data as $report)
@@ -81,11 +97,11 @@
             </div>
         </div>
 
-{{--  @php dd($report); @endphp --}}
+        {{--  @php dd($report); @endphp --}}
 
 
 
-        {{-- {{ $report }} --}}
+        {{ $report }}
 
 
         <hr>
@@ -93,7 +109,7 @@
             <table>
                 <tr>
                     <th colspan="2">Fecha de Asignación:</th>
-                   {{--  <td colspan="2"> {{ $report['assignment_date'] }}</td> --}}
+                    <td colspan="2"> {{ $report['assignment_date'] }}</td>
 
                 </tr>
                 <tr>
@@ -135,6 +151,28 @@
                 </tr>
             </table>
         </div>
+
+        <div class="contenido">
+            <div class="header-text">
+                <h4> <b>Detalles Técnicos</b></h4>
+            </div>
+            <hr>
+            <table class="tableDetail">
+                <tbody>
+                    <tr>
+                        <td>Procesador</td>
+                        <td>{{ $report['brand'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ram(GB)</td>
+                        <td>{{ $report['brand'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Almacenamiento(GB)</td>
+                        <td>{{ $report['brand'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
 
     </body>
