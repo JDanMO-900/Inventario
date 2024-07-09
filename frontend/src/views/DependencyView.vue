@@ -31,12 +31,14 @@
             class="mr-2"
             @click="editItem(item.raw)"
             icon="mdi-pencil"
+            title="Editar"
           />
           <v-icon
             size="20"
             class="mr-2"
             @click="deleteItem(item.raw)"
             icon="mdi-delete"
+            title="Eliminar"
           />
         </template>
         <template v-slot:no-data>

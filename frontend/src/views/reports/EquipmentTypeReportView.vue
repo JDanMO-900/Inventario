@@ -4,7 +4,7 @@
             <v-container>
                 <h2>{{ title }}</h2>
                 <v-row>
-                    <v-col cols="12" lg="4" md="6" sm="12">
+                    <v-col cols="12" lg="6" md="6" sm="12">
                         <BaseSelect 
                         label='Tipo de equipo'
                         :items="types" 
@@ -15,7 +15,7 @@
                         clearable>
                         </BaseSelect>
                     </v-col>
-                    <v-col cols="12" lg="4" md="6" sm="12">
+                    <v-col cols="12" lg="6" md="6" sm="12">
                         <BaseSelect 
                         label='Marca'
                         :items="brands" 
@@ -26,9 +26,9 @@
                         clearable>
                         </BaseSelect>
                     </v-col>
-                    <v-col cols="12" lg="4" md="12" sm="12">
-                        <base-button type="primary" title="Generar reporte" class="mt-4 mb-3" @click="generateReport" block/>
-                    </v-col>                    
+                    <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
+                        <base-button type="primary" title="Generar reporte" @click="generateReport" :loading="btnLoading"/>
+                    </v-col>
                 </v-row>
             </v-container>
         </v-card>
@@ -66,6 +66,7 @@ export default {
                 brand: '',
                 type: '',
             },
+            btnLoading: false
         }
     },
     validations() {
@@ -121,12 +122,16 @@ export default {
             }
 
             try {
+                this.btnLoading = true;
                 const reportData = await backendApi.post(`/typepdf`, this.editedItem, { responseType: 'blob' });
+                console.log(reportData)
                 const report_data = new Blob([reportData.data], { type: 'application/pdf' })
                 const url_report = window.URL.createObjectURL(report_data);
                 window.open(url_report);
+                this.btnLoading = false
             } catch (error) {
                 alert.error("Ocurrió un error al generar el reporte."); 
+                this.btnLoading = false
             }
         }
     }
