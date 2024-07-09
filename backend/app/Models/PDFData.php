@@ -80,16 +80,16 @@ class PDFData extends Model
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
             ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
-            ->join('location', 'history_change.location_id', '=', 'location.id')
-            ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
-            ->join('users', 'users.id', '=', 'history_user_detail.user_id')
-            ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')
+            ->leftJoin('location', 'history_change.location_id', '=', 'location.id')
+            ->leftJoin('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->leftJoin('users', 'users.id', '=', 'history_user_detail.user_id')
+            ->leftJoin('type_action', 'type_action.id', '=', 'history_change.type_action_id')
             ->where('equipment.serial_number', 'like', $search)
             ->orderBy('history_change.start_date', 'desc')
             ->get();
 
         $data->each(function ($item) {
-            $licenses = License::join('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
+            $licenses = License::leftJoin('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
                 ->where('equipment_license_detail.equipment_id', $item->id)
                 ->pluck('license.name')
                 ->toArray();
