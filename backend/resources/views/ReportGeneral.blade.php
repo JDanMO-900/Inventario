@@ -97,9 +97,10 @@
     @if (!empty($data))
         <div class="contenido">
             <div class="header-text">
-                @if ($data[0]['request'] != 'TODAS LAS MARCAS')
-                    <h3> <b>Equipos: </b> {{ $data[0]['request'] }}</h3>
+                @if ($data[0]['request'] == 'TODAS LAS MARCAS' || $data[0]['request'] == '')
+
                 @else
+                <h3> <b>Equipos: </b> {{ $data[0]['request'] }}</h3>
                 @endif
             </div>
             @foreach ($data as $equipment)
