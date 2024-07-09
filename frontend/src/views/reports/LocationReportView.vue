@@ -44,8 +44,12 @@ export default {
         return {
             title: 'Reporte de equipos por ubicación',
             locations: [],
-            types: [],
-            brands: [],
+            types: [
+            {id: -1, name: "TODAS LAS MARCAS"}
+            ],
+            brands: [
+            {id: -1, name: "TODAS LAS MARCAS"}
+            ],
             editedItem: {
                 brand: '',
                 type: '',
@@ -89,12 +93,24 @@ export default {
             });
 
             if (responses) {
-                this.locations = responses[0].data.data
-                this.types = responses[1].data.data
-                this.types.push({"name": "Todos"})
-                this.brands = responses[2].data.data
-                this.brands.push({"name": "Todos"})
+                this.locations = responses[0].data.data;
+                this.types = this.selectTypes(responses[1].data.data);
+                this.brands = this.selectBrands(responses[2].data.data);
             }
+        },
+        selectTypes(data) {
+            let typesList = this.types
+            data.forEach(function(item) {
+                typesList.push(item)
+            })
+            return typesList
+        },
+        selectBrands(data) {
+            let brandList = this.brands
+            data.forEach(function(item) {
+                brandList.push(item)
+            })
+            return brandList
         },
 
         async sendDataForReport() {

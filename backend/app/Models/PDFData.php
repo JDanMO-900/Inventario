@@ -110,7 +110,11 @@ class PDFData extends Model
     public static function locationReport($search)
     {
 
-        if(strtolower($search->brand)=='todos' &&  strtolower($search->type)=='todos'){
+        $brandExist = Brand::whereRaw('name = ?', [$search->brand])->exists();
+        $typeExist = EquipmentType::whereRaw('name = ?', [$search->type])->exists();
+
+
+        if(!$brandExist &&  !$typeExist){
 
             $data = HistoryChange::select(
                 'history_change.*',
@@ -144,7 +148,7 @@ class PDFData extends Model
                 ->get();
     
             $data->each(function ($item) {
-                $users = User::Join('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
+                $users = User::leftJoin('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
                     ->where('history_user_detail.history_change_id', $item->id)
                     ->pluck('users.name')
                     ->toArray();
@@ -156,7 +160,7 @@ class PDFData extends Model
                     ->toArray();
                 $item->technician = $technician;
     
-                $licenses = License::join('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
+                $licenses = License::leftJoin('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
                     ->where('equipment_license_detail.equipment_id', $item->equipment_id)
                     ->pluck('license.name')
                     ->toArray();
@@ -174,7 +178,7 @@ class PDFData extends Model
 
 
         }
-        else if(strtolower($search->brand)!='todos' &&  strtolower($search->type)=='todos'){
+        else if($brandExist &&  !$typeExist){
             $data = HistoryChange::select(
                 'history_change.*',
                 'type_action.*',
@@ -237,7 +241,7 @@ class PDFData extends Model
 
             
         }
-        else if(strtolower($search->brand)=='todos' &&  strtolower($search->type)!='todos'){
+        else if(!$brandExist &&  $typeExist){
 
             $data = HistoryChange::select(
                 'history_change.*',
@@ -364,12 +368,6 @@ class PDFData extends Model
             });
 
         }
-
-
-
-
-
-
 
 
         return $data;

@@ -51,6 +51,11 @@
 
         h2 {
             font-size: 1.2rem;
+            margin-top: -14px;
+        }
+
+        h4 {
+            color: #373A40;
         }
 
         p {
@@ -65,9 +70,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 1rem;
-
-
+            font-size: 0.9rem;
         }
 
         th,
@@ -79,13 +82,12 @@
 
         th {
             background: #b4c6e7;
+            text-align: center;
         }
 
-        .section-title {
-            margin-top: 2rem;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #333;
+        .no-data {
+            color: #304463;
+            text-align: center;
         }
     </style>
 
@@ -93,12 +95,14 @@
 
 
 <body>
+
+
     <div class="header">
         <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
         <div class="title">
             <h1>Biblioteca Nacional de El Salvador</h1>
             <h2>Sección de informática</h2>
-
+            <h4>Reporte de inventario por Ubicación</h4>
         </div>
         <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
     </div>
@@ -109,31 +113,25 @@
             <table>
                 <tr>
                     <th>Ubicación </th>
-                    <td> {{ $report->location_id }} </td>
-
                     <th>Cod. Activo Fijo</th>
-                    <td>{{ $report->number_active }}</td>
-
                     <th>Marca</th>
-                    <td>{{ $report->brand }} </td>
-
-                </tr>
-
-                <tr>
                     <th>Tipo de equipo </th>
-                    <td>{{ $report->type }} </td>
-
                     <th>Modelo</th>
-                    <td>{{ $report->model }} </td>
                     <th>Serie</th>
-                    <td>{{ $report->serial_number }}</td>
-
                 </tr>
 
+                <tr>
+                    <td> {{ $report->location_id }} </td>
+                    <td>{{ $report->number_active }}</td>
+                    <td>{{ $report->brand }} </td>
+                    <td>{{ $report->type }} </td>
+                    <td>{{ $report->model }} </td>
+                    <td>{{ $report->serial_number }}</td>
+                </tr>
 
                 <tr>
 
-                    <th colspan="6">Detalles Técnicos</th>
+                    <th colspan="6">Especificaciones Técnicas</th>
                 </tr>
                 @foreach ($report['technicalAttributes'] as $attribute)
                     <tr>
@@ -142,10 +140,24 @@
                     </tr>
                 @endforeach
 
+                <tr>
+
+                    <th colspan="6">Detalles Técnicos</th>
+                </tr>
+                <tr>
+                    <th>Movimiento realizado</th>
+                    <td> {{ $report->type_action_id }} </td>
+                    <th>Fecha de inicio</th>
+                    <td>{{ $report->start_date}}</td>
+                    <th>Fecha de finalización</th>
+                    <td>{{ $report->end_date }} </td>
+                </tr>
+
             </table>
 
         </div>
     @endforeach
+
 
 </body>
 
