@@ -15,15 +15,16 @@ class PDFReportGController extends Controller
     public function reportGeneral(Request $request)
     {
 
-        $brand = $request->input('brand');
+        $brand = $request->brand;
 
         $history = HistoryChange::getEquipmentData($brand);
-        $equipments = [];
+        $data = [];
 
         foreach ($history as $equipment) {
 
             $equipmentData  = [
                 "id" => $equipment->id,
+                "model" => $equipment->model,
                 "brand" => $equipment->brand,
                 "state" => $equipment->state,
                 "type" => $equipment->type,
@@ -34,6 +35,7 @@ class PDFReportGController extends Controller
                 "serial_number" => $equipment->serial_number,
                 "description" => $equipment->description,
                 "assignment_date" => $equipment->assignment_date,
+                "request" => $brand
             ];
             $details  = HistoryChange::getTechniacalDetailData($equipment->id);
 
@@ -46,13 +48,15 @@ class PDFReportGController extends Controller
                 ];
             }
 
-            $equipmentData['technical_details'] = $technicalDetails;
+           $equipmentData['technical_details'] = $technicalDetails;
 
-            $equipments[] = $equipmentData;
+            $data[] = $equipmentData;
+
         }
 
-        return  response()->json([
-            "data: " =>  $equipments
-        ]);
+        $pdf = PDF::loadView('ReportGeneral', compact('data'));
+        return $pdf->stream('ReportGeneral.pdf');
     }
+
+
 }
