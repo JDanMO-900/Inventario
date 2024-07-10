@@ -38,7 +38,7 @@ export default {
         return {
             title: 'Reporte general de inventario',
             brands: [
-                { id: 'null', name: 'TODAS LAS MARCAS' }
+                { id: -1, name: 'TODAS LAS MARCAS' }
             ],
             editedItem: {
                 id: '',
