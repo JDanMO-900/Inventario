@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 import TheFooter from "./components/TheFooter.vue";
 import TheHeader from "./components/TheHeader.vue";
@@ -7,10 +7,14 @@ import useAuth from "./composables/useAuth";
 import TheMenu from "./components/TheMenu.vue";
 import Alert from "@/components/Alert.vue";
 import { useRouter } from "vue-router";
+import backendApi from "@/services/backendApi";
 
 const router = useRouter();
+
 const { accessToken, refreshToken, user, isLoggedIn, getUserInfo } =
   useAuth();
+
+const userRol = ref("");
 
 onMounted(async () => {
   accessToken.value = localStorage.getItem("access_token");
@@ -22,12 +26,24 @@ onMounted(async () => {
   if (isLoggedIn.value) {
     await getUserInfo();
   }
+
+  if (user.value) {
+
+    const response = await backendApi.get(`/user/${user.value.email}`)
+    userRol.value = response.data[0].rolName;
+
+  }
+
 });
+
+
+
+
 </script>
 
 <template>
   <the-header />
-  <the-menu />
+  <the-menu :userRol="userRol" />
 
   <main>
     <v-container fluid>
@@ -36,7 +52,7 @@ onMounted(async () => {
           <Alert class="mb-3" />
           <RouterView />
         </v-col>
-      </v-row> 
+      </v-row>
     </v-container>
   </main>
 

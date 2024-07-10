@@ -4,29 +4,31 @@
             <v-container>
                 <h2>{{ title }}</h2>
                 <v-row>
-                    <v-col cols="12" lg="4" md="6" sm="12">
+                    <v-col cols="12" lg="6" md="6" sm="12">
                         <BaseSelect 
                         label='Tipo de equipo'
                         :items="types" 
                         item-title='name'
+                        item-value="id"
                         v-model.trim="v$.editedItem.type.$model" 
                         :rules="v$.editedItem.type"
                         clearable>
                         </BaseSelect>
                     </v-col>
-                    <v-col cols="12" lg="4" md="6" sm="12">
+                    <v-col cols="12" lg="6" md="6" sm="12">
                         <BaseSelect 
                         label='Marca'
                         :items="brands" 
                         item-title='name'
+                        item-value="id"
                         v-model.trim="v$.editedItem.brand.$model" 
                         :rules="v$.editedItem.brand"
                         clearable>
                         </BaseSelect>
                     </v-col>
-                    <v-col cols="12" lg="4" md="12" sm="12">
-                        <base-button type="primary" title="Generar reporte" class="mt-4 mb-3" block/>
-                    </v-col>                    
+                    <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
+                        <base-button type="primary" title="Generar reporte" @click="generateReport" :loading="btnLoading"/>
+                    </v-col>
                 </v-row>
             </v-container>
         </v-card>
@@ -35,9 +37,11 @@
 <script>
 import BaseSelect from "@/components/base-components/BaseSelect.vue";
 import BaseButton from "@/components/base-components/BaseButton.vue";
+import useAlert from "@/composables/useAlert";
 import backendApi from "../../services/backendApi";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@/lang/i18n";
+const { alert } = useAlert();
 
 
 export default {
@@ -49,10 +53,10 @@ export default {
         return {
             title: 'Reporte por tipo de equipos',
             types: [
-                { id: null, name: 'TODOS LOS TIPOS'}
+                { id: -1, name: 'TODOS LOS TIPOS'}
             ],
             brands: [
-            { id: null, name: 'TODAS LAS MARCAS'}
+                { id: -1, name: 'TODAS LAS MARCAS'}
             ],
             editedItem: {
                 brand: '',
@@ -62,13 +66,14 @@ export default {
                 brand: '',
                 type: '',
             },
+            btnLoading: false
         }
     },
     validations() {
         return {
             editedItem: {
                 brand: { required },
-                type: {  },
+                type: { required },
             }
         }
     },
@@ -108,6 +113,26 @@ export default {
                 brandList.push(item)
             })
             return brandList
+        },
+        async generateReport(){
+            this.v$.editedItem.$validate();
+            if (this.v$.editedItem.$invalid) {
+                alert.error("Campos obligatorios");
+                return;
+            }
+
+            try {
+                this.btnLoading = true;
+                const reportData = await backendApi.post(`/typepdf`, this.editedItem, { responseType: 'blob' });
+                console.log(reportData)
+                const report_data = new Blob([reportData.data], { type: 'application/pdf' })
+                const url_report = window.URL.createObjectURL(report_data);
+                window.open(url_report);
+                this.btnLoading = false
+            } catch (error) {
+                alert.error("Ocurrió un error al generar el reporte."); 
+                this.btnLoading = false
+            }
         }
     }
 }

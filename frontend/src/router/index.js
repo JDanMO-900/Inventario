@@ -20,7 +20,7 @@ const router = createRouter({
       name: "home",
       // component: () => import("../views/HomeView.vue"),
       redirect: '/equipment',
-      meta: { requiresAuth: true }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/test",
@@ -159,8 +159,11 @@ router.beforeEach(async (to, from, next) => {
       var user = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
       let rol =  user.data[0].rolName;
 
-      if(rol== "Jefe" ){
+      if(rol== "Jefe"  || rol== "Tecnico"){
         next();
+      }
+      else if(rol == "Usuario"){
+        next("/ticket");
       }
       else{
         next("/unauthorized")

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de equipos</title>
     <style>
         body {
             margin: 0;
@@ -90,77 +89,50 @@
             text-align: center;
         }
     </style>
-
 </head>
-
-
 <body>
-
-
     <div class="header">
         <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
         <div class="title">
             <h1>Biblioteca Nacional de El Salvador</h1>
             <h2>Sección de informática</h2>
-            <h4>Reporte de inventario por Ubicación</h4>
+            <h4>Reporte de inventario por tipo de equipo</h4>
         </div>
         <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
     </div>
-
-    @foreach ($data as $report)
-        <div class="contenido">
-
-            <table>
+    @if (!empty($data))        
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Tipo de equipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Activo Fijo</th>
+                <th>Estado</th>
+                <th>Ubicación</th>
+                <th>Detalles técnicos</th>
+            </tr>    
+            @foreach ($data as $key => $report)            
                 <tr>
-                    <th>Ubicación </th>
-                    <th>Cod. Activo Fijo</th>
-                    <th>Marca</th>
-                    <th>Tipo de equipo </th>
-                    <th>Modelo</th>
-                    <th>Serie</th>
-                </tr>
+                    <td>{{ ++$key }}</td>
+                    <td>{{ $report['type'] }}</td>
+                    <td>{{ $report['brand'] }}</td>
+                    <td>{{ $report['model'] }}</td>
+                    <td>{{ $report['number_active'] }}</td>
+                    <td>{{ $report['state'] }}</td>
+                    <td>
+                        @php
+                            $location = json_decode($report['location'], true);
+                            echo $location['location'] ?? 'No definida';
+                        @endphp
+                    </td>
+                    <td>{!! nl2br($report['descriptions']) !!}</td>
 
-                <tr>
-                    <td> {{ $report->location_id }} </td>
-                    <td>{{ $report->number_active }}</td>
-                    <td>{{ $report->brand }} </td>
-                    <td>{{ $report->type }} </td>
-                    <td>{{ $report->model }} </td>
-                    <td>{{ $report->serial_number }}</td>
-                </tr>
-
-                <tr>
-
-                    <th colspan="6">Especificaciones Técnicas</th>
-                </tr>
-                @foreach ($report['technicalAttributes'] as $attribute)
-                    <tr>
-                        <td colspan="3">{{ $attribute['technicalDescription'] }}</td>
-                        <td colspan="3">{{ $attribute['attribute'] }}</td>
-                    </tr>
-                @endforeach
-
-                <tr>
-
-                    <th colspan="6">Detalles Técnicos</th>
-                </tr>
-                <tr>
-                    <th>Movimiento realizado</th>
-                    <td> {{ $report->type_action_id }} </td>
-                    <th>Fecha de inicio</th>
-                    <td>{{ $report->start_date}}</td>
-                    <th>Fecha de finalización</th>
-                    <td>{{ $report->end_date }} </td>
-                </tr>
-
-            </table>
-
-        </div>
-    @endforeach
-
-
+                </tr> 
+            @endforeach
+        </table>
+    @else
+        <p class="no-data">No hay datos disponibles.</p>
+    @endif
 </body>
-
-
-
 </html>

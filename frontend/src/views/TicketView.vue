@@ -17,7 +17,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" />
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Finalizar proceso"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -144,10 +144,11 @@
 
 
                 <!-- Mis equipos -->
-                 <!-- Numero de activo fijo 1 -->
+                <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
-                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format" item-value="serial_number"
-                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
+                    item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
+                    :rules="v$.editedItem.equipment">
                   </base-select>
                 </v-col>
 
@@ -183,7 +184,7 @@
                     </v-table>
                   </div>
                 </v-col>
-                 <!-- Mis equipos -->
+                <!-- Mis equipos -->
 
               </template>
 
@@ -244,30 +245,13 @@
     <v-card>
       <v-card-title>
         <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-          Finalizar
+          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }}
+
         </h2>
       </v-card-title>
 
       <v-card-text>
         <v-container>
-          <!-- Form -->
-          <v-row class="pt-3">
-
-
-            <v-col cols="12" sm="12" md="12">
-
-              <!-- Fecha de finalización de movimiento -->
-              <base-input label="Fecha de finalización del movimiento" v-model="v$.finishMovement.finish_date.$model"
-                :rules="v$.finishMovement.finish_date" type="datetime-local" />
-
-              <!-- Fecha de finalización de movimiento -->
-
-            </v-col>
-
-
-          </v-row>
-
-          <!-- Form -->
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" />
@@ -361,7 +345,6 @@ export default {
       },
       finishMovement: {
         id: "",
-        finish_date: "",
         equipment_id: "",
 
       },
@@ -424,9 +407,7 @@ export default {
 
       },
       finishMovement: {
-        finish_date: {
-          required,
-        },
+
       }
 
     };
@@ -474,7 +455,7 @@ export default {
 
   methods: {
 
-    
+
     movementCancelStatusItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -500,11 +481,10 @@ export default {
       this.finishMovement.state_id = "Cancelado";
 
       try {
-        if (this.finishMovement.finish_date != null) {
 
-          const endStatus = await backendApi.put(`/cancelMovement/`, this.finishMovement);
-          alert.success(endStatus.data.message);
-        }
+        const endStatus = await backendApi.put(`/cancelMovement/`, this.finishMovement);
+        alert.success(endStatus.data.message);
+
       } catch (error) {
         this.close();
       }
@@ -579,7 +559,7 @@ export default {
           params: { itemsPerPage: -1 },
         }),
 
-        
+
 
       ];
 
@@ -591,7 +571,7 @@ export default {
       if (responses) {
 
 
-        
+
         this.typeAction = responses[1].data.data;
         this.equipment = responses[2].data;
         this.processState = responses[3].data.data;

@@ -15,10 +15,10 @@
       <!-- Nueva tabla -->
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"/>
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Detalles"/>
+          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Cambiar disponibilidad"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
@@ -326,6 +326,8 @@
 
       <v-card-text>
         <v-container>
+          
+          <base-button class="ms-1" type="secondary" title="Generar reporte de equipo" @click="generateIndividualReport(this.equipmentData)"/>
           <v-col cols="12" sm="12" md="12">
             <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
@@ -793,6 +795,17 @@ export default {
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
       this.dialogInfo = true;
+    },
+
+    async generateIndividualReport(item){
+      const generate_report = await backendApi.get(`/individual-reportpdf/${item.serial_number}`, {
+                    // blob: This retrieve the data as binary as information
+                    responseType: 'blob',
+                });
+                // This line tells the computer is a pdf and translate the binary information to get the url
+                const report_data = new Blob([generate_report.data], { type: 'application/pdf' })
+                const url_report = window.URL.createObjectURL(report_data);
+                window.open(url_report);
     },
 
     closeDetails() {

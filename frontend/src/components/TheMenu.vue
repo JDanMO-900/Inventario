@@ -7,22 +7,22 @@
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
-        <RouterLink to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+        <RouterLink v-if="userRol != 'Usuario'"  to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
           <span>Inventario</span>
         </RouterLink>
 
-        <RouterLink to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+        <RouterLink v-if="userRol != 'Usuario'" to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
           <span>Movimientos</span>
         </RouterLink>               
 
-        <RouterLink to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+        <RouterLink v-if="userRol != 'Usuario'" to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-shield-home" size="20"></v-icon>
           <span>Catálogos</span>
         </RouterLink>        
         
-        <v-menu location="end" open-on-hover>
+        <v-menu v-if="userRol != 'Usuario'" location="end" open-on-hover>
           <template v-slot:activator="{ props }">
             <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
               <v-icon icon="mdi-chart-line" size="20"></v-icon>
@@ -30,18 +30,18 @@
             </div>
           </template>
 
-          <v-list density="compact" variant="plain" class="my-list pt-2 pb-2">
+          <v-list v-if="userRol != 'Usuario'" density="compact" variant="plain" class="my-list pt-2 pb-2">
             <RouterLink to="/generalReport">
                 <v-list-item>
                 Inventario general
               </v-list-item>
             </RouterLink>
-            <RouterLink to="/equipmentTypeReport">
+            <RouterLink v-if="userRol != 'Usuario'" to="/equipmentTypeReport">
               <v-list-item> 
                 Tipo de equipos
               </v-list-item>
             </RouterLink>
-            <RouterLink to="/locationReport">
+            <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">
               <v-list-item> 
                 Equipos por ubicación
               </v-list-item>
@@ -80,10 +80,17 @@
 import { RouterLink } from "vue-router";
 import useMenu from "@/composables/useMenu";
 import useAuth from "../composables/useAuth";
+import {ref} from "vue";
 
 
 const { stateSideBar } = useMenu();
 const { isLoggedIn, logout } = useAuth();
+
+const props = defineProps({
+  userRol: String,
+}  
+);
+
 
 
 
