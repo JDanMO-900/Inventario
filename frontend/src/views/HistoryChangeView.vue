@@ -17,15 +17,17 @@
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" />
+         
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" v-if="this.rolRetrieveUser == 'Jefe' "/>
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
           <template
-            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' && item.raw.state_id.toLowerCase() != 'cancelado' && item.raw.state_id.toLowerCase() != 'pendiente')">
+            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' 
+            && item.raw.state_id.toLowerCase() != 'cancelado')">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
 
           </template>
 
-          <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente')">
+          <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'">
             <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" />
           </template>
 
@@ -464,6 +466,7 @@ export default {
       dialogInfo: false,
       dialogMovementFinishDate: false,
       dialogChangeProcessState: false,
+      rolRetrieveUser: "",
       enabled: false,
       headers: [
         { title: "TIPO DE MOVIMIENTO", key: "type_action_id" },
@@ -784,6 +787,10 @@ export default {
         }
         this.userTech = Array.from(uniqueTechNames)
       }
+
+      const retrieveUser = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
+      this.rolRetrieveUser =  retrieveUser.data[0].rolName;
+
 
       this.loading = false;
     },

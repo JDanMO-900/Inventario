@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Carbon\Carbon;
 use Encrypt;
 use App\Models\User;
 use App\Models\Location;
@@ -71,7 +73,6 @@ class HistoryChangeController extends Controller
             $available1 = Equipment::where('serial_number', $equipment)->first();
             $available1->availability = false;
             $available1->save();
-
 
             if ($request->end_date != "") {
                 $historychange->end_date = $request->end_date;
@@ -144,9 +145,6 @@ class HistoryChangeController extends Controller
      */
     public function update(Request $request)
     {
-        Log::info($request->users);
-
-
 
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
@@ -156,7 +154,26 @@ class HistoryChangeController extends Controller
         $historychange->start_date = $request->start_date;
         $historychange->type_action_id = TypeAction::where('name', $request->type_action_id)->first()->id;
 
-        $historychange->equipment_id = Equipment::where('serial_number', $request->equipment_id)->first()->id;
+        $historychangeEquipment = HistoryChange::where('id', $historychange->id)->first();
+        
+        $equipmentRetrieveId = Equipment::where('serial_number', $request->equipment_id)->first()->id;
+
+        # If there are a mistake in the equipment selected, this code change the availability of the equipment to available
+        if ($historychangeEquipment->equipment_id != $equipmentRetrieveId) {
+            $availableEquipment = Equipment::where('id', $historychangeEquipment->equipment_id)->first();
+            $availableEquipment->availability = true;
+            $availableEquipment->save();
+
+            $historychange->equipment_id = Equipment::where('serial_number', $request->equipment_id)->first()->id;
+            $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
+            $available1->availability = false;
+            $available1->save();
+
+
+        }
+        else{
+            $historychange->equipment_id = Equipment::where('serial_number', $request->equipment_id)->first()->id;
+        }
 
 
         if ($request->end_date != "") {
@@ -210,8 +227,6 @@ class HistoryChangeController extends Controller
         }
 
 
-
-
         return response()->json([
             "message" => "Registro modificado correctamente.",
         ]);
@@ -244,7 +259,6 @@ class HistoryChangeController extends Controller
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->save();
 
-        Log::info($request->equipment_id);
         $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
         $available1->availability = true;
         $available1->save();
@@ -260,13 +274,11 @@ class HistoryChangeController extends Controller
 
 
         $data = Encrypt::decryptArray($request->all(), 'id');
-
         $historychange = HistoryChange::where('id', $request->history_change)->first();
-        Log::info($request);
-        $historychange->end_date = $request->finish_date;
+        $historychange->end_date = Carbon::now();;
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
+         
         $historychange->save();
-
         $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
         $available1->availability = true;
         $available1->save();
@@ -280,16 +292,20 @@ class HistoryChangeController extends Controller
     public function updateProcessState(Request $request)
     {
 
-        Log::info($request);
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
-        $historychange->save();
-        if (strtolower($request->state_id) == 'cancelado' OR strtolower($request->state_id) == 'finalizado') {
+
+
+        if (strtolower($request->state_id) == 'cancelado' or strtolower($request->state_id) == 'finalizado') {
             $available1 = Equipment::where('serial_number', $request->serial_number)->first();
             $available1->availability = true;
             $available1->save();
+            $historychange->end_date = Carbon::now();
         }
+ 
+
+        $historychange->save();
 
         return response()->json([
             "message" => "El estado del proceso ha sido cambiado con exito",
