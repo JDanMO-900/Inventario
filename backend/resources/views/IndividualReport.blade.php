@@ -113,6 +113,9 @@
 
             <table>
                 <tr>
+                    <th colspan="4" style="text-align: center">Detalles Generales de Equipo</th>
+                </tr>
+                <tr>
                     <th colspan="2">Codigo Activo Fijo</th>
                     <td colspan="2">{{ $report->number_active }}</td>
 
@@ -120,10 +123,9 @@
 
 
                 <tr>
-                    <th>Número de Serie</th>
-                    <td>{{ $report->serial_number }} </td>
-                    <th>Ubicación</th>
-                    <td>{{ $report->location }}</td>
+                    <th colspan="2">Número de Serie</th>
+                    <td colspan="2">{{ $report->serial_number }} </td>
+
                 </tr>
             </table>
         </div>
@@ -131,7 +133,7 @@
         <div class="contenido">
             <table>
                 <tr>
-                    <th colspan="2">Características Técnicas</th>
+                    <th colspan="2" style="text-align: center">Características Técnicas</th>
 
                 </tr>
                 @foreach ($report['technicalAttributes'] as $attribute)
@@ -149,7 +151,7 @@
             <table>
                 <table>
                     <tr>
-                        <th colspan="2">Detalles de Ubicación</th>
+                        <th colspan="2" style="text-align: center">Detalles de Ubicación</th>
                     </tr>
 
 
