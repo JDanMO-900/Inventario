@@ -149,6 +149,7 @@ export default {
       selected: [],
       dialog: false,
       dialogDelete: false,
+      rolRetrieveUser: "",
       headers: [
 
         { title: "Name", key: "name" },
@@ -233,7 +234,7 @@ export default {
 
       }
       const retrieveUser = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
-      const rolRetrieveUser = retrieveUser.data[0].rolName;
+      this.rolRetrieveUser = retrieveUser.data[0].rolName;
 
       this.loading = false;
     },
