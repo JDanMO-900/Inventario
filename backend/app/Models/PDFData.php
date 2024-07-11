@@ -73,7 +73,8 @@ class PDFData extends Model
             'type_action.name as type_action',
             "history_change.start_date as start_date",
             "history_change.end_date as end_date",
-            'location.name as location'
+            'location.name as location',
+            'history_change.description as description'
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')

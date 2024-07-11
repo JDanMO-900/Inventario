@@ -182,7 +182,7 @@
 
 
         <div class="contenido">
-            <p><b>Observaciones: </p>
+            <p><b>Observaciones: </b> {{$report->description}}</p>
         </div>
 
         <div class="contenido">
