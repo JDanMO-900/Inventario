@@ -13,15 +13,20 @@
         </v-col>
       </v-container>
 
+      <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
+      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search"
+        >
 
-      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
+
+
+      
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
-         
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" v-if="this.rolRetrieveUser == 'Jefe' "/>
+
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete"
+            v-if="this.rolRetrieveUser == 'Jefe'" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
-          <template
-            v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo')  &&  item.raw.state_id.toLowerCase() != 'finalizado' 
+          <template v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo') && item.raw.state_id.toLowerCase() != 'finalizado'
             && item.raw.state_id.toLowerCase() != 'cancelado')">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
 
@@ -35,11 +40,14 @@
           <v-icon icon="fa:fas fa-search"></v-icon>
           <font-awesome-icon :icon="['fas', 'file-invoice']" />
         </template>
-        <template v-slot:no-data>
+
+        <template v-slot:no-data >
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
 
       </v-data-table>
+
+
 
     </v-card>
 
@@ -118,7 +126,7 @@
                   item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment_serial.$model"
                   :rules="v$.editedItem.equipment_serial">
                 </base-select>
-                
+
 
                 <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
                   item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
@@ -298,6 +306,11 @@
                       <tr>
                         <td>Ubicación</td>
                         <td>{{ this.editedItem.location_id }}</td>
+                      </tr>
+                      <tr>
+                        <td>Descripción</td>
+                        <td v-if="this.editedItem.description != null">{{ this.editedItem.description }}</td>
+                        <td v-else>No hay datos disponibles</td>
                       </tr>
                     </tbody>
                   </v-table>
@@ -789,7 +802,7 @@ export default {
       }
 
       const retrieveUser = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
-      this.rolRetrieveUser =  retrieveUser.data[0].rolName;
+      this.rolRetrieveUser = retrieveUser.data[0].rolName;
 
 
       this.loading = false;

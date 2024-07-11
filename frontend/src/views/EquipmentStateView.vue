@@ -10,6 +10,7 @@
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
+      
       <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
         item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
