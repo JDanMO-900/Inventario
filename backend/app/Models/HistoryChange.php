@@ -43,28 +43,6 @@ class HistoryChange extends Model
     public $timestamps = true;
 
 
-
-    public function format()
-    {
-        return [
-            'equipment_id' => $this->equipment_id,
-            'description' => $this->description,
-            'serial' => $this->equipment()->get()->toArray()[0]['serial_number'],
-            'model' => $this->equipment()->get()->toArray()[0]['model'],
-            'number_active' => $this->equipment()->get()->toArray()[0]['number_active'],
-            'brand' => $this->equipment()->get()->toArray()[0]['brand_id'],
-            'state' => $this->equipment()->get()->toArray()[0]['equipment_state_id'],
-            'type' => $this->equipment()->get()->toArray()[0]['equipment_type_id'],
-            'location' => $this->locations()->get()->toArray()[0]['name'],
-            'dependency' => $this->dependencys()->get()->toArray()[0]['name'],
-            'type_action' => $this->typeActions()->get()->toArray()[0]['name'],
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ];
-    }
-
-
-
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     {
 

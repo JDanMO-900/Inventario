@@ -23,6 +23,7 @@ use App\Http\Controllers\HistoryUserDetailController;
 use App\Http\Controllers\TechnicalDescriptionController;
 use App\Http\Controllers\EquipmentLicenseDetailController;
 use App\Http\Controllers\PDFReportGController;
+use App\Models\PDFData;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,6 @@ Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
 Route::post('/typepdf', [PDFDataController::class, 'typeReport']);
 
 Route::get('/individual-reportpdf/{serial_number}', [PDFDataController::class, 'individualReport']);
-Route::post('/reportgeneralpdf', [PDFReportGController::class, 'reportGeneral']);
+Route::post('/reportgeneralpdf', [PDFDataController::class, 'reportGeneral']);
 
 Route::post('/testEquip', [EquipmentController::class, 'getReportGeneral']);
