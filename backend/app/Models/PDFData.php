@@ -113,9 +113,72 @@ class PDFData extends Model
 
         $brandExist = Brand::whereRaw('name = ?', [$search->brand])->exists();
         $typeExist = EquipmentType::whereRaw('name = ?', [$search->type])->exists();
+        $locationExist = Location::whereRaw('name = ?', [$search->location])->exists();
+
+        if(!$brandExist &&  !$typeExist && !$locationExist){
+
+            $data = HistoryChange::select(
+                'history_change.*',
+                'type_action.*',
+                'equipment.*',
+                'process_state.*',
+                'location.*',
+                'dependency.*',
+                'history_change.id as id',
+                // Ubicacion
+                'location.name as location_id',
+                'dependency.name as dependency_id',
+                //Equipo1
+                'equipment.serial_number as serial_number',
+                'equipment.number_active as number_active',
+                'equipment.model as model',
+                'equipment_type.name as type',
+                'brand.name as brand',
+                'process_state.name as state_id',
+                'type_action.name as type_action_id'
+            )
+                ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+                // Equipo principal
+                ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+                ->join('equipment_type as equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+                ->join('brand', 'equipment.brand_id', '=', 'brand.id')
+                ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
+                ->join('location', 'history_change.location_id', '=', 'location.id')
+                ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+                ->get();
+    
+            $data->each(function ($item) {
+                $users = User::leftJoin('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
+                    ->where('history_user_detail.history_change_id', $item->id)
+                    ->pluck('users.name')
+                    ->toArray();
+                $item->users = $users;
+    
+                $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
+                    ->where('history_tech.history_change_id', $item->id)
+                    ->pluck('users.name')
+                    ->toArray();
+                $item->technician = $technician;
+    
+                $licenses = License::leftJoin('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
+                    ->where('equipment_license_detail.equipment_id', $item->equipment_id)
+                    ->pluck('license.name')
+                    ->toArray();
+                $item->licenses = $licenses;
+    
+                $technicalAttributes = EquipmentDetail::leftJoin('technical_description', 'technical_description.id', '=', 'equipment_detail.technical_description_id')
+                    ->where('equipment_detail.equipment_id', $item->equipment_id)
+                    ->select('technical_description.name as technicalDescription', 'equipment_detail.attribute as attribute')
+                    ->get()
+                    ->toArray();
+    
+                $item->technicalAttributes = $technicalAttributes;
+            });
+
+        }
 
 
-        if(!$brandExist &&  !$typeExist){
+        else if(!$brandExist &&  !$typeExist && $locationExist){
 
             $data = HistoryChange::select(
                 'history_change.*',
