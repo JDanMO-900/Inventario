@@ -43,9 +43,11 @@ export default {
     data() {
         return {
             title: 'Reporte de equipos por ubicación',
-            locations: [],
+            locations: [
+            {id: -1, name: "TODAS LAS UBICACIÓNES"}
+            ],
             types: [
-            {id: -1, name: "TODAS LAS MARCAS"}
+            {id: -1, name: "TODAS LOS TIPOS"}
             ],
             brands: [
             {id: -1, name: "TODAS LAS MARCAS"}
@@ -93,10 +95,17 @@ export default {
             });
 
             if (responses) {
-                this.locations = responses[0].data.data;
+                this.locations = this.selectLocations(responses[0].data.data);
                 this.types = this.selectTypes(responses[1].data.data);
                 this.brands = this.selectBrands(responses[2].data.data);
             }
+        },
+        selectLocations(data) {
+            let locationList = this.locations
+            data.forEach(function(item) {
+                locationList.push(item)
+            })
+            return locationList
         },
         selectTypes(data) {
             let typesList = this.types

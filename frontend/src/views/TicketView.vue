@@ -13,6 +13,7 @@
         </v-col>
       </v-container>
 
+      <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon

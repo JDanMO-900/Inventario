@@ -133,12 +133,22 @@
 
                     <th colspan="6">Especificaciones Técnicas</th>
                 </tr>
+                @if (!empty($report['technicalAttributes']))
                 @foreach ($report['technicalAttributes'] as $attribute)
                     <tr>
                         <td colspan="3">{{ $attribute['technicalDescription'] }}</td>
                         <td colspan="3">{{ $attribute['attribute'] }}</td>
                     </tr>
                 @endforeach
+                @else
+                <tr >
+                    <td colspan="6" class="no-data">No hay datos disponibles</td>
+                    
+
+                </tr>
+                    
+                @endif
+                
 
                 <tr>
 
@@ -148,7 +158,7 @@
                     <th>Movimiento realizado</th>
                     <td> {{ $report->type_action_id }} </td>
                     <th>Fecha de inicio</th>
-                    <td>{{ $report->start_date}}</td>
+                    <td>{{ $report->start_date }}</td>
                     <th>Fecha de finalización</th>
                     <td>{{ $report->end_date }} </td>
                 </tr>

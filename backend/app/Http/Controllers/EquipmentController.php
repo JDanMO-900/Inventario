@@ -108,7 +108,7 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        $existingEquipment = Equipment::where('number_internal_active', $request->number_internal_active)
+        $existingEquipment = Equipment::where('number_active', $request->number_active)
             ->orWhere('serial_number', $request->serial_number)
             ->first();
 
@@ -190,7 +190,7 @@ class EquipmentController extends Controller
     public function update(Request $request)
     {
 
-        $existingEquipment = Equipment::where('number_internal_active', $request->number_internal_active)
+        $existingEquipment = Equipment::where('number_active', $request->number_active)
             ->orWhere('serial_number', $request->serial_number)
             ->first();
 

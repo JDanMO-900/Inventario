@@ -81,7 +81,7 @@
         th {
             background: #b4c6e7;
         }
-        
+
 
 
         .section-title {
@@ -89,6 +89,11 @@
             font-size: 1rem;
             font-weight: bold;
             color: #333;
+        }
+
+        .no-data {
+            color: #304463;
+            text-align: center;
         }
     </style>
 
@@ -155,23 +160,36 @@
                     </tr>
 
 
-                        <tr>
+                    <tr>
+
+                        <th>Nombre</th>
+                        @if (!empty($report->users))
+                            <td>{{ $report->users }}</td>
+                        @else
+                            <td class="no-data">No hay datos disponibles</td>
+                        @endif
 
 
-                            <th>Nombre</th>
-                            <td>{{$report->users}}</td>
 
 
-                        </tr>
+                    </tr>
 
                     <tr>
                         <th>Ubicación</th>
-                        <td>{{ $report->location }}</td>
+                        @if (!empty($report->location))
+                            <td>{{ $report->location }}</td>
+                        @else
+                            <td class="no-data">No hay datos disponibles</td>
+                        @endif
 
                     </tr>
                     <tr>
                         <th>Fecha de Asignacion/Traslado</th>
+                        @if (!empty($report->start_date))
                         <td>{{ $report->start_date }}</td>
+                        @else
+                            <td class="no-data">No hay datos disponibles</td>
+                        @endif
                     </tr>
 
 
@@ -182,7 +200,7 @@
 
 
         <div class="contenido">
-            <p><b>Observaciones: </p>
+            <p><b>Observaciones: </b> {{ $report->description }}</p>
         </div>
 
         <div class="contenido">
