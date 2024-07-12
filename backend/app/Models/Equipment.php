@@ -60,7 +60,7 @@ class Equipment extends Model
             'provider.name as provider',
             'equipment_state.name as state',
             'equipment_type.name as equipment_type_id',
-            'equipment.availability'
+            'equipment.availability as availability'
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
