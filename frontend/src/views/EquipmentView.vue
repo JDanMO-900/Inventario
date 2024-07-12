@@ -453,6 +453,7 @@
                               <td colspan="2">
                                 <p class="text-center">Sin datos que mostrar</p>
                               </td>
+                              
                             </tr>
                           </tbody>
                         </v-table>
@@ -512,23 +513,46 @@
                         <tbody class="tbl-info">
                           <tr>
                             <td>Nombre</td>
-                            <td>{{ this.equipmentData.provider }}</td>
+                            <td v-if="this.equipmentData.provider == null">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                            <td  v-else>{{ this.equipmentData.provider }}</td>
+ 
                           </tr>
+
                           <tr>
                             <td>Código de factura</td>
-                            <td>{{ this.equipmentData.invoice_number }}</td>
+                            <td v-if="this.equipmentData.invoice_number == null">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                            <td  v-else>{{ this.equipmentData.invoice_number }}</td>
+ 
                           </tr>
                           <tr>
                             <td>Fecha de adquisición</td>
-                            <td>{{ this.equipmentData.adquisition_date }}</td>
+
+                            <td v-if="this.equipmentData.adquisition_date == null">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                            <td  v-else>{{ this.equipmentData.adquisition_date }}</td>
+
+
                           </tr>
                           <tr>
                             <td>Contacto directo</td>
-                            <td>{{ this.equipmentData.contact_name }}</td>
+  
+                            <td v-if="this.equipmentData.contact_name == null">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                            <td  v-else>{{ this.equipmentData.contact_name }}</td>
                           </tr>
                           <tr>
                             <td>Número de contacto</td>
-                            <td>{{ this.equipmentData.contact_phone }}</td>
+ 
+                            <td v-if="this.equipmentData.contact_phone == null">
+                              <p class="text-center">Sin datos que mostrar</p>
+                            </td>
+                            <td  v-else>{{ this.equipmentData.contact_phone }}</td>
                           </tr>
                         </tbody>
                       </v-table>
