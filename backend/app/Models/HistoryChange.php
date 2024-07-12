@@ -55,8 +55,6 @@ class HistoryChange extends Model
             'dependency.*',
             'history_change.id as id',
 
-
-
             // Ubicacion
             'location.name as location_id',
             'dependency.name as dependency_id',
@@ -66,8 +64,6 @@ class HistoryChange extends Model
             'equipment_id.model as model1',
             'equipment_type1.name as type1',
             'brand1.name as brand1',
-
-
 
             'process_state.name as state_id',
             'type_action.name as type_action_id'
@@ -88,6 +84,9 @@ class HistoryChange extends Model
             ->orWhere('dependency.name', 'like', $search)
             ->orWhere('process_state.name', 'like', $search)
             ->orWhere('type_action.name', 'like', $search)
+            ->orWhere('equipment_id.number_active', 'like', $search)
+            ->orWhere('equipment_type1.name', 'like', $search)
+            
 
             ->skip($skip)
             ->take($itemsPerPage)

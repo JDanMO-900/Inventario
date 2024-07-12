@@ -74,6 +74,7 @@ class Equipment extends Model
             ->orWhere('equipment.invoice_number', 'like', $search)
             ->orWhere('equipment.equipment_type_id', 'like', $search)
             ->orWhere('equipment.availability', 'like', $search)
+            ->orWhere('equipment_type.name', 'like', $search)
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("equipment.$sortBy", $sort)
