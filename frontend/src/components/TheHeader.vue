@@ -16,8 +16,8 @@
           class="ms-2 me-2 my-auto d-flex flex-column text-right"
           v-if="isLoggedIn"
         >
-        <!-- <span>{{ user.name }} <v-icon icon="mdi-account" color="#2D52A8"/></span> -->
-        <span>Usuario<v-icon icon="mdi-account" color="#2D52A8"/></span>
+        <span>{{ user.name }} <v-icon icon="mdi-account" color="#2D52A8"/></span>
+
           <a href="#" @click="logout()"><b>Cerrar sesión</b></a>
         </div>
       </div>
