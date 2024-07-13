@@ -106,68 +106,69 @@
         </div>
         <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
     </div>
+    @if (!empty($data) && $data->count())
+        @foreach ($data as $report)
+            <div class="contenido">
 
-    @foreach ($data as $report)
-        <div class="contenido">
-
-            <table>
-                <tr>
-                    <th>Ubicación </th>
-                    <th>Cod. Activo Fijo</th>
-                    <th>Marca</th>
-                    <th>Tipo de equipo </th>
-                    <th>Modelo</th>
-                    <th>Serie</th>
-                </tr>
-
-                <tr>
-                    <td> {{ $report->location_id }} </td>
-                    <td>{{ $report->number_active }}</td>
-                    <td>{{ $report->brand }} </td>
-                    <td>{{ $report->type }} </td>
-                    <td>{{ $report->model }} </td>
-                    <td>{{ $report->serial_number }}</td>
-                </tr>
-
-                <tr>
-
-                    <th colspan="6">Especificaciones Técnicas</th>
-                </tr>
-                @if (!empty($report['technicalAttributes']))
-                @foreach ($report['technicalAttributes'] as $attribute)
+                <table>
                     <tr>
-                        <td colspan="3">{{ $attribute['technicalDescription'] }}</td>
-                        <td colspan="3">{{ $attribute['attribute'] }}</td>
+                        <th>Ubicación </th>
+                        <th>Cod. Activo Fijo</th>
+                        <th>Marca</th>
+                        <th>Tipo de equipo </th>
+                        <th>Modelo</th>
+                        <th>Serie</th>
                     </tr>
-                @endforeach
-                @else
-                <tr >
-                    <td colspan="6" class="no-data">No hay datos disponibles</td>
-                    
 
-                </tr>
-                    
-                @endif
-                
+                    <tr>
+                        <td> {{ $report->location_id }} </td>
+                        <td>{{ $report->number_active }}</td>
+                        <td>{{ $report->brand }} </td>
+                        <td>{{ $report->type }} </td>
+                        <td>{{ $report->model }} </td>
+                        <td>{{ $report->serial_number }}</td>
+                    </tr>
 
-                <tr>
+                    <tr>
 
-                    <th colspan="6">Detalles Técnicos</th>
-                </tr>
-                <tr>
-                    <th>Movimiento realizado</th>
-                    <td> {{ $report->type_action_id }} </td>
-                    <th>Fecha de inicio</th>
-                    <td>{{ $report->start_date }}</td>
-                    <th>Fecha de finalización</th>
-                    <td>{{ $report->end_date }} </td>
-                </tr>
+                        <th colspan="6">Especificaciones Técnicas</th>
+                    </tr>
+                    @if (!empty($report['technicalAttributes']))
+                        @foreach ($report['technicalAttributes'] as $attribute)
+                            <tr>
+                                <td colspan="3">{{ $attribute['technicalDescription'] }}</td>
+                                <td colspan="3">{{ $attribute['attribute'] }}</td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6" class="no-data">No hay datos disponibles</td>
 
-            </table>
 
-        </div>
-    @endforeach
+                        </tr>
+                    @endif
 
+
+                    <tr>
+
+                        <th colspan="6">Detalles Técnicos</th>
+                    </tr>
+                    <tr>
+                        <th>Movimiento realizado</th>
+                        <td> {{ $report->type_action_id }} </td>
+                        <th>Fecha de inicio</th>
+                        <td>{{ $report->start_date }}</td>
+                        <th>Fecha de finalización</th>
+                        <td>{{ $report->end_date }} </td>
+                    </tr>
+
+                </table>
+
+            </div>
+        @endforeach
+    @else
+        <p class="no-data">No hay datos disponibles.</p>
+    @endif
 
 </body>
 
