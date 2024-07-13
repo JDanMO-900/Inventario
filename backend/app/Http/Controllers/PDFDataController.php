@@ -28,7 +28,7 @@ class PDFDataController extends Controller
     {
 
         $data = PDFData::locationReport($request);
-        Log::info($data);
+
         $pdf = PDF::loadView('LocationReport', compact('data'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream('LocationReport.pdf');

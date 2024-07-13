@@ -246,7 +246,7 @@
     <v-card>
       <v-card-title>
         <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }}
+          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }} 
 
         </h2>
       </v-card-title>
@@ -470,9 +470,11 @@ export default {
       });
     },
     async changeToCancelStatus() {
+      console.log(this.editedItem);
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
-      this.finishMovement.history_change = this.editedItem.history_change_id
+      this.finishMovement.history_change = this.editedItem.history_change_id;
+      this.finishMovement.type_action_id = this.editedItem.type_action_id;
       this.v$.finishMovement.$validate();
       if (this.v$.finishMovement.$invalid) {
         alert.error("Campos obligatorios");
@@ -482,10 +484,8 @@ export default {
       this.finishMovement.state_id = "Cancelado";
 
       try {
-
         const endStatus = await backendApi.put(`/cancelMovement/`, this.finishMovement);
         alert.success(endStatus.data.message);
-
       } catch (error) {
         this.close();
       }

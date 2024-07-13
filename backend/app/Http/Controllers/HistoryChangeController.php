@@ -272,16 +272,18 @@ class HistoryChangeController extends Controller
     public function updateUserCancelMovement(Request $request)
     {
 
-
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $request->history_change)->first();
         $historychange->end_date = Carbon::now();;
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
          
         $historychange->save();
-        $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
-        $available1->availability = true;
-        $available1->save();
+        if(strtolower($request->type_action_id) == 'cancelado'){
+            $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
+            $available1->availability = true;
+            $available1->save();
+        }
+
 
         return response()->json([
             "message" => "Movimiento cancelado",
