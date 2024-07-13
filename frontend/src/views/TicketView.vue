@@ -314,7 +314,7 @@ export default {
       ],
       records: [],
       editedIndex: -1,
-      title: "",
+      title: "Mis equipos",
       total: 0,
       options: {},
 
