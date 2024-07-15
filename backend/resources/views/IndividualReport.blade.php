@@ -51,6 +51,11 @@
 
         h2 {
             font-size: 1.2rem;
+            margin-top: -14px;
+        }
+
+        h4 {
+            color: #373A40;
         }
 
         p {
@@ -60,6 +65,7 @@
 
         .contenido {
             margin-top: 2rem;
+            text-align: justify;
         }
 
         table {
@@ -99,38 +105,37 @@
 
 </head>
 @foreach ($data as $report)
-
     <body>
-
         <div class="header">
             <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
             <div class="title">
                 <h1>Biblioteca Nacional de El Salvador</h1>
                 <h2>Sección de informática</h2>
-                <h3>Reporte por Equipo y/o Usuario Individual</h3>
-
+                <h4>Reporte por Equipo y/o Usuario Individual</h4>
             </div>
             <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
         </div>
 
         <div class="contenido">
-
-
             <table>
                 <tr>
                     <th colspan="4" style="text-align: center">Detalles Generales de Equipo</th>
                 </tr>
                 <tr>
-                    <th colspan="2">Codigo Activo Fijo</th>
-                    <td colspan="2">{{ $report->number_active }}</td>
-
+                    <th colspan="2">Tipo de equipo</th>
+                    <td colspan="2">{{ $report->type }}</td>
                 </tr>
-
-
+                <tr>
+                    <th colspan="2">Modelo</th>
+                    <td colspan="2">{{ $report->model }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Código de Activo Fijo</th>
+                    <td colspan="2">{{ $report->number_active }}</td>
+                </tr>
                 <tr>
                     <th colspan="2">Número de Serie</th>
                     <td colspan="2">{{ $report->serial_number }} </td>
-
                 </tr>
             </table>
         </div>
@@ -139,15 +144,17 @@
             <table>
                 <tr>
                     <th colspan="2" style="text-align: center">Características Técnicas</th>
-
                 </tr>
-                @foreach ($report['technicalAttributes'] as $attribute)
-                    <tr>
-                        <td>{{ $attribute['technicalDescription'] }}</td>
-                        <td>{{ $attribute['attribute'] }}</td>
-                    </tr>
-                @endforeach
-
+                @if (!empty($report->users))
+                    @foreach ($report['technicalAttributes'] as $attribute)
+                        <tr>
+                            <td>{{ $attribute['technicalDescription'] }}</td>
+                            <td>{{ $attribute['attribute'] }}</td>
+                        </tr>
+                    @endforeach
+                @else 
+                <td colspan="2" class="no-data">No hay datos disponibles</td>
+                @endif
             </table>
         </div>
 
@@ -158,20 +165,13 @@
                     <tr>
                         <th colspan="2" style="text-align: center">Detalles de Ubicación</th>
                     </tr>
-
-
                     <tr>
-
                         <th>Nombre</th>
                         @if (!empty($report->users))
                             <td>{{ $report->users }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>
                         @endif
-
-
-
-
                     </tr>
 
                     <tr>
@@ -184,7 +184,7 @@
 
                     </tr>
                     <tr>
-                        <th>Fecha de Asignacion/Traslado</th>
+                        <th>Fecha de Asignación/Traslado</th>
                         @if (!empty($report->start_date))
                         <td>{{ $report->start_date }}</td>
                         @else
@@ -235,17 +235,10 @@
                 La firma de este documento implica mi conformidad con el adecuado funcionamiento del equipo en el
                 momento de la entrega y mi aceptación de todos los términos establecidos en esta declaración de
                 responsabilidad.
-
             </p>
         </div>
-
-
-
-
         {{-- 
             @endforeach --}}
     </body>
 @endforeach
-
-
 </html>

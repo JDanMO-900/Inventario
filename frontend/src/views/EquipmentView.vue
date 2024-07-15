@@ -21,7 +21,7 @@
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Detalles"/>
           <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Cambiar disponibilidad"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
-          <font-awesome-icon :icon="['fas', 'file-invoice']" />
+          <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -327,8 +327,14 @@
 
       <v-card-text>
         <v-container>
-          
-          <base-button class="ms-1" type="secondary" title="Generar reporte de equipo" @click="generateIndividualReport(this.equipmentData)"/>
+          <v-col cols="12" sm="12" md="12" lg="12" class="d-flex justify-content-center">
+            <base-button 
+            class="ms-1" type="secondary" 
+            title="Generar reporte de equipo" 
+            @click="generateIndividualReport(this.equipmentData)" 
+            prepend-icon="mdi-file-pdf-box"/>
+          </v-col> 
+                   
           <v-col cols="12" sm="12" md="12">
             <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
@@ -607,13 +613,13 @@ export default {
       dialogInfo: false,
       dialogAvailability: false,
       headers: [
-        { title: "EQUIPO", key: "equipment_type_id" },
-        { title: "MODELO", key: "model" },
-        { title: "# DE SERIE", key: "serial_number" },
-        { title: "# DE ACTIVO FIJO", key: "number_active" },
-        { title: "# DE REGISTRO INTERNO", key: "number_internal_active" },
-        { title: "DISPONIBILIDAD", key: "availability" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Equipo", key: "equipment_type_id" },
+        { title: "Modelo", key: "model" },
+        { title: "# de serie", key: "serial_number" },
+        { title: "# de activo fijo", key: "number_active" },
+        { title: "# de registro interno", key: "number_internal_active" },
+        { title: "Disponibilidad", key: "availability" },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,

@@ -20,7 +20,7 @@
             v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
             size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Finalizar proceso"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
-          <font-awesome-icon :icon="['fas', 'file-invoice']" />
+          <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
@@ -303,21 +303,18 @@ export default {
       cancelMovement: false,
       enabled: false,
       headers: [
-
-
         { title: "Equipo", key: "equipment_type" },
         { title: "Serial", key: "serial_number" },
         { title: 'Movimiento', key: "type_action" },
         { title: 'Fase', key: "process_state" },
-        { title: "Fecha de inicio del movmiento", key: "start_date" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Fecha de inicio del movimiento", key: "start_date" },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,
       title: "Mis equipos",
       total: 0,
       options: {},
-
       editedItem: {
         location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: "",
@@ -326,40 +323,29 @@ export default {
         location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
       },
-
       loading: false,
-
       debounce: 0,
-
       typeAction: [],
       users: [],
       equipment: [],
       available_equipment: [],
       processState: [],
-
       location: [],
-
       userTech: [],
-
       endProcessDate: {
         finishProcess: ""
       },
       finishMovement: {
         id: "",
         equipment_id: "",
-
       },
-
-
     };
   },
-
   watch: {
     dialogDelete(val) {
       val || this.closeDelete();
     },
   },
-
   // Validations
   validations() {
     return {
@@ -405,17 +391,14 @@ export default {
         description: {
 
         }
-
       },
       finishMovement: {
 
       }
-
     };
   },
 
   // rulesChangeStatus: {}
-
   computed: {
     formTitle() {
       this.editedItem.users = JSON.parse(window.localStorage.getItem("user")).name;

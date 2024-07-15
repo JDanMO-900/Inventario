@@ -38,7 +38,7 @@
 
 
           <v-icon icon="fa:fas fa-search"></v-icon>
-          <font-awesome-icon :icon="['fas', 'file-invoice']" />
+          <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
 
         <template v-slot:no-data >
@@ -482,12 +482,12 @@ export default {
       rolRetrieveUser: "",
       enabled: false,
       headers: [
-        { title: "TIPO DE MOVIMIENTO", key: "type_action_id" },
-        { title: "TIPO DE EQUIPO", key: "type1" },
-        { title: "# DE ACTIVO", key: "number_active" },
-        { title: "UBICACIÓN", key: "location_id" },
-        { title: "ESTADO", key: "state_id" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Tipo de movimiento", key: "type_action_id" },
+        { title: "Tipo de equipo", key: "type1" },
+        { title: "# de activo", key: "number_active" },
+        { title: "Ubicación", key: "location_id" },
+        { title: "Estado", key: "state_id" },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,
