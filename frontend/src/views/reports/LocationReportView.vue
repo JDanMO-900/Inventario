@@ -44,10 +44,10 @@ export default {
         return {
             title: 'Reporte de equipos por ubicación',
             locations: [
-            {id: -1, name: "TODAS LAS UBICACIÓNES"}
+            {id: -1, name: "TODAS LAS UBICACIONES"}
             ],
             types: [
-            {id: -1, name: "TODAS LOS TIPOS"}
+            {id: -1, name: "TODOS LOS TIPOS"}
             ],
             brands: [
             {id: -1, name: "TODAS LAS MARCAS"}

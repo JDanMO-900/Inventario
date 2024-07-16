@@ -6,7 +6,7 @@
                 <v-row>
                     <v-col cols="12" lg="6" md="8" sm="12">
                         <BaseSelect label='Marca' :items="brands" item-title='name'
-                            v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" />
+                            v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable/>
 
                     </v-col>
                     <v-col cols="12" lg="3" md="4" sm="12">
