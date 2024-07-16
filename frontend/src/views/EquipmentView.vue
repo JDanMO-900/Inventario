@@ -760,14 +760,11 @@ export default {
         const availabilityStatus = await backendApi.put(`/available/`, edited);
         alert.success(availabilityStatus.data.message);
       } catch (error) {
-
-      }finally{
-        this.closeAvailability();
+        this.close();
       }
 
       this.initialize();
-
-      
+      this.closeAvailability();
     },
 
     // Prueba cambiar estado

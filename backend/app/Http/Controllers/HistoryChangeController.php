@@ -278,6 +278,7 @@ class HistoryChangeController extends Controller
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
          
         $historychange->save();
+        Log::info($request);
         if(strtolower($request->type_action_id) == 'préstamo'){
             $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
             $available1->availability = true;
