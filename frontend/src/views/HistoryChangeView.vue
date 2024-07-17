@@ -301,6 +301,20 @@
                         <td>Serial</td>
                         <td>{{ this.editedItem.equipment_id }}</td>
                       </tr>
+
+                    </tbody>
+                  </v-table>
+                </v-col>
+
+                <v-col cols="12" sm="12" md="12">
+                  <v-chip color="primary" variant="flat" label>
+                    <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
+                  </v-chip>
+                </v-col>
+                <v-col cols="12" sm="12" md="12">
+                  <v-table density="compact">
+                    <tbody class="tbl-info">
+                      
                       <tr>
                         <td>Dependencia</td>
                         <td>{{ this.editedItem.dependency_id }}</td>
@@ -308,6 +322,10 @@
                       <tr>
                         <td>Ubicación</td>
                         <td>{{ this.editedItem.location_id }}</td>
+                      </tr>
+                      <tr>
+                        <td>Fecha que se inicio el movimiento</td>
+                        <td>{{ this.editedItem.start_date }}</td>
                       </tr>
                       <tr>
                         <td>Descripción</td>
@@ -320,12 +338,12 @@
 
                 <v-col cols="12" sm="12" md="12">
                   <v-chip color="primary" variant="flat" label>
-                    <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
+                    <v-icon icon="mdi-numeric-4-circle" start></v-icon>Detalles del movimiento
                   </v-chip>
                 </v-col>
 
 
-                <v-col cols="4" sm="12" md="12">
+                <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
                   <template v-if="(this.editedItem.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'"
                     class="d-flex justify-content-center">
                     <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
