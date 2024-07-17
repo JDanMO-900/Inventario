@@ -312,7 +312,7 @@ export default {
       ],
       records: [],
       editedIndex: -1,
-      title: "Mis equipos",
+      title: "Mis tickets",
       total: 0,
       options: {},
       editedItem: {
