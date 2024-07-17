@@ -311,14 +311,16 @@ class HistoryChangeController extends Controller
 
     public function updateProcessState(Request $request)
     {
+        Log::info($request);
 
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
+        Log::info( $historychange->state_id);
 
         
-        if (ProcessState::where('name', $request->state_id)->first()->id() == 4 or ProcessState::where('name', $request->state_id)->first()->id() == 3) {
-            $available1 = Equipment::where('serial_number', $request->serial_number)->first();
+        if ($historychange->state_id == 4 OR $historychange->state_id == 3) {
+            $available1 = Equipment::where('id', $historychange->equipment_id)->first();
             $available1->availability = true;
             $available1->save();
             $historychange->end_date = Carbon::now();
