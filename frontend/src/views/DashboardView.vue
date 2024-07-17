@@ -14,14 +14,14 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+        <!-- <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
           <v-card class="mx-auto" @click="$router.push('/equipmentState')" max-width="23.5rem" rel="noopener"
             subtitle="Gestión del estado de los equipos" title="Estado de los equipos" color="grey-lighten-5">
             <template v-slot:prepend>
               <v-icon icon="mdi-checkbox-marked-circle" color="primary" size="small"></v-icon>
             </template>
           </v-card>
-        </v-col>
+        </v-col> -->
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
           <v-card class="mx-auto" @click="$router.push('/brand')" max-width="23.5rem" rel="noopener"
@@ -98,14 +98,14 @@
         <h1>Gestión de Procesos</h1>
       </v-container>
       <v-row class="p-2 mt-2">
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+        <!-- <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
           <v-card class="mx-auto" @click="$router.push('/processState')" max-width="23.5rem" rel="noopener"
             subtitle="Gestión de estados de procesos" title="Estado del proceso" color="grey-lighten-5">
             <template v-slot:prepend>
               <v-icon icon="mdi-progress-clock" color="primary" size="small"></v-icon>
             </template>
           </v-card>
-        </v-col>
+        </v-col> -->
 
         <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
           <v-card class="mx-auto" @click="$router.push('/typeAction')" max-width="23.5rem" rel="noopener"

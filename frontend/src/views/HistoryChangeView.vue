@@ -9,7 +9,7 @@
 
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search" ></v-text-field>
         </v-col>
       </v-container>
 
@@ -21,19 +21,19 @@
 
       
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
 
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete"
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
             v-if="this.rolRetrieveUser == 'Jefe'" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" />
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información"/>
           <template v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo') && item.raw.state_id.toLowerCase() != 'finalizado'
             && item.raw.state_id.toLowerCase() != 'cancelado')">
-            <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" />
+            <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" title="Terminar movimiento"/>
 
           </template>
 
           <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'">
-            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" />
+            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" title="Cambiar estado del equipo"/>
           </template>
 
 
@@ -74,7 +74,7 @@
               <!-- name -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
-                  v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users">
+                  v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users" clearable>
                 </base-multi-select>
               </v-col>
               <!-- name -->
@@ -90,7 +90,7 @@
               <!-- acción realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Tipo de movimiento" :items="filterTypeAction" item-title="name"
-                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
+                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id" clearable>
                 </base-select>
 
               </v-col>
@@ -99,14 +99,14 @@
               <!-- fecha del movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha" v-model="v$.editedItem.start_date.$model" :rules="v$.editedItem.start_date"
-                  type="datetime-local" />
+                  type="datetime-local" clearable/>
               </v-col>
               <!-- fecha del movimiento -->
 
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Área o ubicación" :items="this.location" item-title="name"
-                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id">
+                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id" clearable>
                 </base-select>
               </v-col>
               <!-- location -->
@@ -114,7 +114,7 @@
               <!-- name -->
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
-                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id">
+                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id" clearable>
                 </base-select>
               </v-col>
               <!-- name -->
@@ -124,13 +124,13 @@
               <v-col cols="4" sm="12" md="12">
                 <base-select v-if="this.formTitle == 'Nuevo movimiento'" label="Equipo(s)" :items="this.equipment"
                   item-title="format" item-value="serial_number" v-model.trim="v$.editedItem.equipment_serial.$model"
-                  :rules="v$.editedItem.equipment_serial">
+                  :rules="v$.editedItem.equipment_serial" clearable>
                 </base-select>
 
 
                 <base-select v-else label="Equipo" :items="this.equipment" item-title="format"
                   item-value="serial_number" v-model.trim="v$.editedItem.equipment_id.$model"
-                  :rules="v$.editedItem.equipment_id">
+                  :rules="v$.editedItem.equipment_id" clearable>
                 </base-select>
               </v-col>
 
@@ -171,7 +171,7 @@
               <v-col cols="4" sm="12" md="6"
                 v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
-                  :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" />
+                  :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" clearable/>
               </v-col>
               <!-- Cantidad de salida -->
 
@@ -179,7 +179,7 @@
               <v-col cols="4" sm="12" md="6"
                 v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
-                  :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" />
+                  :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" clearable/>
               </v-col>
               <!-- Cantidad de entrada -->
 
@@ -194,7 +194,7 @@
               <!-- técnico responsable -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Técnico(s)" :items="this.userTech" item-title="name"
-                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician">
+                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician" clearable>
                 </base-multi-select>
               </v-col>
               <!-- técnico responsable -->
@@ -202,7 +202,7 @@
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" />
+                  :rules="v$.editedItem.description" clearable/>
               </v-col>
               <!-- Descripcion -->
             </v-row>

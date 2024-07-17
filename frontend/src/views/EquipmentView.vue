@@ -19,8 +19,9 @@
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"/>
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Detalles"/>
-          <v-icon size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Cambiar disponibilidad"/>
+          <v-icon v-if="item.raw.availability != 'Disponible' " size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Recibir equipo"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
+          
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
         <template v-slot:no-data>
@@ -65,7 +66,7 @@
                     <!-- number_active -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de activo fijo" v-model="v$.editedItem.number_active.$model"
-                        :rules="v$.editedItem.number_active" />
+                        :rules="v$.editedItem.number_active" clearable/>
                     </v-col>
                     <!-- number_active -->
 
@@ -73,34 +74,34 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de registro interno"
                         v-model="v$.editedItem.number_internal_active.$model"
-                        :rules="v$.editedItem.number_internal_active" />
+                        :rules="v$.editedItem.number_internal_active" clearable/>
                     </v-col>
                     <!-- number_internal_active -->
 
                     <!-- brand -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Marca" :items="brand" item-title="name" item-value="name"
-                        v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" />
+                        v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable/>
                     </v-col>
                     <!-- brand -->
 
                     <!-- model -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" />
+                      <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" clearable/>
                     </v-col>
                     <!-- model -->
 
                     <!-- serial_number -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de serie" v-model="v$.editedItem.serial_number.$model"
-                        :rules="v$.editedItem.serial_number" />
+                        :rules="v$.editedItem.serial_number" clearable/>
                     </v-col>
                     <!-- serial_number -->
 
                     <!-- equipment state -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name"
-                        v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" />
+                        v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" clearable/>
                     </v-col>
                     <!-- equipment state -->
 
@@ -108,7 +109,7 @@
                     <v-col cols="12" sm="12" md="12" lg="12">
                       <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
                         :items="this.equipmenttype" item-title="name" item-value="name"
-                        :rules="v$.editedItem.equipment_type_id" />
+                        :rules="v$.editedItem.equipment_type_id" clearable/>
                     </v-col>
                     <!-- tipo de equipo -->
 
@@ -124,14 +125,14 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Característica" :items="this.technicalDescrip" item-title="name"
                         item-value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
-                        :rules="v$.editedItem.technicalDescription" />
+                        :rules="v$.editedItem.technicalDescription" clearable/>
                     </v-col>
                     <!-- característica -->
 
                     <!-- valor -->
                     <v-col cols="4" sm="12" md="6" lg="6">
                       <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model"
-                        :rules="v$.editedItem.attribute" type="number" min="0" max="100" />
+                        :rules="v$.editedItem.attribute" type="number" min="0" max="100" clearable/>
                     </v-col>
                     <!-- valor -->
 
@@ -296,16 +297,10 @@
       <v-card class="h-100">
         <v-container>
           <h2 class="black-secondary text-center mt-3 mb-3">
-            <b>¿Desea cambiar el estado de disponibilidad del equipo de </b>
-            <span
-              :class="{ 'green-text': this.editedItem.availability.toLowerCase() == 'disponible', 'red-text': this.editedItem.availability == 'En uso' }">
-              "{{ typeof this.editedItem.availability === 'string' ? this.editedItem.availability.toLowerCase() :
-                this.editedItem.availability }}"
-            </span>
-
-            <span v-if='this.editedItem.availability.toLowerCase() == "disponible"'> a "en uso"?</span>
-            <span v-if='this.editedItem.availability.toLowerCase() == "en uso"'> a "disponible"?</span>
+            <b>Confirmar Devolución del Equipo</b>
+            
           </h2>
+          <br/>
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" />
@@ -615,6 +610,7 @@ export default {
       headers: [
         { title: "Equipo", key: "equipment_type_id" },
         { title: "Modelo", key: "model" },
+        { title: "Estado", key: "state" },
         { title: "# de serie", key: "serial_number" },
         { title: "# de activo fijo", key: "number_active" },
         { title: "# de registro interno", key: "number_internal_active" },
@@ -759,12 +755,19 @@ export default {
       try {
         const availabilityStatus = await backendApi.put(`/available/`, edited);
         alert.success(availabilityStatus.data.message);
+        
       } catch (error) {
-        this.close();
+
+        this.closeAvailability();
+      }
+      finally{
+        await this.$nextTick();
+        this.initialize();
+        this.closeAvailability();
       }
 
-      this.initialize();
-      this.closeAvailability();
+
+
     },
 
     // Prueba cambiar estado

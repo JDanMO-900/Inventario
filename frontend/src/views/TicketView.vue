@@ -18,7 +18,7 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Finalizar proceso"/>
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso"/>
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
@@ -53,8 +53,8 @@
 
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
-                <base-select label="Ubicación del dispositivo asignado" :items="this.location" item-title="name"
-                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id">
+                <base-select label="Lugar donde es requerida la asistencia" :items="this.location" item-title="name"
+                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id" clearable>
                 </base-select>
               </v-col>
               <!-- location -->
@@ -63,7 +63,7 @@
 
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
-                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id">
+                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id" clearable>
                 </base-select>
               </v-col>
               <!-- name -->
@@ -80,7 +80,7 @@
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Movimiento" :items="filterTypeAction" item-title="name"
-                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
+                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id" clearable>
                 </base-select>
               </v-col>
               <!-- Accion realizada -->
@@ -89,7 +89,7 @@
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" />
+                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" clearable/>
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -100,7 +100,7 @@
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
-                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment" clearable>
                   </base-select>
                 </v-col>
 
@@ -149,7 +149,7 @@
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
-                    :rules="v$.editedItem.equipment">
+                    :rules="v$.editedItem.equipment" clearable>
                   </base-select>
                 </v-col>
 
@@ -205,7 +205,7 @@
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" />
+                  :rules="v$.editedItem.description" clearable/>
               </v-col>
               <!-- Descripcion -->
 
