@@ -75,6 +75,7 @@ class Equipment extends Model
             ->orWhere('equipment.equipment_type_id', 'like', $search)
             ->orWhere('equipment.availability', 'like', $search)
             ->orWhere('equipment_type.name', 'like', $search)
+            ->orWhere('equipment_state.name', 'like', $search)
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("equipment.$sortBy", $sort)
@@ -193,12 +194,13 @@ class Equipment extends Model
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
             ->where('equipment.availability', 'like', 1)
+            ->where('equipment_state.id', 'like', 2)
             ->get();
 
         $data->each(function ($item) {
             $availability = $item->availability ? 'Disponible' : 'En uso';
             $item->availability = $availability;
-            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
+            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_active . ') ' . '(Serial: ' . $item->serial_number . ')';
         });
 
 
@@ -241,7 +243,7 @@ class Equipment extends Model
         $data->each(function ($item) {
             $availability = $item->availability ? 'Disponible' : 'En uso';
             $item->availability = $availability;
-            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_internal_active . ') ' . '(Registro interno: ' . $item->serial_number . ')';
+            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_active . ') ' . '(Serial: ' . $item->serial_number . ')';
         });
 
 

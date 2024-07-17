@@ -240,14 +240,32 @@ class HistoryChangeController extends Controller
      */
     public function destroy(Request $request)
     {
+
         $id = Encrypt::decryptValue($request->id);
+        $history_change_to_destroy = HistoryChange::where('id', $id)->first();
+        $history_change_to_compare = HistoryChange::where('equipment_id',$history_change_to_destroy->equipment_id)->get();
+        $last_action_history = null;
 
+
+        for ($i=0; $i < count($history_change_to_compare); $i++) { 
+            
+            if($history_change_to_destroy->type_action_id <5 && $history_change_to_compare[$i]->equipment_id == $history_change_to_destroy->equipment_id){
+                $last_action_history = $history_change_to_compare[$i];
+            }
+        }
+
+        if($last_action_history->id == $history_change_to_destroy->id){
+            $available1 = Equipment::where('id', $history_change_to_destroy->equipment_id)->first();
+            $available1->availability = true;
+            $available1->save();
+
+        }
         HistoryChange::where('id', $id)->delete();
-
         return response()->json([
             "message" => "Registro eliminado correctamente.",
         ]);
     }
+
 
     public function updateEndProcess(Request $request)
     {
@@ -258,12 +276,9 @@ class HistoryChangeController extends Controller
         $historychange->description = $request->description;
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->save();
-
         $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
         $available1->availability = true;
         $available1->save();
-
-
         return response()->json([
             "message" => "Movimiento terminado, equipo disponible de nuevo",
         ]);
@@ -274,12 +289,14 @@ class HistoryChangeController extends Controller
 
         $data = Encrypt::decryptArray($request->all(), 'id');
         $historychange = HistoryChange::where('id', $request->history_change)->first();
-        $historychange->end_date = Carbon::now();;
+        $historychange->end_date = Carbon::now();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
          
         $historychange->save();
-        Log::info($request);
-        if(strtolower($request->type_action_id) == 'préstamo'){
+
+
+        
+        if(TypeAction::where('name', $request->type_action_id)->first()->id() == 4){
             $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
             $available1->availability = true;
             $available1->save();
@@ -299,8 +316,8 @@ class HistoryChangeController extends Controller
         $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
 
-
-        if (strtolower($request->state_id) == 'cancelado' or strtolower($request->state_id) == 'finalizado') {
+        
+        if (ProcessState::where('name', $request->state_id)->first()->id() == 4 or ProcessState::where('name', $request->state_id)->first()->id() == 3) {
             $available1 = Equipment::where('serial_number', $request->serial_number)->first();
             $available1->availability = true;
             $available1->save();

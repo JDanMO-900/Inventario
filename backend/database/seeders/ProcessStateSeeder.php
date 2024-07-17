@@ -18,7 +18,7 @@ class ProcessStateSeeder extends Seeder
                 "name" => "Pendiente"
             ],
             [ 
-                "name" => "En proceso"
+                "name" => "Aprobado"
             ],
             [
                 "name" => "Finalizado"

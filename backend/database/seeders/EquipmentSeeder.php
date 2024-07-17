@@ -60,7 +60,7 @@ class EquipmentSeeder extends Seeder
             "serial_number"=> "zan-123-faahcd-4325",
             "adquisition_date" => "2024-03-26",
             "invoice_number" => "F2023-04-28wzt",
-            "equipment_state_id"=> 3,                
+            "equipment_state_id"=> 1,                
             "equipment_type_id"=> 10,
             "brand_id"=> 4,
             "provider_id"=> 4,
