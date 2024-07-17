@@ -9,39 +9,37 @@
 
         </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search" ></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
       </v-container>
 
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
-      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search"
-        >
+      <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
 
 
 
-      
+
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar" />
 
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
             v-if="this.rolRetrieveUser == 'Jefe'" />
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información"/>
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
           <template v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo') && item.raw.state_id.toLowerCase() != 'finalizado'
             && item.raw.state_id.toLowerCase() != 'cancelado')">
-            <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal" title="Terminar movimiento"/>
+            <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
+              title="Terminar movimiento" />
 
           </template>
 
-          <template v-if="(item.raw.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'">
-            <v-icon size="20" class="mr-2" @click="processStanteChangeItem(item.raw)" icon="mdi-sync-circle" title="Cambiar estado del equipo"/>
-          </template>
+
 
 
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
 
-        <template v-slot:no-data >
+        <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
 
@@ -87,6 +85,7 @@
                 <v-divider class="mt-2"></v-divider>
               </v-col>
 
+
               <!-- acción realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Tipo de movimiento" :items="filterTypeAction" item-title="name"
@@ -99,7 +98,7 @@
               <!-- fecha del movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha" v-model="v$.editedItem.start_date.$model" :rules="v$.editedItem.start_date"
-                  type="datetime-local" clearable/>
+                  type="datetime-local" clearable />
               </v-col>
               <!-- fecha del movimiento -->
 
@@ -171,7 +170,7 @@
               <v-col cols="4" sm="12" md="6"
                 v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
-                  :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" clearable/>
+                  :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" clearable />
               </v-col>
               <!-- Cantidad de salida -->
 
@@ -179,7 +178,7 @@
               <v-col cols="4" sm="12" md="6"
                 v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
-                  :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" clearable/>
+                  :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" clearable />
               </v-col>
               <!-- Cantidad de entrada -->
 
@@ -202,7 +201,7 @@
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" clearable/>
+                  :rules="v$.editedItem.description" clearable />
               </v-col>
               <!-- Descripcion -->
             </v-row>
@@ -243,6 +242,9 @@
           <v-card-title>
             <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Detalles del movimiento</h2>
           </v-card-title>
+
+
+
 
           <v-card-text>
             <v-container>
@@ -320,6 +322,15 @@
                   <v-chip color="primary" variant="flat" label>
                     <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
                   </v-chip>
+                </v-col>
+
+
+                <v-col cols="4" sm="12" md="12">
+                  <template v-if="(this.editedItem.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'"
+                    class="d-flex justify-content-center">
+                    <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
+                      @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
+                  </template>
                 </v-col>
 
                 <v-col cols="12" sm="12" md="12">
@@ -726,14 +737,15 @@ export default {
 
     closeProcessStanteChange() {
       this.dialogChangeProcessState = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
+      // this.$nextTick(() => {
+      //   this.editedItem = Object.assign({}, this.defaultItem);
+      //   this.editedIndex = -1;
+      // });
     },
     async changeProcessStanteChange() {
       this.changeStatusProccess.id = this.editedItem.id;
       this.changeStatusProccess.serial_number = this.editedItem.serial_number;
+      console.log(this.changeStatusProccess);
       this.v$.changeStatusProccess.$validate();
       if (this.v$.changeStatusProccess.$invalid) {
         alert.error("Campos obligatorios");
@@ -747,11 +759,14 @@ export default {
           alert.success(endStatus.data.message);
         }
       } catch (error) {
-        this.close();
+        this.closeProcessStanteChange();
       }
-      this.changeStatusProccess.state_id = "";
-      this.initialize();
-      this.closeProcessStanteChange();
+      finally {
+        this.closeProcessStanteChange();
+        this.dialogInfo = false;
+        this.initialize();
+      }
+
     },
     // Aqui va el nuevo elemento
 
