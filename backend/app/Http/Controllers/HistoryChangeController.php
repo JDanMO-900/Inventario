@@ -81,6 +81,7 @@ class HistoryChangeController extends Controller
                 $historychange->end_date = null;
             }
 
+
             $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
             $historychange->location_id = Location::where('name', $request->location_id)->first()->id;
             $historychange->dependency_id = Dependency::where('name', $request->dependency_id)->first()->id;
@@ -182,6 +183,8 @@ class HistoryChangeController extends Controller
         } else {
             $historychange->end_date = null;
         }
+
+        Log::info($request->state_id);
 
         $historychange->state_id = ProcessState::where('name', $request->state_id)->first()->id;
         $historychange->location_id = Location::where('name', $request->location_id)->first()->id;

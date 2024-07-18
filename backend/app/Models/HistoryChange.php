@@ -59,27 +59,24 @@ class HistoryChange extends Model
             'location.name as location_id',
             'dependency.name as dependency_id',
 
-            //Equipo1
             'equipment_id.serial_number as equipment_id',
             'equipment_id.model as model1',
             'equipment_type1.name as type1',
             'brand1.name as brand1',
 
             'process_state.name as state_id',
-            'type_action.name as type_action_id'
+            'process_state.id as process_state_id',
+            'type_action.name as type_action_id',
+            'type_action.id as action_id'
         )
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             // Equipo principal
             ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
             ->join('equipment_type as equipment_type1', 'equipment_id.equipment_type_id', '=', 'equipment_type1.id')
             ->join('brand as brand1', 'equipment_id.brand_id', '=', 'brand1.id')
-
-
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
-
-
             ->where('location.name', 'like', $search)
             ->orWhere('dependency.name', 'like', $search)
             ->orWhere('process_state.name', 'like', $search)

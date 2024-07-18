@@ -85,7 +85,13 @@ class TypeActionController extends Controller
 
         $TypeAction = TypeAction::where('id', $data['id'])->first();
 		$TypeAction->name = $request->name;
-        $TypeAction->is_internal = $request->is_internal;
+        if($request->is_internal === 'Personal interno'){
+            
+        }
+        else{
+            $TypeAction->is_internal = 0;
+        }
+        
 
         $TypeAction->save();
 
