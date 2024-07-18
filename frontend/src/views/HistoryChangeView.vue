@@ -20,13 +20,14 @@
 
 
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar" />
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"
+            v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
 
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
-            v-if="this.rolRetrieveUser == 'Jefe'" />
+            v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
-          <template v-if="((item.raw.type_action_id.toLowerCase() == 'mantenimiento' || item.raw.type_action_id.toLowerCase() == 'préstamo') && item.raw.state_id.toLowerCase() != 'finalizado'
-            && item.raw.state_id.toLowerCase() != 'cancelado')">
+          <template v-if="((item.raw.action_id == 1 || item.raw.action_id == 4) && item.raw.process_state_id != 3
+            && item.raw.process_state_id != 4)">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
               title="Terminar movimiento" />
 
@@ -210,7 +211,7 @@
             <!-- Form -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" />
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading" />
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -227,7 +228,7 @@
           </h1>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
+              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
             </v-col>
           </v-row>
@@ -314,7 +315,7 @@
                 <v-col cols="12" sm="12" md="12">
                   <v-table density="compact">
                     <tbody class="tbl-info">
-                      
+
                       <tr>
                         <td>Dependencia</td>
                         <td>{{ this.editedItem.dependency_id }}</td>
@@ -426,7 +427,7 @@
           <!-- Form -->
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" />
+              <base-button type="primary" title="Confirmar" @click="changeMovementFinishDate" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeMovementFinishDate" />
             </v-col>
           </v-row>
@@ -460,7 +461,7 @@
           <!-- Form -->
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeProcessStanteChange" />
+              <base-button type="primary" title="Confirmar" @click="changeProcessStanteChange" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeProcessStanteChange" />
             </v-col>
           </v-row>
@@ -510,6 +511,7 @@ export default {
       dialogChangeProcessState: false,
       rolRetrieveUser: "",
       enabled: false,
+      isLoading: false,
       headers: [
         { title: "Tipo de movimiento", key: "type_action_id" },
         { title: "Tipo de equipo", key: "type1" },
@@ -615,7 +617,8 @@ export default {
         },
         start_date: {
           required,
-          minLength: minLength(1)
+          minLength: minLength(1),
+
         },
         end_date: {
           minLength: minLength(1)
@@ -628,6 +631,7 @@ export default {
       finishMovement: {
         finish_date: {
           required,
+
         },
         description: {
           required
@@ -643,7 +647,7 @@ export default {
     };
   },
 
-  // rulesChangeStatus: {}
+
 
   computed: {
     formTitle() {
@@ -658,7 +662,8 @@ export default {
       }
     }, filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal interno")
-    }
+    },
+
   },
 
   watch: {
@@ -679,9 +684,14 @@ export default {
 
   beforeMount() {
     this.getDataFromApi({ page: 1, itemsPerPage: 10, sortBy: [], search: "" });
+
   },
 
+
+
   methods: {
+
+
     addEquipment() {
       var isInArray = false;
       if (this.editedItem.equipment_serial != "") {
@@ -729,6 +739,7 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
 
       try {
         if (this.finishMovement.finish_date != null) {
@@ -737,13 +748,18 @@ export default {
           alert.success(endStatus.data.message);
         }
       } catch (error) {
-        this.close();
+        this.closeMovementFinishDate();
       }
-      this.initialize();
-      this.closeMovementFinishDate();
-      this.finishMovement.state_id = "";
-      this.finishMovement.finish_date = "";
-      this.finishMovement.description = "";
+      finally {
+        setTimeout(() => (this.isLoading = false), 800);
+        this.finishMovement.state_id = "";
+        this.finishMovement.finish_date = "";
+        this.finishMovement.description = "";
+        this.initialize();
+        this.closeMovementFinishDate();
+
+      }
+
     },
 
     // Aqui va el nuevo elemento
@@ -761,14 +777,16 @@ export default {
       // });
     },
     async changeProcessStanteChange() {
+
       this.changeStatusProccess.id = this.editedItem.id;
-      this.changeStatusProccess.serial_number = this.editedItem.serial_number;
-      console.log(this.changeStatusProccess);
+      this.changeStatusProccess.serial_number = this.editedItem.equipment_id;
       this.v$.changeStatusProccess.$validate();
       if (this.v$.changeStatusProccess.$invalid) {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
+
 
       try {
         if (this.changeStatusProccess.state_id != null) {
@@ -780,6 +798,7 @@ export default {
         this.closeProcessStanteChange();
       }
       finally {
+        setTimeout(() => (this.isLoading = false), 800)
         this.closeProcessStanteChange();
         this.dialogInfo = false;
         this.initialize();
@@ -855,6 +874,7 @@ export default {
 
     close() {
       this.dialog = false;
+      this.isLoading = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
@@ -864,8 +884,9 @@ export default {
 
     async save() {
 
+
       if (this.editedItem.type_action_id.toLowerCase() == 'préstamo' || this.editedItem.type_action_id.toLowerCase() == 'mantenimiento') {
-        this.editedItem.state_id = "En proceso";
+        this.editedItem.state_id = "Aprobado";
       }
       else {
         this.editedItem.state_id = "finalizado";
@@ -876,24 +897,32 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
 
       // Updating record
       if (this.editedIndex > -1) {
+
         const edited = Object.assign(
           this.records[this.editedIndex],
           this.editedItem
         );
 
         try {
+
+
           const { data } = await backendApi.put(`/historyChange/${edited.id}`, edited);
           alert.success(data.message);
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
+        finally {
+          setTimeout(() => (this.isLoading = false), 800)
+          this.close();
+          this.initialize();
+          return;
+        }
 
-        this.close();
-        this.initialize();
-        return;
+
       }
 
       //Creating record
@@ -925,19 +954,25 @@ export default {
 
     async deleteItemConfirm() {
       try {
+        this.isLoading = true
         const { data } = await backendApi.delete(`/historyChange/${this.editedItem.id}`, {
           params: {
             id: this.editedItem.id,
           },
         });
 
+
         alert.success(data.message);
       } catch (error) {
-        this.close();
+        this.closeDelete();
+      }
+      finally {
+        setTimeout(() => (this.isLoading = false), 800)
+        this.initialize();
+        this.closeDelete();
+
       }
 
-      this.initialize();
-      this.closeDelete();
     },
 
     getDataFromApi(options) {
@@ -969,6 +1004,7 @@ export default {
       this.editedIndex = -1;
       this.editedItem = Object.assign({}, this.defaultItem);
       this.v$.$reset();
+
     },
   },
 };

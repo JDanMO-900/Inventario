@@ -16,12 +16,13 @@
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
-          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"/>
-          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Detalles"/>
-          <v-icon v-if="item.raw.availability != 'Disponible' " size="20" class="mr-2" @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Recibir equipo"/>
+          <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar" />
+          <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar" />
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Detalles" />
+          <v-icon v-if="item.raw.availability != 'Disponible'" size="20" class="mr-2"
+            @click="availabilityItem(item.raw)" icon="mdi-swap-horizontal-bold" title="Recibir equipo" />
           <v-icon icon="fa:fas fa-search"></v-icon>
-          
+
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
         <template v-slot:no-data>
@@ -66,7 +67,7 @@
                     <!-- number_active -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de activo fijo" v-model="v$.editedItem.number_active.$model"
-                        :rules="v$.editedItem.number_active" clearable/>
+                        :rules="v$.editedItem.number_active" clearable />
                     </v-col>
                     <!-- number_active -->
 
@@ -74,34 +75,35 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de registro interno"
                         v-model="v$.editedItem.number_internal_active.$model"
-                        :rules="v$.editedItem.number_internal_active" clearable/>
+                        :rules="v$.editedItem.number_internal_active" clearable />
                     </v-col>
                     <!-- number_internal_active -->
 
                     <!-- brand -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Marca" :items="brand" item-title="name" item-value="name"
-                        v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable/>
+                        v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable />
                     </v-col>
                     <!-- brand -->
 
                     <!-- model -->
                     <v-col cols="12" sm="12" md="6" lg="6">
-                      <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model" clearable/>
+                      <base-input label="Modelo" v-model="v$.editedItem.model.$model" :rules="v$.editedItem.model"
+                        clearable />
                     </v-col>
                     <!-- model -->
 
                     <!-- serial_number -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-input label="Número de serie" v-model="v$.editedItem.serial_number.$model"
-                        :rules="v$.editedItem.serial_number" clearable/>
+                        :rules="v$.editedItem.serial_number" clearable />
                     </v-col>
                     <!-- serial_number -->
 
                     <!-- equipment state -->
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Estado del equipo" :items="equipmentstate" item-title="name" item-value="name"
-                        v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" clearable/>
+                        v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" clearable />
                     </v-col>
                     <!-- equipment state -->
 
@@ -109,7 +111,7 @@
                     <v-col cols="12" sm="12" md="12" lg="12">
                       <base-select label="Tipo de equipo" v-model.trim="v$.editedItem.equipment_type_id.$model"
                         :items="this.equipmenttype" item-title="name" item-value="name"
-                        :rules="v$.editedItem.equipment_type_id" clearable/>
+                        :rules="v$.editedItem.equipment_type_id" clearable />
                     </v-col>
                     <!-- tipo de equipo -->
 
@@ -125,14 +127,14 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                       <base-select label="Característica" :items="this.technicalDescrip" item-title="name"
                         item-value="name" v-model.trim="v$.editedItem.technicalDescription.$model"
-                        :rules="v$.editedItem.technicalDescription" clearable/>
+                        :rules="v$.editedItem.technicalDescription" clearable />
                     </v-col>
                     <!-- característica -->
 
                     <!-- valor -->
                     <v-col cols="4" sm="12" md="6" lg="6">
                       <base-input label="Capacidad" v-model="v$.editedItem.attribute.$model"
-                        :rules="v$.editedItem.attribute" type="number" min="0" max="100" clearable/>
+                        :rules="v$.editedItem.attribute" type="number" min="0" max="100" clearable />
                     </v-col>
                     <!-- valor -->
 
@@ -264,7 +266,7 @@
             <!-- tabs -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" />
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading"/>
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -283,7 +285,7 @@
           </h1>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
+              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" :loading="isLoading"/>
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
             </v-col>
           </v-row>
@@ -298,12 +300,12 @@
         <v-container>
           <h2 class="black-secondary text-center mt-3 mb-3">
             <b>Confirmar Devolución del Equipo</b>
-            
+
           </h2>
-          <br/>
+          <br />
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" />
+              <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" :loading="isLoading"/>
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeAvailability" />
             </v-col>
           </v-row>
@@ -323,17 +325,15 @@
       <v-card-text>
         <v-container>
           <v-col cols="12" sm="12" md="12" lg="12" class="d-flex justify-content-center">
-            <base-button 
-            class="ms-1" type="secondary" 
-            title="Generar reporte de equipo" 
-            @click="generateIndividualReport(this.equipmentData)" 
-            prepend-icon="mdi-file-pdf-box"/>
-          </v-col> 
-                   
+            <base-button class="ms-1" type="secondary" title="Generar reporte de equipo"
+              @click="generateIndividualReport(this.equipmentData)" prepend-icon="mdi-file-pdf-box" :loading="isLoading"/>
+          </v-col>
+
           <v-col cols="12" sm="12" md="12">
             <p class="text-grey-darken-6 text-center"><b>Disponibilidad del equipo </b>
               <v-chip>
-                <span :class="{ 'green-text': this.allowable.toLowerCase() == 'disponible', 'red-text': this.allowable.toLowerCase() == 'en uso' }">
+                <span
+                  :class="{ 'green-text': this.allowable.toLowerCase() == 'disponible', 'red-text': this.allowable.toLowerCase() == 'en uso' }">
                   {{ this.allowable }}
                 </span>
               </v-chip>
@@ -454,7 +454,7 @@
                               <td colspan="2">
                                 <p class="text-center">Sin datos que mostrar</p>
                               </td>
-                              
+
                             </tr>
                           </tbody>
                         </v-table>
@@ -517,8 +517,8 @@
                             <td v-if="this.equipmentData.provider == null">
                               <p class="text-center">Sin datos que mostrar</p>
                             </td>
-                            <td  v-else>{{ this.equipmentData.provider }}</td>
- 
+                            <td v-else>{{ this.equipmentData.provider }}</td>
+
                           </tr>
 
                           <tr>
@@ -526,8 +526,8 @@
                             <td v-if="this.equipmentData.invoice_number == null">
                               <p class="text-center">Sin datos que mostrar</p>
                             </td>
-                            <td  v-else>{{ this.equipmentData.invoice_number }}</td>
- 
+                            <td v-else>{{ this.equipmentData.invoice_number }}</td>
+
                           </tr>
                           <tr>
                             <td>Fecha de adquisición</td>
@@ -535,25 +535,25 @@
                             <td v-if="this.equipmentData.adquisition_date == null">
                               <p class="text-center">Sin datos que mostrar</p>
                             </td>
-                            <td  v-else>{{ this.equipmentData.adquisition_date }}</td>
+                            <td v-else>{{ this.equipmentData.adquisition_date }}</td>
 
 
                           </tr>
                           <tr>
                             <td>Contacto directo</td>
-  
+
                             <td v-if="this.equipmentData.contact_name == null">
                               <p class="text-center">Sin datos que mostrar</p>
                             </td>
-                            <td  v-else>{{ this.equipmentData.contact_name }}</td>
+                            <td v-else>{{ this.equipmentData.contact_name }}</td>
                           </tr>
                           <tr>
                             <td>Número de contacto</td>
- 
+
                             <td v-if="this.equipmentData.contact_phone == null">
                               <p class="text-center">Sin datos que mostrar</p>
                             </td>
-                            <td  v-else>{{ this.equipmentData.contact_phone }}</td>
+                            <td v-else>{{ this.equipmentData.contact_phone }}</td>
                           </tr>
                         </tbody>
                       </v-table>
@@ -599,6 +599,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       tab: null,
       enabled: false,
       search: "",
@@ -751,16 +752,19 @@ export default {
         this.records[this.editedIndex],
         this.editedItem
       );
+      this.isLoading = true;
+
 
       try {
         const availabilityStatus = await backendApi.put(`/available/`, edited);
         alert.success(availabilityStatus.data.message);
-        
+
       } catch (error) {
 
         this.closeAvailability();
       }
-      finally{
+      finally {
+        setTimeout(() => (this.isLoading = false), 800);
         await this.$nextTick();
         this.initialize();
         this.closeAvailability();
@@ -781,7 +785,7 @@ export default {
           }
         });
 
-        if (!isInArray) {          
+        if (!isInArray) {
           this.editedItem.licenses.push(this.editedItem.license);
           this.editedItem.license = ''
         }
@@ -831,15 +835,17 @@ export default {
       this.dialogInfo = true;
     },
 
-    async generateIndividualReport(item){
+    async generateIndividualReport(item) {
+      this.isLoading = true;
       const generate_report = await backendApi.get(`/individual-reportpdf/${item.serial_number}`, {
-                    // blob: This retrieve the data as binary as information
-                    responseType: 'blob',
-                });
-                // This line tells the computer is a pdf and translate the binary information to get the url
-                const report_data = new Blob([generate_report.data], { type: 'application/pdf' })
-                const url_report = window.URL.createObjectURL(report_data);
-                window.open(url_report);
+        // blob: This retrieve the data as binary as information
+        responseType: 'blob',
+      });
+      // This line tells the computer is a pdf and translate the binary information to get the url
+      const report_data = new Blob([generate_report.data], { type: 'application/pdf' })
+      const url_report = window.URL.createObjectURL(report_data);
+      setTimeout(() => (this.isLoading = false), 800);
+      window.open(url_report);
     },
 
     closeDetails() {
@@ -899,17 +905,17 @@ export default {
         this.editedIndex = -1;
       });
 
-       if(this.formTitle == "Agregar equipo"){
+      if (this.formTitle == "Agregar equipo") {
 
         this.editedItem.licenses.length = 0;
         this.editedItem.technicalAttributes.length = 0;
-        
-       }
-       else{
+
+      }
+      else {
         this.initialize();
-       }
-        
-      
+      }
+
+
 
 
 
@@ -921,6 +927,8 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
+
 
       // Updating record
       if (this.editedIndex > -1) {
@@ -953,14 +961,14 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-
-      this.close();
-
+      setTimeout(() => (this.isLoading = false), 800);
       this.editedItem.licenses.length = 0;
       this.editedItem.technicalAttributes.length = 0;
       this.initialize();
+      this.close();
 
-      
+
+
       return;
     },
 
@@ -979,6 +987,7 @@ export default {
     },
 
     async deleteItemConfirm() {
+      this.isLoading = true;
       try {
         const { data } = await backendApi.delete(`/equipment/${this.editedItem.id}`, {
           params: {
@@ -991,6 +1000,7 @@ export default {
         this.close();
       }
 
+      setTimeout(() => (this.isLoading = false), 800);
       this.initialize();
       this.closeDelete();
     },

@@ -18,7 +18,8 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso"/>
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel"
+            title="Cancelar proceso" />
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
@@ -89,7 +90,7 @@
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" clearable/>
+                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" clearable />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -205,7 +206,7 @@
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" clearable/>
+                  :rules="v$.editedItem.description" clearable />
               </v-col>
               <!-- Descripcion -->
 
@@ -215,7 +216,7 @@
             <!-- Form -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" />
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading"/>
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -232,7 +233,7 @@
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" :loading="isLoading"/>
             </v-col>
           </v-row>
         </v-container>
@@ -246,7 +247,7 @@
     <v-card>
       <v-card-title>
         <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }} 
+          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }}
 
         </h2>
       </v-card-title>
@@ -255,7 +256,7 @@
         <v-container>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" />
+              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" :loading="isLoading"/>
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeCancelMovement" />
             </v-col>
           </v-row>
@@ -296,6 +297,7 @@ export default {
   },
   data() {
     return {
+      isLoading:false,
       search: "",
       selected: [],
       dialog: false,
@@ -453,7 +455,7 @@ export default {
       });
     },
     async changeToCancelStatus() {
-      console.log(this.editedItem);
+
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
       this.finishMovement.history_change = this.editedItem.history_change_id;
@@ -465,16 +467,22 @@ export default {
       }
 
       this.finishMovement.state_id = "Cancelado";
+      this.isLoading = true;
 
       try {
         const endStatus = await backendApi.put(`/cancelMovement/`, this.finishMovement);
         alert.success(endStatus.data.message);
       } catch (error) {
-        this.close();
+        this.closeCancelMovement();
+      }
+      finally{
+        await this.$nextTick();
+        setTimeout(() => (this.isLoading = false), 800);
+        this.initialize();
+        this.closeCancelMovement();
       }
 
-      this.initialize();
-      this.closeCancelMovement();
+
     },
 
 
@@ -595,6 +603,7 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
 
       // Updating record
       if (this.editedIndex > -1) {
@@ -610,10 +619,14 @@ export default {
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
+        finally {
+          setTimeout(() => (this.isLoading = false), 800);
+          this.close();
+          this.initialize();
+          return;
+        }
 
-        this.close();
-        this.initialize();
-        return;
+
       }
 
       //Creating record
@@ -623,10 +636,16 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
+      finally{
+        
+      setTimeout(() => (this.isLoading = false), 800);
       this.close();
       this.initialize();
       this.editedItem.equipment_id.length = 0;
       return;
+
+      }
+
     },
 
     deleteItem(item) {
@@ -645,6 +664,7 @@ export default {
 
     async deleteItemConfirm() {
       try {
+        this.isLoading = true
         const { data } = await backendApi.delete(`/historyChange/${this.editedItem.id}`, {
           params: {
             id: this.editedItem.id,
@@ -655,9 +675,14 @@ export default {
       } catch (error) {
         this.close();
       }
+      finally{
+        setTimeout(() => (this.isLoading = false), 800)
+        this.initialize();
+        this.closeDelete();
+        
+      }
 
-      this.initialize();
-      this.closeDelete();
+
     },
 
     getDataFromApi(options) {
