@@ -79,9 +79,9 @@ export default {
     methods: {
         async initialize() {
             let requests = [
-                backendApi.get('/location', {
-                    params: { itemsPerPage: -1 },
-                }),
+            brand: { required, minLength: minLength(1), },
+                type: { required, minLength: minLength(1), },
+                location: { required, minLength: minLength(1), },
                 backendApi.get('/equipmentType', {
                     params: { itemsPerPage: -1 },
                 }),
