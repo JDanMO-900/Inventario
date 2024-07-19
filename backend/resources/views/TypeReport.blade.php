@@ -121,10 +121,7 @@
                     <td>{{ $report['number_active'] }}</td>
                     <td>{{ $report['state'] }}</td>
                     <td>
-                        @php
-                            $location = json_decode($report['location'], true);
-                            echo $location['location'] ?? 'No definida';
-                        @endphp
+                    {{ $report['location'] }}
                     </td>
                     <td>{!! nl2br($report['descriptions']) !!}</td>
 

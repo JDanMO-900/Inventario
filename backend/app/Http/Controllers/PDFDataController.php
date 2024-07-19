@@ -40,9 +40,11 @@ class PDFDataController extends Controller
             'brand' => ($request['brand'] == -1) ? -1 : (Encrypt::decryptValue($request['brand'])),
             'brand_condition' => ($request['brand'] == -1) ? '>' : '=',
             'type' => ($request['type'] == -1) ? -1 : (Encrypt::decryptValue($request['type'])),
-            'type_condition' => ($request['type'] == -1) ? '>' : '='
+            'type_condition' => ($request['type'] == -1) ? '>' : '=',
+            'location' => ($request['location'] == -1) ? -1 : (Encrypt::decryptValue($request['location'])),
+            'location_condition' => ($request['location'] == -1) ? '>' : '='
         ];
-
+  
         $data = [];
         $equipments = PDFData::typeReport($search);
 
@@ -60,14 +62,14 @@ class PDFDataController extends Controller
                 'model' => $value->model,
                 'number_active' => $value->number_active,
                 'state' => $value->state,
-                'location' => PDFData::getEquipmentLocation($id),
+                'location' => $value->location,
                 'descriptions' => $text
             ];
 
             $data[] = $equipment;
         }
 
-        // Log::info($data);
+        Log::info($data);
         $pdf = PDF::loadView('TypeReport', compact('data'));
         $pdf->setPaper('A4', 'landscape');
 
@@ -95,7 +97,7 @@ class PDFDataController extends Controller
                 "state" => $equipment->state,
                 "type" => $equipment->type,
                 "type_action" => $equipment->type_action,
-                "location" => PDFData::getEquipmentLocation($equipment->id),
+                "location" => $equipment->location,
                 "dependency" => $equipment->dependency,
                 "number_active" => $equipment->number_active,
                 "serial_number" => $equipment->serial_number,
@@ -105,6 +107,7 @@ class PDFDataController extends Controller
                 "request" => $brand
             ];
 
+    
           /*   $details  = PDFData::getTechniacalDetailData($equipment->id);
 
             $technicalDetails = [];
