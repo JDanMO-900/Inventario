@@ -62,11 +62,17 @@
 
               <!-- name -->
 
+
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
-                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id" clearable>
+                  v-model="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id" disabled>
                 </base-select>
+
               </v-col>
+
+
+
+
               <!-- name -->
 
               <v-col cols="12" sm="12" md="12">
@@ -84,13 +90,17 @@
                   v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id" clearable>
                 </base-select>
               </v-col>
+
+              <v-col cols="4" sm="12" md="12">
+                {{ this.editedItem.type_action_id }}
+              </v-col>
               <!-- Accion realizada -->
 
 
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" clearable />
+                  :rules="v$.editedItem.start_date" type="datetime-local" clearable />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
@@ -141,12 +151,6 @@
 
               <template
                 v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'soporte' && v$.editedItem.type_action_id.$model != ''">
-
-                <!-- Numero de activo fijo 1 -->
-
-
-                <!-- Mis equipos -->
-                <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
@@ -216,7 +220,7 @@
             <!-- Form -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading"/>
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading" />
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -233,7 +237,7 @@
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" :loading="isLoading"/>
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" :loading="isLoading" />
             </v-col>
           </v-row>
         </v-container>
@@ -256,7 +260,7 @@
         <v-container>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" :loading="isLoading"/>
+              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeCancelMovement" />
             </v-col>
           </v-row>
@@ -297,7 +301,8 @@ export default {
   },
   data() {
     return {
-      isLoading:false,
+      defaultDependency: "",
+      isLoading: false,
       search: "",
       selected: [],
       dialog: false,
@@ -347,6 +352,13 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+
+    'editedItem.type_action_id': function (newVal, oldVal) {
+      console.log("Watcher - valor cambiado de:", oldVal, "a:", newVal);
+    },
+
+
+
   },
   // Validations
   validations() {
@@ -357,8 +369,6 @@ export default {
           minLength: minLength(1),
         },
         dependency_id: {
-          required,
-          minLength: minLength(1),
         },
         users: {
           minLength: minLength(1),
@@ -416,6 +426,7 @@ export default {
     }, filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
+
 
   },
 
@@ -475,7 +486,7 @@ export default {
       } catch (error) {
         this.closeCancelMovement();
       }
-      finally{
+      finally {
         await this.$nextTick();
         setTimeout(() => (this.isLoading = false), 800);
         this.initialize();
@@ -484,7 +495,6 @@ export default {
 
 
     },
-
 
     getCurrentDateTime() {
       const now = new Date();
@@ -495,7 +505,7 @@ export default {
       const minutes = now.getMinutes().toString().padStart(2, '0');
 
       // Format: YYYY-MM-DDThh:mm (datetime-local format)
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      this.editedItem.start_date = `${year}-${month}-${day}T${hours}:${minutes}`;
     },
 
     addEquipment() {
@@ -561,19 +571,16 @@ export default {
 
 
       if (responses) {
-
-
-
         this.typeAction = responses[1].data.data;
         this.equipment = responses[2].data;
         this.processState = responses[3].data.data;
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
         this.userEquipment = responses[6].data.data;
-
-
-
       }
+
+
+
 
       this.loading = false;
     },
@@ -636,13 +643,13 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-      finally{
-        
-      setTimeout(() => (this.isLoading = false), 800);
-      this.close();
-      this.initialize();
-      this.editedItem.equipment_id.length = 0;
-      return;
+      finally {
+
+        setTimeout(() => (this.isLoading = false), 800);
+        this.close();
+        this.initialize();
+        this.editedItem.equipment_id.length = 0;
+        return;
 
       }
 
@@ -675,11 +682,11 @@ export default {
       } catch (error) {
         this.close();
       }
-      finally{
+      finally {
         setTimeout(() => (this.isLoading = false), 800)
         this.initialize();
         this.closeDelete();
-        
+
       }
 
 
@@ -711,10 +718,18 @@ export default {
     },
 
     addRecord() {
+
       this.dialog = true;
       this.editedIndex = -1;
       this.editedItem = Object.assign({}, this.defaultItem);
       this.v$.$reset();
+
+      this.dependency.forEach(element => {
+        if (element.id == 1) {
+          this.editedItem.dependency_id = element.name;
+        }
+      });
+      this.getCurrentDateTime();
     },
   },
 };

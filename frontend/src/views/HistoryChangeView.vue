@@ -22,7 +22,6 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"
             v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
-
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
             v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
@@ -30,7 +29,6 @@
             && item.raw.process_state_id != 4)">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
               title="Terminar movimiento" />
-
           </template>
 
 
@@ -168,16 +166,17 @@
               <!-- Numero de activo fijo 1 -->
 
               <!-- Cantidad de salida -->
-              <v-col cols="4" sm="12" md="6"
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
+              <v-col cols="4" sm="12" md="6" v-if="currentAction == 1">
                 <base-input label="Cantidad de equipos que entregan: " v-model="v$.editedItem.quantity_out.$model"
                   :rules="v$.editedItem.quantity_out" type="number" min="0" max="100" clearable />
+              </v-col>
+              <v-col cols="4" sm="12" md="6">
+
               </v-col>
               <!-- Cantidad de salida -->
 
               <!-- Cantidad de entrada -->
-              <v-col cols="4" sm="12" md="6"
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
+              <v-col cols="4" sm="12" md="6" v-if="currentAction == 1">
                 <base-input label="Cantidad de equipos que se reciben: " v-model="v$.editedItem.quantity_in.$model"
                   :rules="v$.editedItem.quantity_in" type="number" min="0" max="100" clearable />
               </v-col>
@@ -345,7 +344,7 @@
 
 
                 <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
-                  <template v-if="(this.editedItem.state_id.toLowerCase() == 'pendiente') && rolRetrieveUser == 'Jefe'"
+                  <template v-if="(currentProcess == 1) && rolRetrieveUser == 'Jefe'"
                     class="d-flex justify-content-center">
                     <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
                       @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
@@ -406,7 +405,7 @@
           <v-row class="pt-3">
             <v-col cols="12" sm="12" md="12">
               <template
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'préstamo' || v$.editedItem.type_action_id.$model.toLowerCase() == 'mantenimiento'">
+                v-if="currentAction == 4 || currentAction == 1">
                 <div>
                   <!-- Fecha de finalización de movimiento -->
                   <base-input label="Fecha de finalización del movimiento"
@@ -663,6 +662,13 @@ export default {
     }, filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal interno")
     },
+    currentAction() {
+      return this.getCurrentAction(this.editedItem.type_action_id);
+    },
+    currentProcess() {
+   
+      return this.getCurrentProcess(this.editedItem.state_id);
+    }
 
   },
 
@@ -690,6 +696,33 @@ export default {
 
 
   methods: {
+
+    getCurrentAction(actionName) {
+      for (let element of this.typeAction) {
+        if (actionName == element.name) {
+          return element.id;
+        }
+      }
+    },
+    getCurrentProcess(processName){
+      for (let element of this.processState) {
+        if (processName == element.name) {
+          return element.id;
+        }
+      }
+    },
+
+    getCurrentDateTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+
+      // Format: YYYY-MM-DDThh:mm (datetime-local format)
+      this.editedItem.start_date = `${year}-${month}-${day}T${hours}:${minutes}`;
+    },
 
 
     addEquipment() {
@@ -1004,6 +1037,7 @@ export default {
       this.editedIndex = -1;
       this.editedItem = Object.assign({}, this.defaultItem);
       this.v$.$reset();
+      this.getCurrentDateTime();
 
     },
   },
