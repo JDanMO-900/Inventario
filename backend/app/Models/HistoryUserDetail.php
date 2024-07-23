@@ -51,7 +51,9 @@ class HistoryUserDetail extends Model
             'type_action.name as type_action',
             'type_action.is_internal as internal',
             'process_state.name as process_state',
-            'type_action.name as type_action_id'
+            'type_action.name as type_action_id',
+            'type_action.id as action_id',
+            'process_state.id as process_id',
             
         )
 

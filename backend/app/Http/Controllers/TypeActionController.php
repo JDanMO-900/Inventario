@@ -32,7 +32,7 @@ class TypeActionController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $TypeAction = TypeAction::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $TypeAction = Encrypt::encryptObject($TypeAction, "id");
+
 
         $total = TypeAction::counterPagination($search);
 

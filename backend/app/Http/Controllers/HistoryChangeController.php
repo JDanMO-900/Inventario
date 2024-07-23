@@ -298,8 +298,8 @@ class HistoryChangeController extends Controller
         $historychange->save();
 
 
-        
-        if(TypeAction::where('name', $request->type_action_id)->first()->id() == 4){
+        $type_action_retrive = TypeAction::where('name', $request->type_action_id)->first();
+        if($type_action_retrive-> id == 4){
             $available1 = Equipment::where('serial_number', $request->equipment_id)->first();
             $available1->availability = true;
             $available1->save();
