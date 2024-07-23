@@ -17,7 +17,7 @@
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
-            v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
+            v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.internal != 1"
             size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel"
             title="Cancelar proceso" />
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -106,7 +106,7 @@
               <!-- Fecha de inicio de movimiento -->
 
               <template
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() != 'soporte' && v$.editedItem.type_action_id.$model != ''">
+                v-if="currentAction != 5 && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
@@ -150,7 +150,7 @@
               </template>
 
               <template
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'soporte' && v$.editedItem.type_action_id.$model != ''">
+                v-if="currentAction == 5 && v$.editedItem.type_action_id.$model != ''">
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
@@ -426,6 +426,13 @@ export default {
     }, filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
+    currentAction() {
+      return this.getCurrentAction(this.editedItem.type_action_id);
+    },
+    currentProcess() {
+   
+      return this.getCurrentProcess(this.editedItem.state_id);
+    }
 
 
   },
@@ -451,8 +458,20 @@ export default {
   },
 
   methods: {
-
-
+    getCurrentAction(actionName) {
+      for (let element of this.typeAction) {
+        if (actionName == element.name) {
+          return element.id;
+        }
+      }
+    },
+    getCurrentProcess(processName){
+      for (let element of this.processState) {
+        if (processName == element.name) {
+          return element.id;
+        }
+      }
+    },
     movementCancelStatusItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
