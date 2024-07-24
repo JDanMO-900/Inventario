@@ -91,9 +91,6 @@
                 </base-select>
               </v-col>
 
-              <v-col cols="4" sm="12" md="12">
-                {{ this.editedItem.type_action_id }}
-              </v-col>
               <!-- Accion realizada -->
 
 
@@ -352,13 +349,6 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
-
-    'editedItem.type_action_id': function (newVal, oldVal) {
-      console.log("Watcher - valor cambiado de:", oldVal, "a:", newVal);
-    },
-
-
-
   },
   // Validations
   validations() {
@@ -432,7 +422,7 @@ export default {
     currentProcess() {
    
       return this.getCurrentProcess(this.editedItem.state_id);
-    }
+    },
 
 
   },
@@ -447,6 +437,21 @@ export default {
     dialogBlock(val) {
       val || this.closeBlock();
     },
+    currentAction(newVal, oldVal){
+      if(newVal !== oldVal){
+        this.editedItem.equipment = "";
+        this.editedItem.equipment_id.length = 0;
+      }
+    },
+
+    'v$.editedItem.type_action_id.$model': function(newVal, oldVal){
+      if(newVal !== oldVal){
+        this.editedItem.equipment = "";
+        this.editedItem.equipment_id.length = 0;
+      }
+    }
+
+
   },
 
   created() {
@@ -458,6 +463,7 @@ export default {
   },
 
   methods: {
+
     getCurrentAction(actionName) {
       for (let element of this.typeAction) {
         if (actionName == element.name) {
