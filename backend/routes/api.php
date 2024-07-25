@@ -52,6 +52,9 @@ Route::group(
     }
 );
 
+Route::group(
+    ['middleware' => ['api']],
+    function ($router) {
 Route::get('/status', fn () => response()->json(["message" => "Active"]));
 Route::resource('/equipmentState', EquipmentStateController::class);
 Route::resource('/brand', BrandController::class);
@@ -84,3 +87,4 @@ Route::post('/typepdf', [PDFDataController::class, 'typeReport']);
 Route::get('/individual-reportpdf/{serial_number}', [PDFDataController::class, 'individualReport']);
 Route::post('/reportgeneralpdf', [PDFDataController::class, 'reportGeneral']);
 Route::post('/testEquip', [EquipmentController::class, 'getReportGeneral']);
+    });
