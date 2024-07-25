@@ -16,9 +16,6 @@
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
 
-
-
-
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"
             v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
@@ -31,9 +28,6 @@
               title="Terminar movimiento" />
           </template>
 
-
-
-
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
@@ -43,9 +37,6 @@
         </template>
 
       </v-data-table>
-
-
-
     </v-card>
 
     <v-dialog v-model="dialog" max-width="800px">
@@ -55,7 +46,6 @@
             {{ formTitle }}
           </h2>
         </v-card-title>
-
         <v-card-text>
           <v-container>
             <!-- Form -->
@@ -67,7 +57,6 @@
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
-
               <!-- name -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Usuarios" :items="this.users" item-title="name"
@@ -83,14 +72,11 @@
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
-
-
               <!-- acción realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Tipo de movimiento" :items="filterTypeAction" item-title="name"
                   v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id" clearable>
                 </base-select>
-
               </v-col>
               <!-- acción realizada -->
 
@@ -243,9 +229,6 @@
             <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Detalles del movimiento</h2>
           </v-card-title>
 
-
-
-
           <v-card-text>
             <v-container>
               <v-row>
@@ -254,7 +237,6 @@
                     <v-icon icon="mdi-numeric-1-circle" start></v-icon>Detalles del usuario
                   </v-chip>
                 </v-col>
-
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
                     <v-table density="compact">
@@ -276,7 +258,6 @@
                     </v-table>
                   </div>
                 </v-col>
-
                 <v-col cols="12" sm="12" md="12">
                   <v-chip color="primary" variant="flat" label>
                     <v-icon icon="mdi-numeric-2-circle" start></v-icon>Detalles del equipo
@@ -341,8 +322,6 @@
                     <v-icon icon="mdi-numeric-4-circle" start></v-icon>Detalles del movimiento
                   </v-chip>
                 </v-col>
-
-
                 <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
                   <template v-if="(currentProcess == 1) && rolRetrieveUser == 'Jefe'"
                     class="d-flex justify-content-center">
@@ -350,7 +329,6 @@
                       @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
                   </template>
                 </v-col>
-
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
                     <v-table density="compact">
@@ -810,7 +788,6 @@ export default {
       // });
     },
     async changeProcessStanteChange() {
-
       this.changeStatusProccess.id = this.editedItem.id;
       this.changeStatusProccess.serial_number = this.editedItem.equipment_id;
       this.v$.changeStatusProccess.$validate();

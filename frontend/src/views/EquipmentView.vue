@@ -266,7 +266,7 @@
             <!-- tabs -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading"/>
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading" />
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -285,7 +285,7 @@
           </h1>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" :loading="isLoading"/>
+              <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
             </v-col>
           </v-row>
@@ -299,13 +299,14 @@
       <v-card class="h-100">
         <v-container>
           <h2 class="black-secondary text-center mt-3 mb-3">
-            <b>Confirmar Devolución del Equipo</b>
+            <b>Confirmar devolución del equipo(s)</b>
 
           </h2>
           <br />
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm" :loading="isLoading"/>
+              <base-button type="primary" title="Confirmar" @click="changeAvailabilityItemConfirm"
+                :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeAvailability" />
             </v-col>
           </v-row>
@@ -326,7 +327,8 @@
         <v-container>
           <v-col cols="12" sm="12" md="12" lg="12" class="d-flex justify-content-center">
             <base-button class="ms-1" type="secondary" title="Generar reporte de equipo"
-              @click="generateIndividualReport(this.equipmentData)" prepend-icon="mdi-file-pdf-box" :loading="isLoading"/>
+              @click="generateIndividualReport(this.equipmentData)" prepend-icon="mdi-file-pdf-box"
+              :loading="isLoading" />
           </v-col>
 
           <v-col cols="12" sm="12" md="12">
@@ -404,15 +406,25 @@
                             <th style="width: 25% !important;">Responsable</th>
                             <th style="width: 25% !important;">Fecha de inicio del movimiento</th>
                             <th style="width: 25% !important;">Fecha de retorno del equipo</th>
+                            <th style="width: 25% !important;">Finalizar movimiento pendiente</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr v-for="data in this.historyData">
+                          <tr v-for="(data, index) in this.historyData" :key="index">
                             <td>{{ data.type_action }}</td>
                             <td>{{ data.users }}</td>
                             <td>{{ data.start_date }}</td>
+
                             <td v-if="data.end_date != null">{{ data.end_date }}</td>
                             <td v-else>Actividad sin terminar</td>
+
+                            <td v-if="data.end_date == null && index !== 0">
+                              <base-button class="ms-1 bg-green-lighten-1" title="Finalizar"
+                                 prepend-icon="mdi-sync-circle" @click="finishIncompleteActivityItem(data)"/>
+
+                            </td>
+                            <td v-else-if="data.end_date == null && index === 0">Movimiento actual</td>
+                            <td v-else> Movimiento finalizado</td>
                           </tr>
                           <tr v-if="this.historyData == 0">
                             <td colspan="6">
@@ -575,6 +587,28 @@
     </v-card>
   </v-dialog>
   <!-- Detalles del equipos -->
+
+<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+  <v-dialog v-model="dialogFinishIncompleteActivity" max-width="45rem">
+      <v-card class="h-100">
+        <v-container>
+          <h2 class="black-secondary text-center mt-3 mb-3">
+            <b>Finalizar movimiento sin fecha de retorno</b>
+          </h2>
+          <br />
+          
+          <v-row>
+            <v-col align="center">
+              <base-button type="primary" title="Confirmar" 
+                :loading="isLoading" @click="finishIncompleteActivityItemConfirm"/>
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeFinishIncompleteActivity" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-dialog>
+<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+
 </template>
 
 <script>
@@ -608,6 +642,7 @@ export default {
       dialogDelete: false,
       dialogInfo: false,
       dialogAvailability: false,
+      dialogFinishIncompleteActivity: false,
       headers: [
         { title: "Equipo", key: "equipment_type_id" },
         { title: "Modelo", key: "model" },
@@ -639,6 +674,9 @@ export default {
       provider: [],
       license: [],
       equipmentData: [],
+      finishActivity: {
+        id_change: "",
+      },
       historyData: [],
       allowable: "",
       panel: {
@@ -770,8 +808,6 @@ export default {
         this.closeAvailability();
       }
 
-
-
     },
 
     // Prueba cambiar estado
@@ -833,6 +869,37 @@ export default {
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
       this.dialogInfo = true;
+    },
+
+    closeFinishIncompleteActivity() {
+      this.dialogFinishIncompleteActivity = false;
+
+    },
+    finishIncompleteActivityItem(item) {
+      console.log(item.id)
+      this.finishActivity.id_change = item.id_change;
+      this.dialogFinishIncompleteActivity= true;
+    },
+
+    async finishIncompleteActivityItemConfirm() {
+      
+      this.isLoading = true;
+
+      try {
+        const finishStatus = await backendApi.put(`/finishIncompleteMovement/`, this.finishActivity);
+        alert.success(finishStatus.data.message);
+
+      } catch (error) {
+
+        this.closeFinishIncompleteActivity();
+      }
+      finally {
+        setTimeout(() => (this.isLoading = false), 800);
+        await this.$nextTick();
+        this.initialize();
+        this.closeFinishIncompleteActivity();
+        this.closeDetails();
+      }
     },
 
     async generateIndividualReport(item) {
