@@ -5,7 +5,7 @@
                 <h2>{{ title }}</h2>
                 <v-row>
 
-                    <v-col cols="12" lg="6" md="6" sm="12">
+                    <v-col cols="12" lg="12" md="12" sm="12">
                         <BaseSelect label='Ubicación' :items="locations" item-title='name' item-value="id"
                             v-model.trim="v$.editedItem.location.$model" :rules="v$.editedItem.location" clearable>
                         </BaseSelect>
@@ -46,7 +46,7 @@ export default {
     },
     data() {
         return {
-            title: 'Reporte por tipo de equipos',
+            title: 'Reporte de equipos',
             locations: [
                 { id: -1, name: "TODAS LAS UBICACIONES" }
             ],

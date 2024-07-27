@@ -44,13 +44,13 @@ export default {
         return {
             title: 'Reporte de equipos por ubicación',
             locations: [
-            {id: -1, name: "TODAS LAS UBICACIONES"}
+                { id: -1, name: "TODAS LAS UBICACIONES" }
             ],
             types: [
-            {id: -1, name: "TODOS LOS TIPOS"}
+                { id: -1, name: "TODOS LOS TIPOS" }
             ],
             brands: [
-            {id: -1, name: "TODAS LAS MARCAS"}
+                { id: -1, name: "TODAS LAS MARCAS" }
             ],
             editedItem: {
                 brand: '',
@@ -79,9 +79,7 @@ export default {
     methods: {
         async initialize() {
             let requests = [
-            brand: { required, minLength: minLength(1), },
-                type: { required, minLength: minLength(1), },
-                location: { required, minLength: minLength(1), },
+
                 backendApi.get('/equipmentType', {
                     params: { itemsPerPage: -1 },
                 }),
@@ -102,21 +100,21 @@ export default {
         },
         selectLocations(data) {
             let locationList = this.locations
-            data.forEach(function(item) {
+            data.forEach(function (item) {
                 locationList.push(item)
             })
             return locationList
         },
         selectTypes(data) {
             let typesList = this.types
-            data.forEach(function(item) {
+            data.forEach(function (item) {
                 typesList.push(item)
             })
             return typesList
         },
         selectBrands(data) {
             let brandList = this.brands
-            data.forEach(function(item) {
+            data.forEach(function (item) {
                 brandList.push(item)
             })
             return brandList

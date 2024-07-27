@@ -103,7 +103,7 @@
 
               <!-- Fecha de inicio de movimiento -->
 
-              <template v-if="currentAction != 5 && v$.editedItem.type_action_id.$model != ''">
+              <template v-if="currentAction == 4 && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
@@ -146,9 +146,9 @@
                 </v-col>
               </template>
 
-              <template v-if="currentAction == 5 && v$.editedItem.type_action_id.$model != ''">
+              <template v-if="currentAction != 4 && v$.editedItem.type_action_id.$model != ''">
                 <v-col cols="4" sm="12" md="12">
-                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
+                  <base-select label="Equipos asignados a tu persona" :items="filterUserEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
                     :rules="v$.editedItem.equipment" clearable>
                   </base-select>
@@ -529,7 +529,15 @@ export default {
       else {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
-    }, filterTypeAction() {
+    },
+    filterUserEquipment(){
+      return this.userEquipment = this.userEquipment.filter((item, index, self) =>
+      index === self.findIndex((t) => t.serial_number === item.serial_number)
+    );
+
+    },
+    
+    filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
     currentAction() {
@@ -556,7 +564,8 @@ export default {
     currentAction(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.editedItem.equipment = "";
-        if (this.editedItem.equipment_id.length === 0) {
+        
+        if (this.editedItem.equipment_id.length != 0 && typeof this.editedItem.equipment_id !== 'string') {
           this.editedItem.equipment_id.length = 0;
         }
 
@@ -567,7 +576,7 @@ export default {
     'v$.editedItem.type_action_id.$model': function (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.editedItem.equipment = "";
-        if (this.editedItem.equipment_id.length === 0) {
+        if (this.editedItem.equipment_id.length != 0 && typeof this.editedItem.equipment_id !== 'string') {
           this.editedItem.equipment_id.length = 0;
         }
       }
