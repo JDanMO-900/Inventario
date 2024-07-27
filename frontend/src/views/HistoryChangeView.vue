@@ -997,6 +997,7 @@ export default {
             params: { ...options, search: this.search },
           });
 
+          console.log(data.data);
           this.records = data.data;
 
 
