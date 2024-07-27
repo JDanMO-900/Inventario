@@ -208,7 +208,8 @@ class Equipment extends Model
         return $data;
     }
 
-    public static function userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
+    // public static function userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
+    public static function userEquipment($username, $search, $sortBy, $sort)
     {
 
         $data = Equipment::select(

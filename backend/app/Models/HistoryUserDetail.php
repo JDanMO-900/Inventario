@@ -34,7 +34,8 @@ class HistoryUserDetail extends Model
 
 
 
-    public static function allDataGeneralUser($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
+    // public static function allDataGeneralUser($username, $search, $sortBy, $sort, $skip, $itemsPerPage)
+    public static function allDataGeneralUser($username, $search, $sortBy, $sort)
     {
         $data = HistoryUserDetail::select(
             'history_user_detail.*',
@@ -68,8 +69,8 @@ class HistoryUserDetail extends Model
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->where('users.name', 'like', $username)
             ->orderBy("history_user_detail.$sortBy", $sort)
             ->get();
