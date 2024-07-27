@@ -194,14 +194,8 @@ class EquipmentController extends Controller
             ->orWhere('serial_number', $request->serial_number)
             ->first();
 
-
         $data = Encrypt::decryptArray($request->all(), 'id');
         $equipment = Equipment::where('id', $data['id'])->first();
-
-
-
-
-
 
         if ($equipment->id == $existingEquipment->id) {
 
@@ -214,13 +208,12 @@ class EquipmentController extends Controller
             $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
             $equipment->equipment_type_id = EquipmentType::where('name', $request->equipment_type_id)->first()->id;
             $equipment->brand_id = Brand::where('name', $request->brand)->first()->id;
-
             if ($request->provider != "") {
                 $equipment->provider_id = Provider::where('name', $request->provider)->first()->id;
             } else {
                 $equipment->provider_id = null;
             }
-
+            
             $equipment->save();
 
             // Recibe las licencias

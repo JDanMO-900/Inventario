@@ -31,7 +31,6 @@ class ProcessStateController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $processstate = ProcessState::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $processstate = Encrypt::encryptObject($processstate, "id");
 
         $total = ProcessState::counterPagination($search);
 

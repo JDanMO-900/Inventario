@@ -16,9 +16,11 @@
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            v-if="item.raw.process_state.toLowerCase() == 'pendiente' && item.raw.process_state.toLowerCase() != 'cancelado' && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Finalizar proceso"/>
+          <v-icon v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.internal != 1" size="20"
+            class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso" />
+
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
+
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
@@ -53,19 +55,25 @@
 
               <!-- location -->
               <v-col cols="6" sm="12" md="6">
-                <base-select label="Ubicación del dispositivo asignado" :items="this.location" item-title="name"
-                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id">
+                <base-select label="Lugar donde es requerida la asistencia" :items="this.location" item-title="name"
+                  v-model.trim="v$.editedItem.location_id.$model" :rules="v$.editedItem.location_id" clearable>
                 </base-select>
               </v-col>
               <!-- location -->
 
               <!-- name -->
 
+
               <v-col cols="6" sm="12" md="6">
                 <base-select label="Dependencia" :items="this.dependency" item-title="name"
-                  v-model.trim="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id">
+                  v-model="v$.editedItem.dependency_id.$model" :rules="v$.editedItem.dependency_id" disabled>
                 </base-select>
+
               </v-col>
+
+
+
+
               <!-- name -->
 
               <v-col cols="12" sm="12" md="12">
@@ -80,27 +88,27 @@
               <!-- accion realizada -->
               <v-col cols="4" sm="12" md="12">
                 <base-select label="Movimiento" :items="filterTypeAction" item-title="name"
-                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id">
+                  v-model.trim="v$.editedItem.type_action_id.$model" :rules="v$.editedItem.type_action_id" clearable>
                 </base-select>
               </v-col>
+
               <!-- Accion realizada -->
 
 
               <!-- Fecha de inicio de movimiento -->
               <v-col cols="12" sm="12" md="12">
                 <base-input label="Fecha de inicio" v-model="v$.editedItem.start_date.$model"
-                  :rules="v$.editedItem.start_date" type="datetime-local" :min="getCurrentDateTime()" />
+                  :rules="v$.editedItem.start_date" type="datetime-local" clearable />
               </v-col>
 
               <!-- Fecha de inicio de movimiento -->
 
-              <template
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() != 'soporte' && v$.editedItem.type_action_id.$model != ''">
+              <template v-if="currentAction == 4 && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos" :items="this.equipment" item-title="format" item-value="serial_number"
-                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment">
+                    v-model.trim="v$.editedItem.equipment.$model" :rules="v$.editedItem.equipment" clearable>
                   </base-select>
                 </v-col>
 
@@ -138,18 +146,11 @@
                 </v-col>
               </template>
 
-              <template
-                v-if="v$.editedItem.type_action_id.$model.toLowerCase() == 'soporte' && v$.editedItem.type_action_id.$model != ''">
-
-                <!-- Numero de activo fijo 1 -->
-
-
-                <!-- Mis equipos -->
-                <!-- Numero de activo fijo 1 -->
+              <template v-if="currentAction != 4 && v$.editedItem.type_action_id.$model != ''">
                 <v-col cols="4" sm="12" md="12">
-                  <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
+                  <base-select label="Equipos asignados a tu persona" :items="filterUserEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
-                    :rules="v$.editedItem.equipment">
+                    :rules="v$.editedItem.equipment" clearable>
                   </base-select>
                 </v-col>
 
@@ -205,7 +206,7 @@
               <!-- Descripcion -->
               <v-col cols="12" sm="12" md="12">
                 <base-text-area label="Comentarios(Opcional)" v-model="v$.editedItem.description.$model"
-                  :rules="v$.editedItem.description" />
+                  :rules="v$.editedItem.description" clearable />
               </v-col>
               <!-- Descripcion -->
 
@@ -215,7 +216,7 @@
             <!-- Form -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" />
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading" />
                 <base-button class="ms-1" type="secondary" title="Cancelar" @click="close" />
               </v-col>
             </v-row>
@@ -232,7 +233,7 @@
           <v-row>
             <v-col align="center">
               <base-button type="primary" title="Confirmar" @click="deleteItemConfirm" />
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" />
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeDelete" :loading="isLoading" />
             </v-col>
           </v-row>
         </v-container>
@@ -246,7 +247,7 @@
     <v-card>
       <v-card-title>
         <h2 class="mx-auto pt-3 mb-3 text-center black-secondary">
-          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }} 
+          Cancelar solicitud de {{ this.editedItem.type_action.toLowerCase() }}
 
         </h2>
       </v-card-title>
@@ -255,12 +256,128 @@
         <v-container>
           <v-row>
             <v-col align="center">
-              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" />
+              <base-button type="primary" title="Confirmar" @click="changeToCancelStatus" :loading="isLoading" />
               <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeCancelMovement" />
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialogInfo" width="1024">
+    <v-card>
+      <v-card-title>
+        <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Información referente al ticket</h2>
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <v-row>
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
+              </v-chip>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">
+              <v-table density="compact">
+                <tbody class="tbl-info">
+
+                  <tr>
+                    <td>Tipo de movimiento</td>
+                    <td>{{ editedItem.type_action }}</td>
+                  </tr>
+                  <tr>
+                    <td>Ubicación</td>
+                    <td>{{ editedItem.location }}</td>
+                  </tr>
+                  <tr>
+                    <td>Fecha que se inicio del movimiento</td>
+                    <td>{{ editedItem.start_date }}</td>
+
+                  </tr>
+
+                  <tr>
+                    <td>Descripción</td>
+                    <td v-if="this.editedItem.description != null"></td>
+                    <td v-else>No hay datos disponibles</td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-col>
+
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-2-circle" start></v-icon>Detalles del equipo
+              </v-chip>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">
+              <v-table density="compact">
+                <tbody class="tbl-info">
+                  <tr>
+                    <td>Tipo de equipo</td>
+                    <td>{{ editedItem.equipment_type }} </td>
+
+                  </tr>
+                  <tr>
+                    <td>Marca</td>
+                    <td>{{ editedItem.brand }}</td>
+                  </tr>
+                  <tr>
+                    <td>Modelo</td>
+                    <td>{{ editedItem.model }}</td>
+                  </tr>
+                  <tr>
+                    <td>Serial</td>
+                    <td>{{ editedItem.equipment_id }}</td>
+                  </tr>
+
+                </tbody>
+              </v-table>
+            </v-col>
+
+
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-4-circle" start></v-icon>Detalles del movimiento
+              </v-chip>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12">
+              <div class="w-100">
+                <v-table density="compact">
+                  <thead class="tbl-info">
+                    <tr>
+                      <th style="width: 33% !important;" class="text-center">Personal que realizo el movimiento</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="tech in this.editedItem.technician">
+                      <td>{{ tech }}</td>
+                    </tr>
+
+                    <tr v-if="this.editedItem.technician == 0">
+                      <td colspan="4">
+                        <p class="text-center py-3">Sin personal asignado</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-col cols="12" align="center">
+          <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
+        </v-col>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 
@@ -296,6 +413,9 @@ export default {
   },
   data() {
     return {
+      dialogInfo: false,
+      defaultDependency: "",
+      isLoading: false,
       search: "",
       selected: [],
       dialog: false,
@@ -312,7 +432,7 @@ export default {
       ],
       records: [],
       editedIndex: -1,
-      title: "Mis equipos",
+      title: "Mis tickets",
       total: 0,
       options: {},
       editedItem: {
@@ -355,8 +475,6 @@ export default {
           minLength: minLength(1),
         },
         dependency_id: {
-          required,
-          minLength: minLength(1),
         },
         users: {
           minLength: minLength(1),
@@ -411,9 +529,25 @@ export default {
       else {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
-    }, filterTypeAction() {
+    },
+    filterUserEquipment(){
+      return this.userEquipment = this.userEquipment.filter((item, index, self) =>
+      index === self.findIndex((t) => t.serial_number === item.serial_number)
+    );
+
+    },
+    
+    filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
+    currentAction() {
+      return this.getCurrentAction(this.editedItem.type_action_id);
+    },
+    currentProcess() {
+
+      return this.getCurrentProcess(this.editedItem.state_id);
+    },
+
 
   },
 
@@ -427,6 +561,28 @@ export default {
     dialogBlock(val) {
       val || this.closeBlock();
     },
+    currentAction(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.editedItem.equipment = "";
+        
+        if (this.editedItem.equipment_id.length != 0 && typeof this.editedItem.equipment_id !== 'string') {
+          this.editedItem.equipment_id.length = 0;
+        }
+
+
+      }
+    },
+
+    'v$.editedItem.type_action_id.$model': function (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.editedItem.equipment = "";
+        if (this.editedItem.equipment_id.length != 0 && typeof this.editedItem.equipment_id !== 'string') {
+          this.editedItem.equipment_id.length = 0;
+        }
+      }
+    }
+
+
   },
 
   created() {
@@ -438,8 +594,26 @@ export default {
   },
 
   methods: {
+    infoItem(item) {
+      this.editedIndex = this.records.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogInfo = true;
+    },
 
-
+    getCurrentAction(actionName) {
+      for (let element of this.typeAction) {
+        if (actionName == element.name) {
+          return element.id;
+        }
+      }
+    },
+    getCurrentProcess(processName) {
+      for (let element of this.processState) {
+        if (processName == element.name) {
+          return element.id;
+        }
+      }
+    },
     movementCancelStatusItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -453,7 +627,7 @@ export default {
       });
     },
     async changeToCancelStatus() {
-      console.log(this.editedItem);
+
       this.finishMovement.id = this.editedItem.id;
       this.finishMovement.equipment_id = this.editedItem.equipment_id;
       this.finishMovement.history_change = this.editedItem.history_change_id;
@@ -465,18 +639,23 @@ export default {
       }
 
       this.finishMovement.state_id = "Cancelado";
+      this.isLoading = true;
 
       try {
         const endStatus = await backendApi.put(`/cancelMovement/`, this.finishMovement);
         alert.success(endStatus.data.message);
       } catch (error) {
-        this.close();
+        this.closeCancelMovement();
+      }
+      finally {
+        await this.$nextTick();
+        setTimeout(() => (this.isLoading = false), 800);
+        this.initialize();
+        this.closeCancelMovement();
       }
 
-      this.initialize();
-      this.closeCancelMovement();
-    },
 
+    },
 
     getCurrentDateTime() {
       const now = new Date();
@@ -487,7 +666,7 @@ export default {
       const minutes = now.getMinutes().toString().padStart(2, '0');
 
       // Format: YYYY-MM-DDThh:mm (datetime-local format)
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      this.editedItem.start_date = `${year}-${month}-${day}T${hours}:${minutes}`;
     },
 
     addEquipment() {
@@ -553,19 +732,16 @@ export default {
 
 
       if (responses) {
-
-
-
         this.typeAction = responses[1].data.data;
         this.equipment = responses[2].data;
         this.processState = responses[3].data.data;
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
         this.userEquipment = responses[6].data.data;
-
-
-
       }
+
+
+
 
       this.loading = false;
     },
@@ -595,6 +771,7 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
 
       // Updating record
       if (this.editedIndex > -1) {
@@ -610,10 +787,14 @@ export default {
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
+        finally {
+          setTimeout(() => (this.isLoading = false), 800);
+          this.close();
+          this.initialize();
+          return;
+        }
 
-        this.close();
-        this.initialize();
-        return;
+
       }
 
       //Creating record
@@ -623,10 +804,16 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-      this.close();
-      this.initialize();
-      this.editedItem.equipment_id.length = 0;
-      return;
+      finally {
+
+        setTimeout(() => (this.isLoading = false), 800);
+        this.close();
+        this.initialize();
+        this.editedItem.equipment_id.length = 0;
+        return;
+
+      }
+
     },
 
     deleteItem(item) {
@@ -645,6 +832,7 @@ export default {
 
     async deleteItemConfirm() {
       try {
+        this.isLoading = true
         const { data } = await backendApi.delete(`/historyChange/${this.editedItem.id}`, {
           params: {
             id: this.editedItem.id,
@@ -655,9 +843,14 @@ export default {
       } catch (error) {
         this.close();
       }
+      finally {
+        setTimeout(() => (this.isLoading = false), 800)
+        this.initialize();
+        this.closeDelete();
 
-      this.initialize();
-      this.closeDelete();
+      }
+
+
     },
 
     getDataFromApi(options) {
@@ -686,10 +879,18 @@ export default {
     },
 
     addRecord() {
+
       this.dialog = true;
       this.editedIndex = -1;
       this.editedItem = Object.assign({}, this.defaultItem);
       this.v$.$reset();
+
+      this.dependency.forEach(element => {
+        if (element.id == 1) {
+          this.editedItem.dependency_id = element.name;
+        }
+      });
+      this.getCurrentDateTime();
     },
   },
 };

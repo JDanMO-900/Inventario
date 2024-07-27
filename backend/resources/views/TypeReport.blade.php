@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,6 +91,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
@@ -100,7 +102,7 @@
         </div>
         <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
     </div>
-    @if (!empty($data))        
+    @if (!empty($data))
         <table>
             <tr>
                 <th>#</th>
@@ -111,8 +113,8 @@
                 <th>Estado</th>
                 <th>Ubicación</th>
                 <th>Detalles técnicos</th>
-            </tr>    
-            @foreach ($data as $key => $report)            
+            </tr>
+            @foreach ($data as $key => $report)
                 <tr>
                     <td>{{ ++$key }}</td>
                     <td>{{ $report['type'] }}</td>
@@ -121,18 +123,20 @@
                     <td>{{ $report['number_active'] }}</td>
                     <td>{{ $report['state'] }}</td>
                     <td>
-                        @php
-                            $location = json_decode($report['location'], true);
-                            echo $location['location'] ?? 'No definida';
-                        @endphp
+                        @if ($report['location'] != '')
+                            {{ $report['location'] }}
+                        @else
+                            No hay datos disponibles
+                        @endif
                     </td>
                     <td>{!! nl2br($report['descriptions']) !!}</td>
 
-                </tr> 
+                </tr>
             @endforeach
         </table>
     @else
         <p class="no-data">No hay datos disponibles.</p>
     @endif
 </body>
+
 </html>

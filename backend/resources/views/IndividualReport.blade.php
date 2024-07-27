@@ -104,7 +104,11 @@
     </style>
 
 </head>
-@foreach ($data as $report)
+@php
+    $lastTrheeReoports = $data->take(5);
+@endphp
+
+@foreach ($lastTrheeReoports as $report)
     <body>
         <div class="header">
             <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">

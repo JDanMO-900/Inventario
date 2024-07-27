@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Equipment;
 use App\Models\HistoryChange;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,10 @@ class PDFData extends Model
 
     public static function typeReport($search)
     {
+
+        $lastestHistoryChange = HistoryChange::select('equipment_id', DB::raw('MAX(id) as latest_id'))
+        ->groupBy('equipment_id');
+
         $data = Equipment::select(
             'equipment.id',
             'equipment_type.name as type',
@@ -21,16 +26,22 @@ class PDFData extends Model
             'equipment.model',
             'equipment.number_active',
             'equipment_state.name as state',
-            'equipment.equipment_state_id as location'
+            DB::raw("CASE WHEN history_change.end_date IS NULL THEN location.name ELSE '' END as location")
         )
             ->join('brand', 'brand.id', '=', 'equipment.brand_id')
             ->join('equipment_type', 'equipment_type.id', '=', 'equipment.equipment_type_id')
             ->join('equipment_state', 'equipment_state.id', '=', 'equipment.equipment_state_id')
+            ->leftJoinSub($lastestHistoryChange, 'latest_history', function($join){
+                $join->on('latest_history.equipment_id', '=', 'equipment.id');
+            })
+            ->leftJoin('history_change', 'history_change.id', '=', 'latest_history.latest_id')
+            ->leftJoin('location', 'history_change.location_id', '=', 'location.id')
             ->where('brand_id', $search['brand_condition'], $search['brand'])
             ->where('equipment_type_id', $search['type_condition'], $search['type'])
+            ->where('location.id', $search['location_condition'], $search['location'])
             ->orderBy('equipment_type.name', 'ASC')
             ->get();
-
+    
         return $data;
     }
 
@@ -45,15 +56,18 @@ class PDFData extends Model
         return $data;
     }
 
-    public static function getEquipmentLocation($id)
+    public static function getEquipmentLocation($id, $search)
     {
         $data = HistoryChange::select('location.name as location')
             ->join('location', 'location.id', '=', 'history_change.location_id')
             ->where('history_change.equipment_id', $id)
+            ->where('history_change.location_id', $search['location_condition'], $search['location'])
             ->whereIn('history_change.type_action_id', ['2', '3', '4'])
             ->whereNull('history_change.end_date')
             ->orderBy('history_change.id', 'DESC')
             ->first();
+
+
 
         return $data;
     }

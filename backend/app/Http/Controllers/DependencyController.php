@@ -31,7 +31,6 @@ class DependencyController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $dependency = Dependency::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $dependency = Encrypt::encryptObject($dependency, "id");
 
         $total = Dependency::counterPagination($search);
 

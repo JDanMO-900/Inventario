@@ -31,21 +31,21 @@
           </template>
 
           <v-list v-if="userRol != 'Usuario'" density="compact" variant="plain" class="my-list pt-2 pb-2">
-            <RouterLink to="/generalReport">
+            <!-- <RouterLink to="/generalReport">
                 <v-list-item>
                 Inventario general
               </v-list-item>
-            </RouterLink>
+            </RouterLink> -->
             <RouterLink v-if="userRol != 'Usuario'" to="/equipmentTypeReport">
               <v-list-item> 
-                Tipo de equipos
+                Reporte de equipos
               </v-list-item>
             </RouterLink>
-            <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">
+            <!-- <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">
               <v-list-item> 
                 Equipos por ubicación
               </v-list-item>
-            </RouterLink>
+            </RouterLink> -->
           </v-list>
         </v-menu>
 

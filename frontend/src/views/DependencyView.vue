@@ -76,7 +76,7 @@
             <!-- Form -->
             <v-row>
               <v-col align="center">
-                <base-button type="primary" title="Guardar" @click="save" />
+                <base-button type="primary" title="Guardar" @click="save" :loading="isLoading"/>
                 <base-button
                   class="ms-1"
                   type="secondary"
@@ -102,6 +102,7 @@
                 type="primary"
                 title="Confirmar"
                 @click="deleteItemConfirm"
+                :loading="isLoading"
               />
               <base-button
                 class="ms-1"
@@ -141,6 +142,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       search: "",
       selected: [],
       dialog: false,
@@ -252,6 +254,7 @@ export default {
         alert.error("Campos obligatorios");
         return;
       }
+      this.isLoading = true;
 
       // Updating record
       if (this.editedIndex > -1) {
@@ -267,7 +270,7 @@ export default {
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
-
+        setTimeout(() => (this.isLoading = false), 800);
         this.close();
         this.initialize();
         return;
@@ -281,7 +284,7 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-
+      setTimeout(() => (this.isLoading = false), 800);
       this.close();
       this.initialize();
       return;
@@ -303,6 +306,7 @@ export default {
     },
 
     async deleteItemConfirm() {
+      this.isLoading = true;
       try {
         const { data } = await backendApi.delete(`/dependency/${this.editedItem.id}`, {
           params: {
@@ -314,7 +318,7 @@ export default {
       } catch (error) {
         this.close();
       }
-
+      setTimeout(() => (this.isLoading = false), 800);
       this.initialize();
       this.closeDelete();
     },
