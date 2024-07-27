@@ -16,10 +16,11 @@
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.internal != 1"
-            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel"
-            title="Cancelar proceso" />
+          <v-icon v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.internal != 1" size="20"
+            class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso" />
+
+          <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
+
           <v-icon icon="fa:fas fa-search"></v-icon>
           <!-- <font-awesome-icon :icon="['fas', 'file-invoice']" /> -->
         </template>
@@ -102,8 +103,7 @@
 
               <!-- Fecha de inicio de movimiento -->
 
-              <template
-                v-if="currentAction != 5 && v$.editedItem.type_action_id.$model != ''">
+              <template v-if="currentAction != 5 && v$.editedItem.type_action_id.$model != ''">
 
                 <!-- Numero de activo fijo 1 -->
                 <v-col cols="4" sm="12" md="12">
@@ -146,8 +146,7 @@
                 </v-col>
               </template>
 
-              <template
-                v-if="currentAction == 5 && v$.editedItem.type_action_id.$model != ''">
+              <template v-if="currentAction == 5 && v$.editedItem.type_action_id.$model != ''">
                 <v-col cols="4" sm="12" md="12">
                   <base-select label="Equipos asignados a tu persona" :items="this.userEquipment" item-title="format"
                     item-value="serial_number" v-model.trim="v$.editedItem.equipment.$model"
@@ -266,6 +265,122 @@
     </v-card>
   </v-dialog>
 
+  <v-dialog v-model="dialogInfo" width="1024">
+    <v-card>
+      <v-card-title>
+        <h2 class="mx-auto mt-3 pt-3 text-center black-secondary">Información referente al ticket</h2>
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <v-row>
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-3-circle" start></v-icon>Detalles del movimiento
+              </v-chip>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">
+              <v-table density="compact">
+                <tbody class="tbl-info">
+
+                  <tr>
+                    <td>Tipo de movimiento</td>
+                    <td>{{ editedItem.type_action }}</td>
+                  </tr>
+                  <tr>
+                    <td>Ubicación</td>
+                    <td>{{ editedItem.location }}</td>
+                  </tr>
+                  <tr>
+                    <td>Fecha que se inicio del movimiento</td>
+                    <td>{{ editedItem.start_date }}</td>
+
+                  </tr>
+
+                  <tr>
+                    <td>Descripción</td>
+                    <td v-if="this.editedItem.description != null"></td>
+                    <td v-else>No hay datos disponibles</td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-col>
+
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-2-circle" start></v-icon>Detalles del equipo
+              </v-chip>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">
+              <v-table density="compact">
+                <tbody class="tbl-info">
+                  <tr>
+                    <td>Tipo de equipo</td>
+                    <td>{{ editedItem.equipment_type }} </td>
+
+                  </tr>
+                  <tr>
+                    <td>Marca</td>
+                    <td>{{ editedItem.brand }}</td>
+                  </tr>
+                  <tr>
+                    <td>Modelo</td>
+                    <td>{{ editedItem.model }}</td>
+                  </tr>
+                  <tr>
+                    <td>Serial</td>
+                    <td>{{ editedItem.equipment_id }}</td>
+                  </tr>
+
+                </tbody>
+              </v-table>
+            </v-col>
+
+
+
+            <v-col cols="12" sm="12" md="12">
+              <v-chip color="primary" variant="flat" label>
+                <v-icon icon="mdi-numeric-4-circle" start></v-icon>Detalles del movimiento
+              </v-chip>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12">
+              <div class="w-100">
+                <v-table density="compact">
+                  <thead class="tbl-info">
+                    <tr>
+                      <th style="width: 33% !important;" class="text-center">Personal que realizo el movimiento</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="tech in this.editedItem.technician">
+                      <td>{{ tech }}</td>
+                    </tr>
+
+                    <tr v-if="this.editedItem.technician == 0">
+                      <td colspan="4">
+                        <p class="text-center py-3">Sin personal asignado</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-col cols="12" align="center">
+          <base-button class="ms-1" type="secondary" title="Cerrar" @click="dialogInfo = false" />
+        </v-col>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 
 
 </template>
@@ -298,6 +413,7 @@ export default {
   },
   data() {
     return {
+      dialogInfo: false,
       defaultDependency: "",
       isLoading: false,
       search: "",
@@ -420,7 +536,7 @@ export default {
       return this.getCurrentAction(this.editedItem.type_action_id);
     },
     currentProcess() {
-   
+
       return this.getCurrentProcess(this.editedItem.state_id);
     },
 
@@ -437,17 +553,23 @@ export default {
     dialogBlock(val) {
       val || this.closeBlock();
     },
-    currentAction(newVal, oldVal){
-      if(newVal !== oldVal){
+    currentAction(newVal, oldVal) {
+      if (newVal !== oldVal) {
         this.editedItem.equipment = "";
-        this.editedItem.equipment_id.length = 0;
+        if (this.editedItem.equipment_id.length === 0) {
+          this.editedItem.equipment_id.length = 0;
+        }
+
+
       }
     },
 
-    'v$.editedItem.type_action_id.$model': function(newVal, oldVal){
-      if(newVal !== oldVal){
+    'v$.editedItem.type_action_id.$model': function (newVal, oldVal) {
+      if (newVal !== oldVal) {
         this.editedItem.equipment = "";
-        this.editedItem.equipment_id.length = 0;
+        if (this.editedItem.equipment_id.length === 0) {
+          this.editedItem.equipment_id.length = 0;
+        }
       }
     }
 
@@ -463,6 +585,11 @@ export default {
   },
 
   methods: {
+    infoItem(item) {
+      this.editedIndex = this.records.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogInfo = true;
+    },
 
     getCurrentAction(actionName) {
       for (let element of this.typeAction) {
@@ -471,7 +598,7 @@ export default {
         }
       }
     },
-    getCurrentProcess(processName){
+    getCurrentProcess(processName) {
       for (let element of this.processState) {
         if (processName == element.name) {
           return element.id;
