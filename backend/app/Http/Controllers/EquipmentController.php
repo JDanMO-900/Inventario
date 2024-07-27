@@ -61,7 +61,8 @@ class EquipmentController extends Controller
 
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
-        $equipment = Equipment::userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage);
+        // $equipment = Equipment::userEquipment($username, $search, $sortBy, $sort, $skip, $itemsPerPage);
+        $equipment = Equipment::userEquipment($username, $search, $sortBy, $sort);
         $equipment = Encrypt::encryptObject($equipment, "id");
 
         $total = Equipment::counterPagination($search);

@@ -8,7 +8,6 @@ use Encrypt;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\Equipment;
-
 use App\Models\Dependency;
 use App\Models\TypeAction;
 use App\Models\HistoryTech;
@@ -38,10 +37,10 @@ class HistoryChangeController extends Controller
 
         $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
         $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
-
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
-        $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
+        // $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
+        $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort);
         $historychange = Encrypt::encryptObject($historychange, "id");
 
         $total = HistoryChange::counterPagination($search);

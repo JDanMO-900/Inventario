@@ -42,10 +42,9 @@ class HistoryChange extends Model
 
     public $timestamps = true;
 
-
-    public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
+    // public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
+    public static function allDataSearched($search, $sortBy, $sort)
     {
-
         $data =  HistoryChange::select(
             'history_change.*',
             'type_action.*',
@@ -54,16 +53,13 @@ class HistoryChange extends Model
             'location.*',
             'dependency.*',
             'history_change.id as id',
-
             // Ubicacion
             'location.name as location_id',
             'dependency.name as dependency_id',
-
             'equipment_id.serial_number as equipment_id',
             'equipment_id.model as model1',
             'equipment_type1.name as type1',
             'brand1.name as brand1',
-
             'process_state.name as state_id',
             'process_state.id as process_state_id',
             'type_action.name as type_action_id',
@@ -85,8 +81,8 @@ class HistoryChange extends Model
             ->orWhere('equipment_type1.name', 'like', $search)
             
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("history_change.$sortBy", $sort)
             ->get();
 
@@ -118,7 +114,6 @@ class HistoryChange extends Model
             ->join('location', 'history_change.location_id', '=', 'location.id')
             ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->where('history_change.location_id', 'like', $search)
-
             ->count();
     }
 
