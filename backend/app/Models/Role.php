@@ -31,7 +31,6 @@ class Role extends Model
         return Role::select('role.*', 'role.id as id')
 
             ->where('role.name', 'like', $search)
-
             ->skip($skip)
             ->take($itemsPerPage)
             ->orderBy("role.$sortBy", $sort)
@@ -43,5 +42,19 @@ class Role extends Model
         return Role::select('role.*', 'role.id as id')
             ->where('role.name', 'like', $search)
             ->count();
+    }
+
+    public static function getUserRolById($rolId)
+    {
+        if($rolId == null){
+            return null;
+        }
+        else{
+            return Role::select('role.name as rolName')
+            ->where('role.id', 'like', $rolId)
+            ->first();
+
+        }
+
     }
 }

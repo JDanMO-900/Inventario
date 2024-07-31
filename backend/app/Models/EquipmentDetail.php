@@ -42,18 +42,18 @@ class EquipmentDetail extends Model
         return $this->belongsTo(TechnicalDescription::class, 'technical_description_id', 'id');
     }
 
-    public function format()
-    {
-        return [
-            'id' => $this->id,
-            'attribute' => $this->attribute,
-            'equipment_id' => $this->equipment_id,
-            'technical_description' => $this->technical_description_id,
-            'equipment' => $this->equipment()->get(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ];
-    }
+    // public function format()
+    // {
+    //     return [
+    //         'id' => $this->id,
+    //         'attribute' => $this->attribute,
+    //         'equipment_id' => $this->equipment_id,
+    //         'technical_description' => $this->technical_description_id,
+    //         'equipment' => $this->equipment()->get(),
+    //         'created_at' => $this->created_at,
+    //         'updated_at' => $this->updated_at,
+    //     ];
+    // }
 
     public function getById(int $id){
         $equipment = Equipment::where('equipment_id', $id)->get()->map(fn ($equipment) => $equipment->format());

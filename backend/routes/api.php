@@ -85,7 +85,8 @@ Route::group(
     Route::put('/finishIncompleteMovement', [HistoryChangeController::class, 'finishIncompleteMovement']);
     
     Route::get('/user/{name}', [UserController::class, 'filter']);
-    Route::resource('/userData', UserController::class);
+    Route::resource('/userData/{role}', UserController::class);
+
     Route::get('/role', [RoleController::class, 'index']);
     Route::resource('/location', LocationController::class);
     Route::resource('/historyUserDetail', HistoryUserDetailController::class);
