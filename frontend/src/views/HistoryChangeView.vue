@@ -3,7 +3,7 @@
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }} {{ }}</h2>
+        <h2>{{ title }} </h2>
         <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
@@ -18,9 +18,9 @@
 
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"
-            v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
+            v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
-            v-if="item.raw.process_state_id != 3 || this.rolRetrieveUser == 'Jefe'" />
+            v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
           <template v-if="((item.raw.action_id == 1 || item.raw.action_id == 4) && item.raw.process_state_id != 3
             && item.raw.process_state_id != 4)">
@@ -323,7 +323,7 @@
                   </v-chip>
                 </v-col>
                 <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
-                  <template v-if="(currentProcess == 1) && rolRetrieveUser == 'Jefe'"
+                  <template v-if="(currentProcess == 1) && userRol == 2"
                     class="d-flex justify-content-center">
                     <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
                       @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
@@ -455,19 +455,18 @@
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
 import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
-
-
+import { onMounted, ref } from "vue";
 import backendApi from "@/services/backendApi";
-
-
-
-
 import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
 import BaseSelect from "../components/base-components/BaseSelect.vue";
 import BaseTextArea from "../components/base-components/BaseTextArea.vue";
 import BaseMultiSelect from "../components/base-components/BaseMultiSelect.vue";
 import useAlert from "../composables/useAlert";
+
+
+
+
 
 const { alert } = useAlert();
 const langMessages = messages["es"].validations;
@@ -481,12 +480,12 @@ export default {
     return {
       search: "",
       selected: [],
+      userRol: JSON.parse(window.localStorage.getItem("user")).rol,
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
       dialogMovementFinishDate: false,
       dialogChangeProcessState: false,
-      rolRetrieveUser: "",
       enabled: false,
       isLoading: false,
       headers: [
@@ -863,8 +862,7 @@ export default {
         this.userTech = Array.from(uniqueTechNames)
       }
 
-      const retrieveUser = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
-      this.rolRetrieveUser = retrieveUser.data[0].rolName;
+    
 
 
       this.loading = false;

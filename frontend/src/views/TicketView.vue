@@ -16,7 +16,8 @@
       <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.internal != 1" size="20"
+
+          <v-icon v-if="item.raw.process_id == 1 || item.raw.process_id != 4 && item.raw.internal != 1" size="20"
             class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso" />
 
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />

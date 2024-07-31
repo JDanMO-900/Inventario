@@ -20,7 +20,7 @@ const router = createRouter({
       name: "home",
       // component: () => import("../views/HomeView.vue"),
       redirect: '/equipment',
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/test",
@@ -32,73 +32,73 @@ const router = createRouter({
       path: "/equipmentState",
       name: "equipmentState",
       component: () => import("../views/EquipmentStateView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/brand",
       name: "brand",
       component: () => import("../views/BrandView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/equipmentType",
       name: "equipmentType",
       component: () => import("../views/EquipmentTypeView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },    
     {
       path: "/dependency",
       name: "dependency",
       component: () => import("../views/DependencyView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/provider",
       name: "provider",
       component: () => import("../views/ProviderView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/technicalDescription",
       name: "technicalDescription",
       component: () => import("../views/TechnicalDescriptionView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },    
     {
       path: "/license",
       name: "license",
       component: () => import("../views/LicenseView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/processState",
       name: "processState",
       component: () => import("../views/ProcessStateView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/typeAction",
       name: "typeAction",
       component: () => import("../views/TypeActionView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/movements",
       name: "movements",
       component: () => import("../views/HistoryChangeView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/equipment",
       name: "equipment",
       component: () => import("../views/EquipmentView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/location",
       name: "location",
       component: () => import("../views/LocationView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/ticket",
@@ -111,31 +111,37 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../views/DashboardView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/users",
       name: "users",
       component: () => import("../views/UserListView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     },  
     {
       path: "/generalReport",
       name: "generalReport",
       component: () => import("../views/reports/GeneralReportView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
     {
       path: "/equipmentTypeReport",
       name: "equipmentTypeReport",
       component: () => import("../views/reports/EquipmentTypeReportView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
     {
       path: "/locationReport",
       name: "locationReport",
       component: () => import("../views/reports/LocationReportView.vue"),
-      meta: { requiresAuth: true, roles: ['Jefe', 'Tecnico'] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
+    }, 
+    {
+      path: "/filterMovement",
+      name: "filterMovement",
+      component: () => import("../views/filters/FilterMovementView.vue"),
+      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
     {
       path: "/:pathMatch(.*)*",
@@ -156,13 +162,13 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
     else{
-      var user = await backendApi.get(`/user/${JSON.parse(window.localStorage.getItem("user")).email}`)
-      let rol =  user.data[0].rolName;
 
-      if(rol== "Jefe"  || rol== "Tecnico"){
+      let rol =  JSON.parse(window.localStorage.getItem("user")).rol;
+
+      if(rol== 2  || rol== 3){
         next();
       }
-      else if(rol == "Usuario"){
+      else if(rol == 1){
         next("/ticket");
       }
       else{
