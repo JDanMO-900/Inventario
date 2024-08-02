@@ -81,9 +81,7 @@ Route::group(
     Route::put('/cancelMovement', [HistoryChangeController::class, 'updateUserCancelMovement']);
     Route::put('/changeStatus', [HistoryChangeController::class, 'updateEndProcess']);
     Route::put('/updateProcessState', [HistoryChangeController::class, 'updateProcessState']);
-
     Route::put('/finishIncompleteMovement', [HistoryChangeController::class, 'finishIncompleteMovement']);
-    
     Route::get('/user/{name}', [UserController::class, 'filter']);
     Route::resource('/userData', UserController::class);
     Route::get('/role', [RoleController::class, 'index']);
@@ -95,7 +93,5 @@ Route::group(
     Route::get('/individual-reportpdf/{serial_number}', [PDFDataController::class, 'individualReport']);
     Route::post('/reportgeneralpdf', [PDFDataController::class, 'reportGeneral']);
     Route::post('/testEquip', [EquipmentController::class, 'getReportGeneral']);
-
-
-    
+    Route::get('/getFilterMovement', [HistoryChangeController::class, 'filterMovement']);
 });

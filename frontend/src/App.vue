@@ -29,8 +29,7 @@ onMounted(async () => {
 
   if (user.value) {
 
-    const response = await backendApi.get(`/user/${user.value.email}`)
-    userRol.value = response.data[0].rolName;
+    userRol.value =user.value['rol'];
 
   }
 

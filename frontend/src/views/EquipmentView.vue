@@ -643,6 +643,7 @@ export default {
       dialogInfo: false,
       dialogAvailability: false,
       dialogFinishIncompleteActivity: false,
+      userRol: JSON.parse(window.localStorage.getItem("user")).rol,
       headers: [
         { title: "Equipo", key: "equipment_type_id" },
         { title: "Modelo", key: "model" },
@@ -1084,7 +1085,7 @@ export default {
             params: { ...options, search: this.search },
           });
 
-          // var user = JSON.parse(window.localStorage.getItem("user"));
+JSON.parse(window.localStorage.getItem("user"))          // var user = ;
           // const rol = await backendApi.get(`/user/${user.name}`);
           this.records = data.data;
           this.total = data.total;

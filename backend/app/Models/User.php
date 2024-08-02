@@ -106,7 +106,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
             "id" => Encrypt::encryptValue($this->id) ?? null,
             "name" => $this?->name,
             "email" => $this?->email,
-            "rol" => $this?->role?->name,
+            "rol" => $this?->role_id,
+            // "rol" => $this?->role?->name,
+            "user_role" => Role::getUserRolById($this?->role_id)
         ];
     }
 
