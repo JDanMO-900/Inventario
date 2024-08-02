@@ -52,6 +52,30 @@ class HistoryChangeController extends Controller
         ]);
     }
 
+    public function filterMovement(Request $request){
+
+
+
+        $search = [
+            'typeMovement' => ($request->search['typeMovement']),
+            'typeMovement_condition' => ($request->search['typeMovement'] == -1) ? '>' : '=',
+            'type' => ($request->search['type']),
+            'type_condition' => ($request->search['type'] == -1) ? '>' : '=',
+            'processState' => ($request->search['processState']),
+            'processState_condition' => ($request->search['processState'] == -1) ? '>' : '=',
+            'start_range' => $request->search['start_date'],
+            'end_range' => $request->search['end_date'],
+        ];
+
+        $historychange = HistoryChange::filterMovementByParameters($search);
+        $historychange = Encrypt::encryptObject($historychange, "id");
+
+        return response()->json([
+            "message" => "Registros obtenidos correctamente.",
+            "data" => $historychange,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

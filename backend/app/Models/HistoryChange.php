@@ -117,6 +117,44 @@ class HistoryChange extends Model
             ->count();
     }
 
+    public static function filterMovementByParameters($search){
+        $data =  HistoryChange::select(
+            'history_change.*',
+            'type_action.*',
+            'equipment.*',
+            'process_state.*',
+            'location.*',
+            'dependency.*',
+            'history_change.id as id',
+            'location.name as location',
+            'dependency.name as dependency',
+            'equipment.serial_number as serial_number',
+            'equipment.model as model',
+            'equipment_type.name as type',
+            'equipment.number_active as number_active',
+            'brand.name as brand',
+            'process_state.name as process_state',
+            'type_action.name as action_name'
+        )
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
+            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+            ->where('type_action_id', $search['typeMovement_condition'], $search['typeMovement'])
+            ->Where('equipment_type.id', $search['type_condition'], $search['type'])
+            ->Where('state_id', $search['processState_condition'], $search['processState'])
+            ->whereBetween('start_date', [$search['start_range'], $search['end_range']])
+            ->get();
+
+
+
+            return $data;
+
+    }
+
     public static function getEquipmentData($brand)
     {
         $data = HistoryChange::select(

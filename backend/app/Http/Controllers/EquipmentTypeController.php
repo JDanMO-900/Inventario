@@ -31,7 +31,7 @@ class EquipmentTypeController extends Controller
         $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
         $equipmenttype = EquipmentType::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $equipmenttype = Encrypt::encryptObject($equipmenttype, "id");
+        // $equipmenttype = Encrypt::encryptObject($equipmenttype, "id");
 
         $total = EquipmentType::counterPagination($search);
 
