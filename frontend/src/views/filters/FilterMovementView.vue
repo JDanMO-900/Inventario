@@ -7,7 +7,8 @@
 
                     <v-col cols="12" lg="12" md="12" sm="12">
                         <BaseSelect label='Estados' :items="processStates" item-title='name' item-value="id"
-                            v-model.trim="v$.editedItem.location.$model" :rules="v$.editedItem.location" clearable>
+                            v-model.trim="v$.editedItem.processState.$model" :rules="v$.editedItem.processState"
+                            clearable>
                         </BaseSelect>
                     </v-col>
                     <v-col cols="12" lg="6" md="6" sm="12">
@@ -17,33 +18,64 @@
                     </v-col>
                     <v-col cols="12" lg="6" md="6" sm="12">
                         <BaseSelect label='Tipo de movimiento' :items="typeMovements" item-title='name' item-value="id"
-                            v-model.trim="v$.editedItem.brand.$model" :rules="v$.editedItem.brand" clearable>
+                            v-model.trim="v$.editedItem.typeMovement.$model" :rules="v$.editedItem.typeMovement"
+                            clearable>
                         </BaseSelect>
                     </v-col>
 
                     <!-- fecha del movimiento -->
-                    <v-col cols="12" sm="12" md="12">
-                        <base-input label="Fecha" v-model="v$.editedItem.start_date.$model"
-                            :rules="v$.editedItem.start_date" type="date" clearable />
+                    <v-col cols="12" sm="6" md="6">
+                        <base-input label="Rango inicial" v-model="v$.editedItem.start_date.$model"
+                            :rules="v$.editedItem.start_date" type="datetime-local" clearable />
                     </v-col>
                     <!-- fecha del movimiento -->
 
 
                     <!-- fecha del movimiento -->
-                    <v-col cols="12" sm="12" md="12">
-                        <base-input label="Fecha" v-model="v$.editedItem.end_date.$model"
-                            :rules="v$.editedItem.end_date" type="date" clearable />
+                    <v-col cols="12" sm="6" md="6">
+                        <base-input label="Rango final" v-model="v$.editedItem.end_date.$model"
+                            :rules="v$.editedItem.end_date" type="datetime-local" clearable />
                     </v-col>
                     <!-- fecha del movimiento -->
 
 
                     <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
-                        <base-button type="primary" title="Generar reporte" @click="generateReport"
+                        <base-button type="primary" title="Generar historial" @click="filterByMovement"
                             :loading="btnLoading" />
                     </v-col>
+
                 </v-row>
             </v-container>
         </v-card>
+
+        <v-card class="p-3 mt-3">
+
+            <v-container>
+
+
+
+                <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
+                    <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text"
+                        v-model="search"></v-text-field>
+                </v-col>
+            </v-container>
+
+
+            <v-container>
+                <v-row>
+                    <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
+                    <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1"
+                        :search="search">
+
+                        <template v-slot:no-data>
+                            <v-icon @click="initialize" icon="mdi-refresh" />
+                        </template>
+
+                    </v-data-table>
+                </v-row>
+            </v-container>
+        </v-card>
+
     </div>
 </template>
 <script>
@@ -64,6 +96,8 @@ export default {
     },
     data() {
         return {
+            search: "",
+            loading: false,
             title: 'Reporte de equipos',
             processStates: [
                 { id: -1, name: "TODAS LOS ESTADOS" }
@@ -75,34 +109,38 @@ export default {
                 { id: -1, name: 'TODOS LOS MOVIMIENTOS' }
             ],
             editedItem: {
-                brand: '',
+                typeMovement: '',
                 type: '',
-                location: '',
+                processState: '',
                 start_date: "",
                 end_date: "",
             },
-            defaultItem: {
-                brand: '',
-                type: '',
-                location: '',
-                start_date: "",
-                end_date: "",
-            },
+            headers: [
+                { title: "Ubicación", key: "location" },
+                { title: "Dependencia", key: "dependency" },
+                { title: "# de activo", key: "number_active" },
+                { title: "Serial", key: "serial_number" },
+                { title: "Modelo", key: "model" },
+
+            ],
+            records: [],
+
             btnLoading: false
         }
     },
     validations() {
         return {
             editedItem: {
-                brand: { required, minLength: minLength(1), },
+                typeMovement: { required, minLength: minLength(1), },
                 type: { required, minLength: minLength(1), },
-                location: { required, minLength: minLength(1), },
+                processState: { required, minLength: minLength(1), },
                 start_date: {
-
+                    required,
                     minLength: minLength(1),
 
                 },
                 end_date: {
+                    required,
                     minLength: minLength(1)
                 },
             }
@@ -156,7 +194,10 @@ export default {
             })
             return typeMovementList
         },
-        async generateReport() {
+        async filterByMovement() {
+            this.loading = true;
+            this.btnLoading = true;
+            this.records = [];
             this.v$.editedItem.$validate();
             if (this.v$.editedItem.$invalid) {
                 alert.error("Campos obligatorios");
@@ -164,16 +205,18 @@ export default {
             }
 
             try {
-                this.btnLoading = true;
-                const reportData = await backendApi.post(`/typepdf`, this.editedItem, { responseType: 'blob' });
-                console.log(this.editedItem)
-                const report_data = new Blob([reportData.data], { type: 'application/pdf' })
-                const url_report = window.URL.createObjectURL(report_data);
-                window.open(url_report);
-                this.btnLoading = false
+                const { data } = await backendApi.get('/getFilterMovement', {
+                    params: { search: this.editedItem },
+                });
+
+                this.records = data.data;
+                setTimeout(() => (this.btnLoading = false), 500);
+                this.loading = false;
+     
             } catch (error) {
-                alert.error("Ocurrió un error al generar el reporte.");
-                this.btnLoading = false
+                alert.error("Ocurrió un error al generar el historial.");
+                setTimeout(() => (this.btnLoading = false), 500);
+                this.loading = false;
             }
         }
     }

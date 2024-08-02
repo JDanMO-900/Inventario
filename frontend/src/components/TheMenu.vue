@@ -26,16 +26,16 @@
           <template v-slot:activator="{ props }">
             <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
               <v-icon icon="mdi-chart-line" size="20"></v-icon>
-              <span>Reportes</span>
+              <span>Control de Inventario</span>
             </div>
           </template>
 
           <v-list v-if="userRol != 1" density="compact" variant="plain" class="my-list pt-2 pb-2">
-            <!-- <RouterLink to="/generalReport">
+            <RouterLink to="/filterMovement">
                 <v-list-item>
-                Inventario general
+                Filtro de movimientos
               </v-list-item>
-            </RouterLink> -->
+            </RouterLink>
             <RouterLink v-if="userRol != 1" to="/equipmentTypeReport">
               <v-list-item> 
                 Reporte de equipos
