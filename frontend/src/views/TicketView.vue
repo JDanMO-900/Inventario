@@ -639,7 +639,7 @@ export default {
         return;
       }
 
-      this.finishMovement.state_id = "Cancelado";
+      this.finishMovement.state_id = this.processState.find(item=>item.id ==4)['name'];
       this.isLoading = true;
 
       try {
