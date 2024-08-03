@@ -27,11 +27,11 @@ class DatabaseSeeder extends Seeder
             TypeActionSeeder::class,
             LocationSeeder::class,
             EquipmentSeeder::class,
-            EquipmentLicenseDetailSeeder::class,
-            HistoryChangeSeeder::class,
-            EquipmentDetailSeeder::class,
-            HistoryUserDetailSeeder::class,
-            HistoryTechSeeder::class
+            // EquipmentLicenseDetailSeeder::class,
+            // HistoryChangeSeeder::class,
+            // EquipmentDetailSeeder::class,
+            // HistoryUserDetailSeeder::class,
+            // HistoryTechSeeder::class
 
         ]);
     }

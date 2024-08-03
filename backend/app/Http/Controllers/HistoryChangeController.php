@@ -84,6 +84,7 @@ class HistoryChangeController extends Controller
      */
     public function store(Request $request)
     {
+   
 
         foreach ($request->equipment_id as $equipment) {
             $historychange = new HistoryChange;
