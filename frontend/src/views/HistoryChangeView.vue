@@ -892,12 +892,13 @@ export default {
 
     async save() {
 
+      
+      if (this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==4)['name'] || this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==1)['name']) {
 
-      if (this.editedItem.type_action_id.toLowerCase() == 'préstamo' || this.editedItem.type_action_id.toLowerCase() == 'mantenimiento') {
-        this.editedItem.state_id = "Aprobado";
+        this.editedItem.state_id = this.processState.find(item=>item.id ==2)['name'];
       }
       else {
-        this.editedItem.state_id = "finalizado";
+        this.editedItem.state_id = this.processState.find(item=>item.id ==3)['name'];
       }
 
       this.v$.editedItem.$validate();

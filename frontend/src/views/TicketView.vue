@@ -437,11 +437,11 @@ export default {
       total: 0,
       options: {},
       editedItem: {
-        location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
+        location_id: "", dependency_id: "", technician: [], users: JSON.parse(window.localStorage.getItem("user")).name, description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: "",
       },
       defaultItem: {
-        location_id: "", dependency_id: "", technician: [], users: "", description: "", quantity_out: 0,
+        location_id: "", dependency_id: "", technician: [], users: JSON.parse(window.localStorage.getItem("user")).name, description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
       },
       loading: false,
