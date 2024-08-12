@@ -271,7 +271,7 @@ class EquipmentController extends Controller
         $changeEndUseDate->save();
 
         return response()->json([
-            "message" => "Disponibilidad cambiada con exito",
+            "message" => "Disponibilidad cambiada con éxito",
         ]);
     }
 

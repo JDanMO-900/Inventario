@@ -646,12 +646,12 @@ export default {
       userRol: JSON.parse(window.localStorage.getItem("user")).rol,
       headers: [
         { title: "Equipo", key: "equipment_type_id" },
-        { title: "Modelo", key: "model" },
-        { title: "Estado", key: "state" },
+        // { title: "Modelo", key: "model" },
         { title: "# de serie", key: "serial_number" },
         { title: "# de activo fijo", key: "number_active" },
-        { title: "# de registro interno", key: "number_internal_active" },
+        // { title: "# de registro interno", key: "number_internal_active" },
         { title: "Disponibilidad", key: "availability" },
+        { title: "Estado", key: "state" },
         { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
@@ -701,7 +701,6 @@ export default {
           required,
           minLength: minLength(1),
         }, number_internal_active: {
-          required,
           minLength: minLength(1),
         }, model: {
           required,
@@ -1015,7 +1014,7 @@ export default {
         } catch (error) {
           alert.error("No fue posible actualizar el registro.");
         }
-
+        this.isLoading = false;
         this.close();
         this.initialize();
         return;
@@ -1029,13 +1028,11 @@ export default {
       } catch (error) {
         alert.error("No fue posible crear el registro.");
       }
-      setTimeout(() => (this.isLoading = false), 800);
+      this.isLoading = false;
       this.editedItem.licenses.length = 0;
       this.editedItem.technicalAttributes.length = 0;
       this.initialize();
       this.close();
-
-
 
       return;
     },
@@ -1085,7 +1082,7 @@ export default {
             params: { ...options, search: this.search },
           });
 
-JSON.parse(window.localStorage.getItem("user"))          // var user = ;
+          JSON.parse(window.localStorage.getItem("user"))          // var user = ;
           // const rol = await backendApi.get(`/user/${user.name}`);
           this.records = data.data;
           this.total = data.total;

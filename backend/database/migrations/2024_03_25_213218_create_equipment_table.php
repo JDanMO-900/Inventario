@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id()->autoIncrement();
 
             $table->string('number_active');
-            $table->string('number_internal_active');
+            $table->string('number_internal_active')->nullable();
             $table->string('model');
             $table->string('serial_number');
             $table->date('adquisition_date')->nullable();
@@ -23,9 +23,7 @@ return new class extends Migration
             $table->boolean('availability');
             
             $table->unsignedBigInteger('equipment_state_id');
-            $table->foreign('equipment_state_id')->references('id')->on('equipment_state');
-           
-
+            $table->foreign('equipment_state_id')->references('id')->on('equipment_state');         
 
             $table->unsignedBigInteger('equipment_type_id');
             $table->foreign('equipment_type_id')->references('id')->on('equipment_type');

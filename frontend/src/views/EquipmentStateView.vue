@@ -105,7 +105,7 @@ export default {
       headers: [
 
         { title: "Estado de equipos", key: "name" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,

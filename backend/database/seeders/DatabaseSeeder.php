@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             ProcessStateSeeder::class,
             TypeActionSeeder::class,
             LocationSeeder::class,
-            EquipmentSeeder::class,
+            // EquipmentSeeder::class,
             // EquipmentLicenseDetailSeeder::class,
             // HistoryChangeSeeder::class,
             // EquipmentDetailSeeder::class,

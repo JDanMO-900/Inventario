@@ -147,10 +147,9 @@ export default {
       selected: [],
       dialog: false,
       dialogDelete: false,
-      headers: [
-        
-		{ title: "Nombre de dependencia", key: "name" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+      headers: [        
+		    { title: "Dependencia", key: "name" },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,

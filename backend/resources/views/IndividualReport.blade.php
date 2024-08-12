@@ -115,7 +115,7 @@
             <div class="title">
                 <h1>Biblioteca Nacional de El Salvador</h1>
                 <h2>Sección de informática</h2>
-                <h4>Reporte por Equipo y/o Usuario Individual</h4>
+                <h4>Información del equipo</h4>
             </div>
             <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
         </div>
@@ -123,7 +123,7 @@
         <div class="contenido">
             <table>
                 <tr>
-                    <th colspan="4" style="text-align: center">Detalles Generales de Equipo</th>
+                    <th colspan="4" style="text-align: center">Detalles Generales del Equipo</th>
                 </tr>
                 <tr>
                     <th colspan="2">Tipo de equipo</th>
@@ -149,7 +149,7 @@
                 <tr>
                     <th colspan="2" style="text-align: center">Características Técnicas</th>
                 </tr>
-                @if (!empty($report->users))
+                @if (!empty($report->technicalAttributes))
                     @foreach ($report['technicalAttributes'] as $attribute)
                         <tr>
                             <td>{{ $attribute['technicalDescription'] }}</td>
@@ -167,11 +167,11 @@
             <table>
                 <table>
                     <tr>
-                        <th colspan="2" style="text-align: center">Detalles de Ubicación</th>
+                        <th colspan="2" style="text-align: center">Responsable y Ubicación</th>
                     </tr>
                     <tr>
                         <th>Nombre</th>
-                        @if (!empty($report->users))
+                        @if (!empty($report->users && $report->availability==0))
                             <td>{{ $report->users }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>
@@ -180,7 +180,7 @@
 
                     <tr>
                         <th>Ubicación</th>
-                        @if (!empty($report->location))
+                        @if (!empty($report->location && $report->availability==0))
                             <td>{{ $report->location }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>
@@ -188,8 +188,8 @@
 
                     </tr>
                     <tr>
-                        <th>Fecha de Asignación/Traslado</th>
-                        @if (!empty($report->start_date))
+                        <th>Fecha de Asignación o Traslado</th>
+                        @if (!empty($report->start_date && $report->availability==0))
                         <td>{{ $report->start_date }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>

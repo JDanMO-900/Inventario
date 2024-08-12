@@ -63,7 +63,13 @@ class ProviderSeeder extends Seeder
                 "contact_phone" => "2566-4888",
                 "address" => "Santa Tecla"
             ],
-               
+            [
+                "id" => 8,
+                "name" => "Computer Trading",
+                "contact_name" => "Oscar Fuentes",
+                "contact_phone" => "2566-4888",
+                "address" => "Santa Tecla"
+            ],               
         ]);
         
 

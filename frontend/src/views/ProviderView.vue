@@ -142,12 +142,11 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-
-        { title: "Nombre del proveedor", key: "name" },
+        { title: "Proveedor", key: "name" },
         { title: "Nombre del contacto", key: "contact_name" },
-        { title: "Numero de contacto", key: "contact_phone" },
+        { title: "Número de contacto", key: "contact_phone" },
         { title: "Dirección del proveedor", key: "address" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,

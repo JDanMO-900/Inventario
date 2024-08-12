@@ -15,7 +15,6 @@ class PDFData extends Model
 
     public static function typeReport($search)
     {
-
         $lastestHistoryChange = HistoryChange::select('equipment_id', DB::raw('MAX(id) as latest_id'))
         ->groupBy('equipment_id');
 
@@ -66,8 +65,6 @@ class PDFData extends Model
             ->whereNull('history_change.end_date')
             ->orderBy('history_change.id', 'DESC')
             ->first();
-
-
 
         return $data;
     }
@@ -469,7 +466,17 @@ class PDFData extends Model
             'technical_description.name as component',
             'equipment_detail.attribute as capacity',
         )
-            ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
-            ->where('equipment_detail.equipment_id', $equipment)->get();
+        ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
+        ->where('equipment_detail.equipment_id', $equipment)->get();
+    }
+
+    public static function getAvailableEquipment($dates){
+        return Equipment::select('equipment.number_active','equipment.serial_number','equipment.model','et.name as type','br.name as brand')
+        ->join('equipment_type as et', 'et.id', '=','equipment.equipment_type_id')
+        ->join('brand as br', 'br.id', '=','equipment.brand_id')
+        ->whereBetween('equipment.created_at', $dates)
+        ->where('equipment.availability', 1)
+        ->orderBy('et.name', 'ASC')
+        ->get();
     }
 }

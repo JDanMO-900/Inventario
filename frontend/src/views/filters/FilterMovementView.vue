@@ -4,7 +4,6 @@
             <v-container>
                 <h2>{{ title }}</h2>
                 <v-row>
-
                     <v-col cols="12" lg="12" md="12" sm="12">
                         <BaseSelect label='Estados' :items="processStates" item-title='name' item-value="id"
                             v-model.trim="v$.editedItem.processState.$model" :rules="v$.editedItem.processState"
@@ -30,7 +29,6 @@
                     </v-col>
                     <!-- fecha del movimiento -->
 
-
                     <!-- fecha del movimiento -->
                     <v-col cols="12" sm="6" md="6">
                         <base-input label="Rango final" v-model="v$.editedItem.end_date.$model"
@@ -38,46 +36,37 @@
                     </v-col>
                     <!-- fecha del movimiento -->
 
-
                     <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
-                        <base-button type="primary" title="Generar historial" @click="filterByMovement"
+                        <base-button type="primary" title="Mostrar historial" @click="filterByMovement"
                             :loading="btnLoading" />
                     </v-col>
-
                 </v-row>
             </v-container>
         </v-card>
 
         <v-card class="p-3 mt-3">
-
             <v-container>
-
-
-
                 <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
                     <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text"
                         v-model="search"></v-text-field>
                 </v-col>
             </v-container>
 
-
             <v-container>
                 <v-row>
                     <v-progress-linear v-if="loading" indeterminate color="indigo-accent-3"></v-progress-linear>
                     <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1"
                         :search="search">
-
                         <template v-slot:no-data>
                             <v-icon @click="initialize" icon="mdi-refresh" />
                         </template>
-
                     </v-data-table>
                 </v-row>
             </v-container>
         </v-card>
-
     </div>
 </template>
+
 <script>
 import BaseSelect from "@/components/base-components/BaseSelect.vue";
 import BaseButton from "@/components/base-components/BaseButton.vue";
@@ -98,9 +87,9 @@ export default {
         return {
             search: "",
             loading: false,
-            title: 'Reporte de equipos',
+            title: 'Movimientos de inventario',
             processStates: [
-                { id: -1, name: "TODAS LOS ESTADOS" }
+                { id: -1, name: "TODOS LOS ESTADOS" }
             ],
             types: [
                 { id: -1, name: 'TODOS LOS TIPOS' }
@@ -116,12 +105,13 @@ export default {
                 end_date: "",
             },
             headers: [
-                { title: "Ubicación", key: "location" },
+                { title: 'Fecha', key: 'start_date'},
+                { title: 'Equipo', key: 'type'},
+                { title: 'Movimiento', key: 'action_name'},
                 { title: "Dependencia", key: "dependency" },
+                { title: "Ubicación", key: "location" },
                 { title: "# de activo", key: "number_active" },
-                { title: "Serial", key: "serial_number" },
-                { title: "Modelo", key: "model" },
-
+                { title: "Serial", key: "serial_number" }
             ],
             records: [],
 
@@ -196,11 +186,13 @@ export default {
         },
         async filterByMovement() {
             this.loading = true;
-            this.btnLoading = true;
+            this.btnLoading = true
             this.records = [];
             this.v$.editedItem.$validate();
             if (this.v$.editedItem.$invalid) {
                 alert.error("Campos obligatorios");
+                this.loading = false;
+                this.btnLoading = false
                 return;
             }
 
@@ -208,14 +200,13 @@ export default {
                 const { data } = await backendApi.get('/getFilterMovement', {
                     params: { search: this.editedItem },
                 });
-
                 this.records = data.data;
-                setTimeout(() => (this.btnLoading = false), 500);
+                this.btnLoading = false
                 this.loading = false;
      
             } catch (error) {
                 alert.error("Ocurrió un error al generar el historial.");
-                setTimeout(() => (this.btnLoading = false), 500);
+                this.btnLoading = false
                 this.loading = false;
             }
         }

@@ -90,6 +90,7 @@ Route::group(
     Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
     Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
     Route::post('/typepdf', [PDFDataController::class, 'typeReport']);
+    Route::post('/availableEquipment', [PDFDataController::class, 'availableEquipment']);
     Route::get('/individual-reportpdf/{serial_number}', [PDFDataController::class, 'individualReport']);
     Route::post('/reportgeneralpdf', [PDFDataController::class, 'reportGeneral']);
     Route::post('/testEquip', [EquipmentController::class, 'getReportGeneral']);

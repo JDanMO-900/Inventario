@@ -122,11 +122,10 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-
-        { title: "NOMBRE", key: "name" },
-        { title: "EMAIL", key: "email" },
-        { title: "ROL", key: "role_id" },
-        { title: "ACCIONES", key: "actions", sortable: false },
+        { title: "Nombre", key: "name" },
+        { title: "Correo", key: "email" },
+        { title: "Rol", key: "role_id" },
+        { title: "Acciones", key: "actions", sortable: false },
       ],
       records: [],
       editedIndex: -1,

@@ -201,7 +201,7 @@ class Equipment extends Model
         $data->each(function ($item) {
             $availability = $item->availability ? 'Disponible' : 'En uso';
             $item->availability = $availability;
-            $item->format = '(Tipo: ' . $item->equipment_type_id . ') ' . '(Modelo: ' . $item->model . ') ' . '(Activo fijo: ' . $item->number_active . ') ' . '(Serial: ' . $item->serial_number . ')';
+            $item->format = $item->equipment_type_id . ' (Modelo: ' . $item->model . ' - ' . 'Activo fijo: ' . $item->number_active . ' - ' . ' Serial: ' . $item->serial_number . ')';
         });
 
 

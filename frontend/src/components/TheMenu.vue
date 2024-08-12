@@ -25,20 +25,25 @@
         <v-menu v-if="userRol != 1" location="end" open-on-hover>
           <template v-slot:activator="{ props }">
             <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
-              <v-icon icon="mdi-chart-line" size="20"></v-icon>
-              <span>Control de Inventario</span>
+              <v-icon icon="mdi-file" size="20"></v-icon>
+              <span>Reportes</span>
             </div>
           </template>
 
           <v-list v-if="userRol != 1" density="compact" variant="plain" class="my-list pt-2 pb-2">
-            <RouterLink to="/filterMovement">
-                <v-list-item>
-                Filtro de movimientos
+            <RouterLink v-if="userRol != 1" to="/availableEquipment">
+              <v-list-item> 
+                Equipos en bodega
               </v-list-item>
-            </RouterLink>
+            </RouterLink>            
             <RouterLink v-if="userRol != 1" to="/equipmentTypeReport">
               <v-list-item> 
-                Reporte de equipos
+                Listado de equipos
+              </v-list-item>
+            </RouterLink>
+            <RouterLink to="/filterMovement">
+                <v-list-item>
+                Movimientos de inventario
               </v-list-item>
             </RouterLink>
             <!-- <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">

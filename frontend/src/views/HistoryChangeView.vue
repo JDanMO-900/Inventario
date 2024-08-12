@@ -53,7 +53,7 @@
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-1-circle" start></v-icon>
-                  Detalles del usuario
+                  Responsable(s) del equipo
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
@@ -128,7 +128,7 @@
                   <v-table density="compact">
                     <thead>
                       <tr>
-                        <td><b>Equipo</b></td>
+                        <td><b>Serial del equipo</b></td>
                         <td><b>Acción</b></td>
                       </tr>
                     </thead>
@@ -171,7 +171,7 @@
               <v-col cols="12" sm="12" md="12">
                 <v-chip color="primary" variant="flat" label>
                   <v-icon icon="mdi-numeric-3-circle" start></v-icon>
-                  Técnico responsable
+                  Técnico responsable del movimiento
                 </v-chip>
                 <v-divider class="mt-2"></v-divider>
               </v-col>
@@ -234,7 +234,7 @@
               <v-row>
                 <v-col cols="12" sm="12" md="12">
                   <v-chip color="primary" variant="flat" label>
-                    <v-icon icon="mdi-numeric-1-circle" start></v-icon>Detalles del usuario
+                    <v-icon icon="mdi-numeric-1-circle" start></v-icon>Responsable(s) del equipo
                   </v-chip>
                 </v-col>
                 <v-col cols="12" sm="12" md="12">
@@ -267,6 +267,10 @@
                   <v-table density="compact">
                     <tbody class="tbl-info">
                       <tr>
+                        <td>Código de activo fijo</td>
+                        <td>{{ this.editedItem.number_active }}</td>
+                      </tr>
+                      <tr>
                         <td>Tipo de equipo</td>
                         <td>{{ this.editedItem.type1 }}</td>
                       </tr>
@@ -295,7 +299,6 @@
                 <v-col cols="12" sm="12" md="12">
                   <v-table density="compact">
                     <tbody class="tbl-info">
-
                       <tr>
                         <td>Dependencia</td>
                         <td>{{ this.editedItem.dependency_id }}</td>
@@ -305,11 +308,11 @@
                         <td>{{ this.editedItem.location_id }}</td>
                       </tr>
                       <tr>
-                        <td>Fecha que se inicio el movimiento</td>
+                        <td>Fecha que se inició el movimiento</td>
                         <td>{{ this.editedItem.start_date }}</td>
                       </tr>
                       <tr>
-                        <td>Descripción</td>
+                        <td>Observaciones</td>
                         <td v-if="this.editedItem.description != null">{{ this.editedItem.description }}</td>
                         <td v-else>No hay datos disponibles</td>
                       </tr>
@@ -319,22 +322,21 @@
 
                 <v-col cols="12" sm="12" md="12">
                   <v-chip color="primary" variant="flat" label>
-                    <v-icon icon="mdi-numeric-4-circle" start></v-icon>Detalles del movimiento
+                    <v-icon icon="mdi-numeric-4-circle" start></v-icon>Técnico responsable del movimiento
                   </v-chip>
                 </v-col>
-                <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
-                  <template v-if="(currentProcess == 1) && userRol == 2"
-                    class="d-flex justify-content-center">
+                <template v-if="(currentProcess == 1) && userRol == 2" class="d-flex justify-content-center">
+                  <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">                  
                     <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
-                      @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
-                  </template>
-                </v-col>
+                      @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />                  
+                  </v-col>
+                </template>
                 <v-col cols="12" sm="12" md="12">
                   <div class="w-100">
                     <v-table density="compact">
                       <thead class="tbl-info">
                         <tr>
-                          <th style="width: 33% !important;">Técnico responsable</th>
+                          <th style="width: 33% !important;">Nombre</th>
                           <th style="width: 33% !important;">Tipo de movimiento</th>
                           <th style="width: 33% !important;">Etapa del movimiento</th>
                         </tr>
@@ -454,8 +456,7 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
-import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
-import { onMounted, ref } from "vue";
+import { minLength, required, numeric } from "@/lang/i18n";
 import backendApi from "@/services/backendApi";
 import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
@@ -463,13 +464,7 @@ import BaseSelect from "../components/base-components/BaseSelect.vue";
 import BaseTextArea from "../components/base-components/BaseTextArea.vue";
 import BaseMultiSelect from "../components/base-components/BaseMultiSelect.vue";
 import useAlert from "../composables/useAlert";
-
-
-
-
-
 const { alert } = useAlert();
-const langMessages = messages["es"].validations;
 
 export default {
   components: { BaseButton, BaseInput, BaseSelect, BaseMultiSelect, BaseTextArea },
@@ -490,7 +485,8 @@ export default {
       isLoading: false,
       headers: [
         { title: "Tipo de movimiento", key: "type_action_id" },
-        { title: "Tipo de equipo", key: "type1" },
+        { title: 'Fecha', key: 'start_date'},
+        { title: "Equipo", key: "type1" },
         { title: "# de activo", key: "number_active" },
         { title: "Ubicación", key: "location_id" },
         { title: "Estado", key: "state_id" },
@@ -501,7 +497,6 @@ export default {
       title: "Movimientos",
       total: 0,
       options: {},
-
       editedItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment_serial: "", state_id: "", start_date: "", end_date: "",
@@ -512,19 +507,14 @@ export default {
       },
 
       loading: false,
-
       debounce: 0,
-
       typeAction: [],
       users: [],
       equipment: [],
       available_equipment: [],
       processState: [],
-
       location: [],
-
       userTech: [],
-
       endProcessDate: {
         finishProcess: ""
       },
@@ -538,9 +528,7 @@ export default {
         id: "",
         state_id: "",
         serial_number: ""
-
       }
-
     };
   },
 
@@ -594,20 +582,17 @@ export default {
         start_date: {
           required,
           minLength: minLength(1),
-
         },
         end_date: {
           minLength: minLength(1)
         },
         description: {
-
         }
 
       },
       finishMovement: {
         finish_date: {
           required,
-
         },
         description: {
           required
@@ -617,13 +602,9 @@ export default {
         state_id: {
           required
         }
-
       }
-
     };
   },
-
-
 
   computed: {
     formTitle() {
@@ -642,11 +623,9 @@ export default {
     currentAction() {
       return this.getCurrentAction(this.editedItem.type_action_id);
     },
-    currentProcess() {
-   
+    currentProcess() {   
       return this.getCurrentProcess(this.editedItem.state_id);
     }
-
   },
 
   watch: {
@@ -667,13 +646,9 @@ export default {
 
   beforeMount() {
     this.getDataFromApi({ page: 1, itemsPerPage: 10, sortBy: [], search: "" });
-
   },
 
-
-
   methods: {
-
     getCurrentAction(actionName) {
       for (let element of this.typeAction) {
         if (actionName == element.name) {
@@ -696,11 +671,9 @@ export default {
       const day = now.getDate().toString().padStart(2, '0');
       const hours = now.getHours().toString().padStart(2, '0');
       const minutes = now.getMinutes().toString().padStart(2, '0');
-
       // Format: YYYY-MM-DDThh:mm (datetime-local format)
       this.editedItem.start_date = `${year}-${month}-${day}T${hours}:${minutes}`;
     },
-
 
     addEquipment() {
       var isInArray = false;
@@ -717,7 +690,6 @@ export default {
           this.editedItem.equipment_serial = ''
         }
       }
-
     },
     deleteEquipment(item) {
       this.editedItem.equipment_id = this.editedItem.equipment_id.filter(
@@ -726,6 +698,7 @@ export default {
         }
       )
     },
+
     movementFinishDateItem(item) {
       this.finishMovement.description = item.description;
       this.editedIndex = this.records.indexOf(item);
@@ -767,9 +740,7 @@ export default {
         this.finishMovement.description = "";
         this.initialize();
         this.closeMovementFinishDate();
-
       }
-
     },
 
     // Aqui va el nuevo elemento
@@ -781,11 +752,8 @@ export default {
 
     closeProcessStanteChange() {
       this.dialogChangeProcessState = false;
-      // this.$nextTick(() => {
-      //   this.editedItem = Object.assign({}, this.defaultItem);
-      //   this.editedIndex = -1;
-      // });
     },
+
     async changeProcessStanteChange() {
       this.changeStatusProccess.id = this.editedItem.id;
       this.changeStatusProccess.serial_number = this.editedItem.equipment_id;
@@ -795,11 +763,8 @@ export default {
         return;
       }
       this.isLoading = true;
-
-
       try {
         if (this.changeStatusProccess.state_id != null) {
-
           const endStatus = await backendApi.put(`/updateProcessState/`, this.changeStatusProccess);
           alert.success(endStatus.data.message);
         }
@@ -812,10 +777,8 @@ export default {
         this.dialogInfo = false;
         this.initialize();
       }
-
     },
     // Aqui va el nuevo elemento
-
     async initialize() {
       this.loading = true;
       this.records = [];
@@ -845,7 +808,6 @@ export default {
         alert.error("No fue posible obtener el registro.");
       });
 
-
       if (responses) {
         this.typeAction = responses[1].data.data;
         this.users = responses[2].data.data;
@@ -855,16 +817,11 @@ export default {
         this.dependency = responses[6].data.data;
         let uniqueTechNames = new Set();
         for (let i = 0; i < this.users.length; i++) {
-
           if (this.users[i].role_id.toLowerCase() === "tecnico")
             uniqueTechNames.add(this.users[i].name);
-        }
-        this.userTech = Array.from(uniqueTechNames)
-      }
-
-    
-
-
+          }
+          this.userTech = Array.from(uniqueTechNames)
+      } 
       this.loading = false;
     },
 
@@ -891,10 +848,8 @@ export default {
     },
 
     async save() {
-
       
       if (this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==4)['name'] || this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==1)['name']) {
-
         this.editedItem.state_id = this.processState.find(item=>item.id ==2)['name'];
       }
       else {
@@ -910,15 +865,12 @@ export default {
 
       // Updating record
       if (this.editedIndex > -1) {
-
         const edited = Object.assign(
           this.records[this.editedIndex],
           this.editedItem
         );
 
         try {
-
-
           const { data } = await backendApi.put(`/historyChange/${edited.id}`, edited);
           alert.success(data.message);
         } catch (error) {
@@ -930,8 +882,6 @@ export default {
           this.initialize();
           return;
         }
-
-
       }
 
       //Creating record
@@ -969,8 +919,6 @@ export default {
             id: this.editedItem.id,
           },
         });
-
-
         alert.success(data.message);
       } catch (error) {
         this.closeDelete();
@@ -979,9 +927,7 @@ export default {
         setTimeout(() => (this.isLoading = false), 800)
         this.initialize();
         this.closeDelete();
-
       }
-
     },
 
     getDataFromApi(options) {
@@ -996,11 +942,7 @@ export default {
             params: { ...options, search: this.search },
           });
 
-
-          this.records = data.data;
-
-
-
+          this.records = data.data;          
           this.total = data.total;
           this.loading = false;
         } catch (error) {

@@ -95,8 +95,6 @@
 
 
 <body>
-
-
     <div class="header">
         <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
         <div class="title">
@@ -109,7 +107,6 @@
     @if (!empty($data) && $data->count())
         @foreach ($data as $report)
             <div class="contenido">
-
                 <table>
                     <tr>
                         <th>Ubicación </th>

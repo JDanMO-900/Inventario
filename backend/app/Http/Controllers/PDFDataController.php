@@ -19,6 +19,7 @@ class PDFDataController extends Controller
     {
 
         $data = PDFData::individualReport($serial_number);
+        Log::info($data);
        
         $pdf = PDF::loadView('IndividualReport', compact('data'));
         return $pdf->stream('IndividualReport.pdf');
@@ -127,5 +128,14 @@ class PDFDataController extends Controller
         $pdf = PDF::loadView('ReportGeneral', compact('data'));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream('ReportGeneral.pdf');
+    }
+
+    public function availableEquipment(Request $request){
+        $data = PDFData::getAvailableEquipment([$request->start_date, $request->end_date]);       
+        // Log::info($data);
+        $pdf = PDF::loadView('AvailableEquipmentReport', compact('data'));
+        $pdf->setPaper('A4', 'landscape');
+        
+        return $pdf->stream('AvailableEquipmentReport.pdf');
     }
 }
