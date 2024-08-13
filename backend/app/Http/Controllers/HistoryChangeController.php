@@ -359,7 +359,8 @@ class HistoryChangeController extends Controller
     public function finishIncompleteMovement(Request $request)
     {
 
-        $historychange = HistoryChange::where('id', $request->id_change)->first();
+        $data = Encrypt::decryptArray($request->all(), 'id');
+        $historychange = HistoryChange::where('id', $data['id'])->first();
         $historychange->state_id = 3;
         $historychange->end_date = Carbon::now();
         $historychange->save();
