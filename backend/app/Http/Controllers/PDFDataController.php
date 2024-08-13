@@ -17,10 +17,11 @@ class PDFDataController extends Controller
 
     public function individualReport($serial_number)
     {
+        Log::info("Serial".$serial_number);
 
         $data = PDFData::individualReport($serial_number);
         Log::info($data);
-       
+
         $pdf = PDF::loadView('IndividualReport', compact('data'));
         return $pdf->stream('IndividualReport.pdf');
     }

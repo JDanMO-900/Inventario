@@ -16,7 +16,7 @@ class PDFData extends Model
     public static function typeReport($search)
     {
         $lastestHistoryChange = HistoryChange::select('equipment_id', DB::raw('MAX(id) as latest_id'))
-        ->groupBy('equipment_id');
+            ->groupBy('equipment_id');
 
         $data = Equipment::select(
             'equipment.id',
@@ -30,7 +30,7 @@ class PDFData extends Model
             ->join('brand', 'brand.id', '=', 'equipment.brand_id')
             ->join('equipment_type', 'equipment_type.id', '=', 'equipment.equipment_type_id')
             ->join('equipment_state', 'equipment_state.id', '=', 'equipment.equipment_state_id')
-            ->leftJoinSub($lastestHistoryChange, 'latest_history', function($join){
+            ->leftJoinSub($lastestHistoryChange, 'latest_history', function ($join) {
                 $join->on('latest_history.equipment_id', '=', 'equipment.id');
             })
             ->leftJoin('history_change', 'history_change.id', '=', 'latest_history.latest_id')
@@ -40,7 +40,7 @@ class PDFData extends Model
             ->where('location.id', $search['location_condition'], $search['location'])
             ->orderBy('equipment_type.name', 'ASC')
             ->get();
-    
+
         return $data;
     }
 
@@ -71,48 +71,52 @@ class PDFData extends Model
 
     public static function individualReport($search)
     {
-        $data = Equipment::select(
+        $data = HistoryChange::select(
+            'history_change.*',
+            'type_action.*',
             'equipment.*',
-            'equipment_state.*',
-            'equipment_type.*',
-            'brand.*',
-            'provider.*',
-            'equipment.id as id',
-            'brand.name as brand',
-            'provider.name as provider',
-            'equipment_state.name as state',
+            'process_state.*',
+            'location.*',
+            'dependency.*',
+            'history_change.id as id',
+            // Ubicacion
+            'location.name as location_id',
+            'dependency.name as dependency_id',
+            //Equipo1
+            'equipment.serial_number as serial_number',
+            'equipment.number_active as number_active',
+            'equipment.model as model',
             'equipment_type.name as type',
-            // Users
-            'users.name as users',
-            // Type action
-            'type_action.name as type_action',
-            "history_change.start_date as start_date",
-            "history_change.end_date as end_date",
+            'brand.name as brand',
+            'process_state.name as state_id',
+            'type_action.name as type_action_id',
             'location.name as location',
-            'history_change.description as description'
+            'history_change.description as description',
+            'history_change.start_date as start_date'
+
         )
-            ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
-            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            // Equipo principal
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('equipment_type as equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
-            ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
-            ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
-            ->leftJoin('location', 'history_change.location_id', '=', 'location.id')
-            ->leftJoin('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
-            ->leftJoin('users', 'users.id', '=', 'history_user_detail.user_id')
-            ->leftJoin('type_action', 'type_action.id', '=', 'history_change.type_action_id')
+            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
             ->where('equipment.serial_number', 'like', $search)
-            ->orderBy('history_change.start_date', 'desc')
+            ->whereIn('history_change.type_action_id', [2,3])
             ->get();
 
         $data->each(function ($item) {
-            $licenses = License::leftJoin('equipment_license_detail', 'license.id', '=', 'equipment_license_detail.license_id')
-                ->where('equipment_license_detail.equipment_id', $item->id)
-                ->pluck('license.name')
+            $users = User::leftJoin('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
+                ->where('history_user_detail.history_change_id', $item->id)
+                ->pluck('users.name')
                 ->toArray();
-            $item->licenses = $licenses;
+            $item->users = $users;
+
 
             $technicalAttributes = EquipmentDetail::leftJoin('technical_description', 'technical_description.id', '=', 'equipment_detail.technical_description_id')
-                ->where('equipment_detail.equipment_id', $item->id)
+                ->where('equipment_detail.equipment_id', $item->equipment_id)
                 ->select('technical_description.name as technicalDescription', 'equipment_detail.attribute as attribute')
                 ->get()
                 ->toArray();
@@ -130,7 +134,7 @@ class PDFData extends Model
         $typeExist = EquipmentType::whereRaw('name = ?', [$search->type])->exists();
         $locationExist = Location::whereRaw('name = ?', [$search->location])->exists();
 
-        if(!$brandExist &&  !$typeExist && !$locationExist){
+        if (!$brandExist && !$typeExist && !$locationExist) {
 
             $data = HistoryChange::select(
                 'history_change.*',
@@ -190,10 +194,7 @@ class PDFData extends Model
                 $item->technicalAttributes = $technicalAttributes;
             });
 
-        }
-
-
-        else if(!$brandExist &&  !$typeExist && $locationExist){
+        } else if (!$brandExist && !$typeExist && $locationExist) {
 
             $data = HistoryChange::select(
                 'history_change.*',
@@ -253,7 +254,7 @@ class PDFData extends Model
 
                 $item->technicalAttributes = $technicalAttributes;
             });
-        } else if ($brandExist &&  !$typeExist) {
+        } else if ($brandExist && !$typeExist) {
             $data = HistoryChange::select(
                 'history_change.*',
                 'type_action.*',
@@ -313,7 +314,7 @@ class PDFData extends Model
 
                 $item->technicalAttributes = $technicalAttributes;
             });
-        } else if (!$brandExist &&  $typeExist) {
+        } else if (!$brandExist && $typeExist) {
 
             $data = HistoryChange::select(
                 'history_change.*',
@@ -466,17 +467,18 @@ class PDFData extends Model
             'technical_description.name as component',
             'equipment_detail.attribute as capacity',
         )
-        ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
-        ->where('equipment_detail.equipment_id', $equipment)->get();
+            ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
+            ->where('equipment_detail.equipment_id', $equipment)->get();
     }
 
-    public static function getAvailableEquipment($dates){
-        return Equipment::select('equipment.number_active','equipment.serial_number','equipment.model','et.name as type','br.name as brand')
-        ->join('equipment_type as et', 'et.id', '=','equipment.equipment_type_id')
-        ->join('brand as br', 'br.id', '=','equipment.brand_id')
-        ->whereBetween('equipment.created_at', $dates)
-        ->where('equipment.availability', 1)
-        ->orderBy('et.name', 'ASC')
-        ->get();
+    public static function getAvailableEquipment($dates)
+    {
+        return Equipment::select('equipment.number_active', 'equipment.serial_number', 'equipment.model', 'et.name as type', 'br.name as brand')
+            ->join('equipment_type as et', 'et.id', '=', 'equipment.equipment_type_id')
+            ->join('brand as br', 'br.id', '=', 'equipment.brand_id')
+            ->whereBetween('equipment.created_at', $dates)
+            ->where('equipment.availability', 1)
+            ->orderBy('et.name', 'ASC')
+            ->get();
     }
 }

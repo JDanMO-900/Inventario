@@ -214,7 +214,7 @@ class EquipmentController extends Controller
             } else {
                 $equipment->provider_id = null;
             }
-            
+
             $equipment->save();
 
             // Recibe las licencias
@@ -256,17 +256,17 @@ class EquipmentController extends Controller
     {
         $data = Encrypt::decryptArray($request->all(), 'id');
         $equipment = Equipment::where('id', $data['id'])->first();
-
-        if (strtolower($request->availability) == "disponible") {
-            $equipment->availability = 0;
-        } else {
-            $equipment->availability = 1;
-        }
-
+        $equipment->availability = 1;
         $equipment->save();
+
+
         $changeEndUseDate = HistoryChange::where('equipment_id', $equipment->id)
+            ->whereIn('history_change.type_action_id', [2, 3])
+            ->whereNull('history_change.end_date')
             ->latest()
             ->first();
+
+
         $changeEndUseDate->end_date = Carbon::now();
         $changeEndUseDate->save();
 
@@ -300,7 +300,7 @@ class EquipmentController extends Controller
 
         foreach ($history as $equipment) {
 
-            $equipmentData  = [
+            $equipmentData = [
                 "id" => $equipment->id,
                 "brand" => $equipment->brand,
                 "state" => $equipment->state,
@@ -313,7 +313,7 @@ class EquipmentController extends Controller
                 "description" => $equipment->description,
                 "assignment_date" => $equipment->assignment_date,
             ];
-            $details  = HistoryChange::getTechniacalDetailData($equipment->id);
+            $details = HistoryChange::getTechniacalDetailData($equipment->id);
 
             $technicalDetails = [];
 
@@ -329,8 +329,8 @@ class EquipmentController extends Controller
             $equipments[] = $equipmentData;
         }
 
-        return  response()->json([
-            "data: " =>  $equipments
+        return response()->json([
+            "data: " => $equipments
         ]);
     }
 }

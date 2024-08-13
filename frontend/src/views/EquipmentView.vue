@@ -406,7 +406,7 @@
                             <th style="width: 25% !important;">Responsable</th>
                             <th style="width: 25% !important;">Fecha de inicio del movimiento</th>
                             <th style="width: 25% !important;">Fecha de retorno del equipo</th>
-                            <th style="width: 25% !important;">Finalizar movimiento pendiente</th>
+
                           </tr>
                         </thead>
                         <tbody>
@@ -418,13 +418,7 @@
                             <td v-if="data.end_date != null">{{ data.end_date }}</td>
                             <td v-else>Actividad sin terminar</td>
 
-                            <td v-if="data.end_date == null && index !== 0">
-                              <base-button class="ms-1 bg-green-lighten-1" title="Finalizar"
-                                 prepend-icon="mdi-sync-circle" @click="finishIncompleteActivityItem(data)"/>
-
-                            </td>
-                            <td v-else-if="data.end_date == null && index === 0">Movimiento actual</td>
-                            <td v-else> Movimiento finalizado</td>
+                            
                           </tr>
                           <tr v-if="this.historyData == 0">
                             <td colspan="6">
@@ -588,26 +582,7 @@
   </v-dialog>
   <!-- Detalles del equipos -->
 
-<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
-  <v-dialog v-model="dialogFinishIncompleteActivity" max-width="45rem">
-      <v-card class="h-100">
-        <v-container>
-          <h2 class="black-secondary text-center mt-3 mb-3">
-            <b>Finalizar movimiento sin fecha de retorno</b>
-          </h2>
-          <br />
-          
-          <v-row>
-            <v-col align="center">
-              <base-button type="primary" title="Confirmar" 
-                :loading="isLoading" @click="finishIncompleteActivityItemConfirm"/>
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeFinishIncompleteActivity" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
-    </v-dialog>
-<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+
 
 </template>
 
@@ -871,36 +846,7 @@ export default {
       this.dialogInfo = true;
     },
 
-    closeFinishIncompleteActivity() {
-      this.dialogFinishIncompleteActivity = false;
 
-    },
-    finishIncompleteActivityItem(item) {
-      console.log(item.id)
-      this.finishActivity.id_change = item.id_change;
-      this.dialogFinishIncompleteActivity= true;
-    },
-
-    async finishIncompleteActivityItemConfirm() {
-      
-      this.isLoading = true;
-
-      try {
-        const finishStatus = await backendApi.put(`/finishIncompleteMovement/`, this.finishActivity);
-        alert.success(finishStatus.data.message);
-
-      } catch (error) {
-
-        this.closeFinishIncompleteActivity();
-      }
-      finally {
-        setTimeout(() => (this.isLoading = false), 800);
-        await this.$nextTick();
-        this.initialize();
-        this.closeFinishIncompleteActivity();
-        this.closeDetails();
-      }
-    },
 
     async generateIndividualReport(item) {
       this.isLoading = true;

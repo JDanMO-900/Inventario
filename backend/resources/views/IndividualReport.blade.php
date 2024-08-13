@@ -109,6 +109,7 @@
 @endphp
 
 @foreach ($lastTrheeReoports as $report)
+
     <body>
         <div class="header">
             <img class="left" src="{{ public_path('images/LogoBinaes.png') }}" alt="Logo">
@@ -156,8 +157,8 @@
                             <td>{{ $attribute['attribute'] }}</td>
                         </tr>
                     @endforeach
-                @else 
-                <td colspan="2" class="no-data">No hay datos disponibles</td>
+                @else
+                    <td colspan="2" class="no-data">No hay datos disponibles</td>
                 @endif
             </table>
         </div>
@@ -166,21 +167,10 @@
         <div class="contenido">
             <table>
                 <table>
-                    <tr>
-                        <th colspan="2" style="text-align: center">Responsable y Ubicación</th>
-                    </tr>
-                    <tr>
-                        <th>Nombre</th>
-                        @if (!empty($report->users && $report->availability==0))
-                            <td>{{ $report->users }}</td>
-                        @else
-                            <td class="no-data">No hay datos disponibles</td>
-                        @endif
-                    </tr>
 
                     <tr>
                         <th>Ubicación</th>
-                        @if (!empty($report->location && $report->availability==0))
+                        @if (!empty($report->location))
                             <td>{{ $report->location }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>
@@ -189,12 +179,26 @@
                     </tr>
                     <tr>
                         <th>Fecha de Asignación o Traslado</th>
-                        @if (!empty($report->start_date && $report->availability==0))
-                        <td>{{ $report->start_date }}</td>
+                        @if (!empty($report->start_date))
+                            <td>{{ $report->start_date }}</td>
                         @else
                             <td class="no-data">No hay datos disponibles</td>
                         @endif
                     </tr>
+
+                    <tr>
+                        <th colspan="2" >Nombre de responsables: </th>
+                    </tr>
+                    @if (!empty($report ->users))
+                        @foreach ($report ->users as $user)
+                            <tr>
+                                <td colspan="2" >{{ $user }}</td>
+
+                            </tr>
+                        @endforeach
+                    @else
+                        <td colspan="2" class="no-data">No hay datos disponibles</td>
+                    @endif
 
 
 
@@ -245,4 +249,5 @@
             @endforeach --}}
     </body>
 @endforeach
+
 </html>

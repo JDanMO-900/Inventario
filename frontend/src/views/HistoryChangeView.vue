@@ -22,6 +22,11 @@
           <v-icon size="20" class="mr-2" @click="deleteItem(item.raw)" icon="mdi-delete" title="Eliminar"
             v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
+
+          <!-- <v-icon size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Terminar mantenimiento"
+            v-if="item.raw.process_state_id != 3 || userRol == 2" /> -->
+
+
           <template v-if="((item.raw.action_id == 1 || item.raw.action_id == 4) && item.raw.process_state_id != 3
             && item.raw.process_state_id != 4)">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
@@ -449,6 +454,28 @@
     </v-card>
   </v-dialog>
 
+  <!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+  <v-dialog v-model="dialogFinishIncompleteActivity" max-width="45rem">
+      <v-card class="h-100">
+        <v-container>
+          <h2 class="black-secondary text-center mt-3 mb-3">
+            <b>Finalizar movimiento sin fecha de retorno</b>
+          </h2>
+          <br />
+          
+          <v-row>
+            <v-col align="center">
+              <base-button type="primary" title="Confirmar" 
+                :loading="isLoading" @click="finishIncompleteActivityItemConfirm"/>
+              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeFinishIncompleteActivity" />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-dialog>
+<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+
+
 
 
 </template>
@@ -476,6 +503,7 @@ export default {
       search: "",
       selected: [],
       userRol: JSON.parse(window.localStorage.getItem("user")).rol,
+      dialogFinishIncompleteActivity: false,
       dialog: false,
       dialogDelete: false,
       dialogInfo: false,
@@ -674,6 +702,40 @@ export default {
       // Format: YYYY-MM-DDThh:mm (datetime-local format)
       this.editedItem.start_date = `${year}-${month}-${day}T${hours}:${minutes}`;
     },
+
+    closeFinishIncompleteActivity() {
+      this.dialogFinishIncompleteActivity = false;
+
+    },
+    finishIncompleteActivityItem(item) {
+      console.log(item.id)
+      this.finishActivity.id_change = item.id_change;
+      this.dialogFinishIncompleteActivity= true;
+    },
+
+    async finishIncompleteActivityItemConfirm() {
+      
+      this.isLoading = true;
+
+      try {
+        const finishStatus = await backendApi.put(`/finishIncompleteMovement/`, this.finishActivity);
+        alert.success(finishStatus.data.message);
+
+      } catch (error) {
+
+        this.closeFinishIncompleteActivity();
+      }
+      finally {
+        setTimeout(() => (this.isLoading = false), 800);
+        await this.$nextTick();
+        this.initialize();
+        this.closeFinishIncompleteActivity();
+        this.closeDetails();
+      }
+    },
+
+
+
 
     addEquipment() {
       var isInArray = false;
