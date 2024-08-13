@@ -23,8 +23,8 @@
             v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
 
-          <!-- <v-icon size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Terminar mantenimiento"
-            v-if="item.raw.process_state_id != 3 || userRol == 2" /> -->
+          <v-icon v-if="item.raw.process_state_id != 3 || item.raw.process_state_id != 4" size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Finalizar soporte"
+             />
 
 
           <template v-if="((item.raw.action_id == 1 || item.raw.action_id == 4) && item.raw.process_state_id != 3
@@ -708,8 +708,8 @@ export default {
 
     },
     finishIncompleteActivityItem(item) {
-      console.log(item.id)
-      this.finishActivity.id_change = item.id_change;
+
+      this.finishActivity = item;
       this.dialogFinishIncompleteActivity= true;
     },
 
@@ -730,7 +730,7 @@ export default {
         await this.$nextTick();
         this.initialize();
         this.closeFinishIncompleteActivity();
-        this.closeDetails();
+
       }
     },
 
