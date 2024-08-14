@@ -23,11 +23,13 @@
             v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
 
-          <v-icon v-if="item.raw.process_state_id != 3 || item.raw.process_state_id != 4" size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Finalizar soporte"
+          <v-icon v-if="item.raw.process_state_id == 2 && item.raw.action_id == 5" size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Finalizar soporte"
              />
 
 
-          <template v-if="((item.raw.action_id == 1 || item.raw.action_id == 4) && item.raw.process_state_id != 3
+
+
+          <template v-if="((item.raw.action_id == 1 || item.raw.action_id <= 4) && item.raw.process_state_id != 3
             && item.raw.process_state_id != 4)">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
               title="Terminar movimiento" />
@@ -459,7 +461,7 @@
       <v-card class="h-100">
         <v-container>
           <h2 class="black-secondary text-center mt-3 mb-3">
-            <b>Finalizar movimiento sin fecha de retorno</b>
+            <b>Finalizar soporte u otro movimiento</b>
           </h2>
           <br />
           
