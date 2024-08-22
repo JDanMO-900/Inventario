@@ -19,34 +19,61 @@ class HistoryUserDetailController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function userFilter($username, Request $request){
+    public function userFilter($username, Request $request)
+    {
 
-        $itemsPerPage = $request->itemsPerPage ?? 10;
-        $skip = ($request->page - 1) * $request->itemsPerPage;
+        if (in_array(null, $request->filter, true)) {
 
-        // Getting all the records
-        if (($request->itemsPerPage == -1)) {
-            $itemsPerPage =  HistoryUserDetail::count();
-            $skip = 0;
+            $itemsPerPage = $request->itemsPerPage ?? 10;
+            $skip = ($request->page - 1) * $request->itemsPerPage;
+
+            // Getting all the records
+            if (($request->itemsPerPage == -1)) {
+                $itemsPerPage = HistoryUserDetail::count();
+                $skip = 0;
+            }
+
+            $sortBy = (isset($request->sortBy[0])) ? $request->sortBy[0] : 'id';
+            $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
+
+            $search = (isset($request->search)) ? "%$request->search%" : '%%';
+
+            $historyuserdetail = HistoryUserDetail::allDataGeneralUser($username, $search, $sortBy, $sort, $skip, $itemsPerPage);
+            $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
+
+            $total = HistoryUserDetail::counterPagination($search);
+
+            return response()->json([
+                "message" => "Registros obtenidos correctamente.",
+                "data" => $historyuserdetail,
+                "total" => $total,
+            ]);
+        }
+        else{
+            $search = [
+                'typeMovement' => ($request->filter['typeMovement']),
+                'typeMovement_condition' => ($request->filter['typeMovement'] == -1) ? '>' : '=',
+                'processState' => ($request->filter['processStateFilter']),
+                'processState_condition' => ($request->filter['processStateFilter'] == -1) ? '>' : '=',
+                'start_range' => $request->filter['start_date'],
+                'end_range' => $request->filter['end_date'],
+            ];
+
+
+            $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+            $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
+    
+            $historyuserdetail = HistoryUserDetail::filterUserHistoryChange($username, $search, $sortBy, $sort);
+            $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
+    
+            return response()->json([
+                "message" => "Registros obtenidos correctamente.",
+                "data" => $historyuserdetail,
+            ]);
+
         }
 
-        $sortBy = (isset($request->sortBy[0])) ? $request->sortBy[0] : 'id';
-        $sort = (isset($request->sortDesc[0])) ? "asc" : 'desc';
-
-        $search = (isset($request->search)) ? "%$request->search%" : '%%';
-
-        $historyuserdetail = HistoryUserDetail::allDataGeneralUser($username, $search, $sortBy, $sort, $skip, $itemsPerPage);
-        $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
-
-        $total = HistoryUserDetail::counterPagination($search);
-
-        return response()->json([
-            "message"=>"Registros obtenidos correctamente.",
-            "data" => $historyuserdetail,
-            "total" => $total,
-        ]);
-
-     }
+    }
 
     public function index(Request $request)
     {
@@ -55,7 +82,7 @@ class HistoryUserDetailController extends Controller
 
         // Getting all the records
         if (($request->itemsPerPage == -1)) {
-            $itemsPerPage =  HistoryUserDetail::count();
+            $itemsPerPage = HistoryUserDetail::count();
             $skip = 0;
         }
 
@@ -70,7 +97,7 @@ class HistoryUserDetailController extends Controller
         $total = HistoryUserDetail::counterPagination($search);
 
         return response()->json([
-            "message"=>"Registros obtenidos correctamente.",
+            "message" => "Registros obtenidos correctamente.",
             "data" => $historyuserdetail,
             "total" => $total,
         ]);
@@ -86,15 +113,15 @@ class HistoryUserDetailController extends Controller
     {
         $historyuserdetail = new HistoryUserDetail;
 
-		$historyuserdetail->history_change_id = HistoryChange::where('quantity_out', $request->quantity_out)->first()->id;
-		$historyuserdetail->user_id = User::where('name', $request->name)->first()->id;
-		$historyuserdetail->user_tech_id = User::where('name', $request->name)->first()->id;
-		$historyuserdetail->deleted_at = $request->deleted_at;
+        $historyuserdetail->history_change_id = HistoryChange::where('quantity_out', $request->quantity_out)->first()->id;
+        $historyuserdetail->user_id = User::where('name', $request->name)->first()->id;
+        $historyuserdetail->user_tech_id = User::where('name', $request->name)->first()->id;
+        $historyuserdetail->deleted_at = $request->deleted_at;
 
         $historyuserdetail->save();
 
         return response()->json([
-            "message"=>"Registro creado correctamente.",
+            "message" => "Registro creado correctamente.",
         ]);
     }
 
@@ -121,15 +148,15 @@ class HistoryUserDetailController extends Controller
         $data = Encrypt::decryptArray($request->all(), 'id');
 
         $historyuserdetail = HistoryUserDetail::where('id', $data['id'])->first();
-		$historyuserdetail->history_change_id = HistoryChange::where('quantity_out', $request->quantity_out)->first()->id;
-		$historyuserdetail->user_id = User::where('name', $request->name)->first()->id;
-		$historyuserdetail->user_tech_id = User::where('name', $request->name)->first()->id;
-		$historyuserdetail->deleted_at = $request->deleted_at;
+        $historyuserdetail->history_change_id = HistoryChange::where('quantity_out', $request->quantity_out)->first()->id;
+        $historyuserdetail->user_id = User::where('name', $request->name)->first()->id;
+        $historyuserdetail->user_tech_id = User::where('name', $request->name)->first()->id;
+        $historyuserdetail->deleted_at = $request->deleted_at;
 
         $historyuserdetail->save();
 
         return response()->json([
-            "message"=>"Registro modificado correctamente.",
+            "message" => "Registro modificado correctamente.",
         ]);
     }
 
@@ -146,7 +173,7 @@ class HistoryUserDetailController extends Controller
         HistoryUserDetail::where('id', $id)->delete();
 
         return response()->json([
-            "message"=>"Registro eliminado correctamente.",
+            "message" => "Registro eliminado correctamente.",
         ]);
     }
 }

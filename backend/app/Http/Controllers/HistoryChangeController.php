@@ -26,35 +26,62 @@ class HistoryChangeController extends Controller
      */
     public function index(Request $request)
     {
-        $itemsPerPage = $request->itemsPerPage ?? 10;
-        $skip = ($request->page - 1) * $request->itemsPerPage;
 
-        // Getting all the records
-        if (($request->itemsPerPage == -1)) {
-            $itemsPerPage = HistoryChange::count();
-            $skip = 0;
+        if(in_array(null, $request->filter, true)){
+            $itemsPerPage = $request->itemsPerPage ?? 10;
+            $skip = ($request->page - 1) * $request->itemsPerPage;
+    
+            // Getting all the records
+            if (($request->itemsPerPage == -1)) {
+                $itemsPerPage = HistoryChange::count();
+                $skip = 0;
+            }
+    
+            $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+            $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
+            $search = (isset($request->search)) ? "%$request->search%" : '%%';
+    
+            $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort);
+            $historychange = Encrypt::encryptObject($historychange, "id");
+    
+            $total = HistoryChange::counterPagination($search);
+    
+            return response()->json([
+                "message" => "Registros obtenidos correctamente.",
+                "data" => $historychange,
+                "total" => $total,
+            ]);
+
+        }
+        else{
+            
+            $search = [
+                'typeMovement' => ($request->filter['typeMovement']),
+                'typeMovement_condition' => ($request->filter['typeMovement'] == -1) ? '>' : '=',
+                'processState' => ($request->filter['processStateFilter']),
+                'processState_condition' => ($request->filter['processStateFilter'] == -1) ? '>' : '=',
+                'start_range' => $request->filter['start_date'],
+                'end_range' => $request->filter['end_date'],
+            ];
+
+
+            $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
+            $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
+    
+            $historychange = HistoryChange::filterHistoryChange($search, $sortBy, $sort);
+            $historychange = Encrypt::encryptObject($historychange, "id");
+    
+            return response()->json([
+                "message" => "Registros obtenidos correctamente.",
+                "data" => $historychange,
+            ]);
+
         }
 
-        $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
-        $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
-        $search = (isset($request->search)) ? "%$request->search%" : '%%';
 
-        // $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage);
-        $historychange = HistoryChange::allDataSearched($search, $sortBy, $sort);
-        $historychange = Encrypt::encryptObject($historychange, "id");
-
-        $total = HistoryChange::counterPagination($search);
-
-        return response()->json([
-            "message" => "Registros obtenidos correctamente.",
-            "data" => $historychange,
-            "total" => $total,
-        ]);
     }
 
     public function filterMovement(Request $request){
-
-
 
         $search = [
             'typeMovement' => ($request->search['typeMovement']),
@@ -273,20 +300,21 @@ class HistoryChangeController extends Controller
         $history_change_to_compare = HistoryChange::where('equipment_id',$history_change_to_destroy->equipment_id)->get();
         $last_action_history = null;
 
-
         for ($i=0; $i < count($history_change_to_compare); $i++) { 
-            
             if($history_change_to_destroy->type_action_id <5 && $history_change_to_compare[$i]->equipment_id == $history_change_to_destroy->equipment_id){
                 $last_action_history = $history_change_to_compare[$i];
             }
+            else if($history_change_to_destroy->type_action_id >=5){
+                $last_action_history = $history_change_to_compare[$i];
+            }
         }
-
-        if($last_action_history->id == $history_change_to_destroy->id){
+        
+        if($last_action_history->id == $history_change_to_destroy->id && $last_action_history->type_action_id <5){
             $available1 = Equipment::where('id', $history_change_to_destroy->equipment_id)->first();
             $available1->availability = true;
             $available1->save();
-
         }
+
         HistoryChange::where('id', $id)->delete();
         return response()->json([
             "message" => "Registro eliminado correctamente.",

@@ -45,7 +45,7 @@ class HistoryChange extends Model
     // public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
     public static function allDataSearched($search, $sortBy, $sort)
     {
-        $data =  HistoryChange::select(
+        $data = HistoryChange::select(
             'history_change.*',
             'type_action.*',
             'equipment_id.*',
@@ -79,7 +79,7 @@ class HistoryChange extends Model
             ->orWhere('type_action.name', 'like', $search)
             ->orWhere('equipment_id.number_active', 'like', $search)
             ->orWhere('equipment_type1.name', 'like', $search)
-            
+
 
             // ->skip($skip)
             // ->take($itemsPerPage)
@@ -117,8 +117,9 @@ class HistoryChange extends Model
             ->count();
     }
 
-    public static function filterMovementByParameters($search){
-        $data =  HistoryChange::select(
+    public static function filterMovementByParameters($search)
+    {
+        $data = HistoryChange::select(
             'history_change.*',
             'type_action.*',
             'equipment.*',
@@ -151,9 +152,98 @@ class HistoryChange extends Model
 
 
 
-            return $data;
+
+
+
+
+
+
+        return $data;
 
     }
+
+
+    public static function filterHistoryChange($search, $sortBy, $sort)
+    {
+
+
+        $data = HistoryChange::select(
+            'history_change.*',
+            'type_action.*',
+            'equipment_id.*',
+            'process_state.*',
+            'location.*',
+            'dependency.*',
+            'history_change.id as id',
+            // Ubicacion
+            'location.name as location_id',
+            'dependency.name as dependency_id',
+            'equipment_id.serial_number as equipment_id',
+            'equipment_id.model as model1',
+            'equipment_type1.name as type1',
+            'brand1.name as brand1',
+            'process_state.name as state_id',
+            'process_state.id as process_state_id',
+            'type_action.name as type_action_id',
+            'type_action.id as action_id'
+        )
+
+
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            // Equipo principal
+            ->join('equipment as equipment_id', 'history_change.equipment_id', '=', 'equipment_id.id')
+            ->join('equipment_type as equipment_type1', 'equipment_id.equipment_type_id', '=', 'equipment_type1.id')
+            ->join('brand as brand1', 'equipment_id.brand_id', '=', 'brand1.id')
+            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
+            ->join('location', 'history_change.location_id', '=', 'location.id')
+            ->join('dependency', 'history_change.dependency_id', '=', 'dependency.id')
+            ->where('type_action_id', $search['typeMovement_condition'], $search['typeMovement'])
+            ->Where('state_id', $search['processState_condition'], $search['processState'])
+            ->whereBetween('start_date', [$search['start_range'], $search['end_range']])
+            ->orWhere('location.name', 'like', $search)
+            ->orWhere('dependency.name', 'like', $search)
+            ->orWhere('process_state.name', 'like', $search)
+            ->orWhere('type_action.name', 'like', $search)
+            ->orWhere('equipment_id.number_active', 'like', $search)
+            ->orWhere('equipment_type1.name', 'like', $search)
+
+
+            // ->skip($skip)
+            // ->take($itemsPerPage)
+            ->orderBy("history_change.$sortBy", $sort)
+            ->get();
+
+        $data->each(function ($item) {
+            $users = User::Join('history_user_detail', 'users.id', '=', 'history_user_detail.user_id')
+                ->where('history_user_detail.history_change_id', $item->id)
+                ->pluck('users.name')
+                ->toArray();
+            $item->users = $users;
+        });
+
+        $data->each(function ($item) {
+            $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
+                ->where('history_tech.history_change_id', $item->id)
+                ->pluck('users.name')
+                ->toArray();
+            $item->technician = $technician;
+        });
+
+        return $data;
+
+
+
+
+
+
+
+
+
+        return $data;
+
+    }
+
+
 
     public static function getEquipmentData($brand)
     {

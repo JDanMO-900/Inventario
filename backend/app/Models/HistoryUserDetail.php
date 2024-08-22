@@ -87,6 +87,60 @@ class HistoryUserDetail extends Model
         return $data;
     }
 
+    public static function filterUserHistoryChange($username, $search, $sortBy, $sort){
+        $data = HistoryUserDetail::select(
+            'history_user_detail.*',
+            'history_change.*',
+            'users.*',
+            'history_user_detail.id as id',
+            // Datos del equipo
+            'equipment.*',
+            'users.name as users',
+            'equipment_type.name as equipment_type',
+            'equipment.serial_number as equipment_id',
+            'equipment.model as model',
+            'brand.name as brand',
+            'history_change.start_date as start_date',
+            'history_change.end_date as end_date',
+            'type_action.name as type_action',
+            'type_action.is_internal as internal',
+            'process_state.name as process_state',
+            'type_action.name as type_action_id',
+            'type_action.id as action_id',
+            'process_state.id as process_id',
+            'location.name as location'
+            
+        )
+
+            ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('location', 'location.id', '=', 'history_change.location_id')
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=','equipment_type.id')
+            ->join('brand', 'equipment.brand_id', '=','brand.id')
+            ->join('users', 'history_user_detail.user_id', '=', 'users.id')
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
+            // ->skip($skip)
+            // ->take($itemsPerPage)
+            ->where('users.name', 'like', $username)
+            ->where('history_change.type_action_id', $search['typeMovement_condition'], $search['typeMovement'])
+            ->Where('history_change.state_id', $search['processState_condition'], $search['processState'])
+            ->whereBetween('history_change.start_date', [$search['start_range'], $search['end_range']])
+            ->orderBy("history_user_detail.$sortBy", $sort)
+            ->get();
+
+            $data->each(function ($item) {
+
+                $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
+                    ->where('history_tech.history_change_id', $item->history_change_id)
+                    ->pluck('users.name')
+                    ->toArray();
+                $item->technician = $technician;
+            });
+
+        return $data;
+    }
+
 
 
     public static function allDataSearched($search, $sortBy, $sort, $skip, $itemsPerPage)
