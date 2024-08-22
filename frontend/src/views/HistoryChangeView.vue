@@ -1,13 +1,49 @@
 <template>
   <div data-app>
+
+
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }} </h2>
-        <div class="options-table">
+        <h2>{{ title }} <base-button type="primary" title="Agregar" @click="addRecord()" /></h2>
+        <!-- <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
-        </div>
+        </div> -->
+
+        <v-row class="mt-2 mb-2">
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <BaseSelect label='Estados' :items="this.processStatesFilter" item-title='name' item-value="id"
+              v-model.trim="v$.filterItem.processStateFilter.$model" :rules="v$.filterItem.processStateFilter" clearable>
+            </BaseSelect>
+          </v-col>
+
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <BaseSelect label='Tipo de movimiento' :items="this.typeMovements" item-title='name' item-value="id"
+              v-model.trim="v$.filterItem.typeMovement.$model" :rules="v$.filterItem.typeMovement" clearable>
+            </BaseSelect>
+          </v-col>
+
+          <!-- fecha del movimiento -->
+          <v-col cols="12" sm="6" md="6">
+            <base-input label="Rango inicial" v-model="v$.filterItem.start_date.$model"
+              :rules="v$.filterItem.start_date" type="datetime-local" clearable />
+          </v-col>
+          <!-- fecha del movimiento -->
+
+          <!-- fecha del movimiento -->
+          <v-col cols="12" sm="6" md="6">
+            <base-input label="Rango final" v-model="v$.filterItem.end_date.$model" :rules="v$.filterItem.end_date"
+              type="datetime-local" clearable />
+          </v-col>
+          <!-- fecha del movimiento -->
+
+          <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
+            <base-button type="primary" title="Filtrar" @click="filterByMovement" :loading="isLoading" />
+          </v-col>
+        </v-row>
+
+
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
@@ -23,16 +59,16 @@
             v-if="item.raw.process_state_id != 3 || userRol == 2" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
 
-          <v-icon v-if="item.raw.process_state_id == 2 && item.raw.action_id == 5" size="20" class="mr-2" @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Finalizar soporte"
-             />
+          <v-icon v-if="item.raw.process_state_id == 2 && item.raw.action_id == 5" size="20" class="mr-2"
+            @click="finishIncompleteActivityItem(item.raw)" icon="mdi-trending-neutral" title="Finalizar soporte" />
 
 
 
 
-          <template v-if="((item.raw.action_id == 1 || item.raw.action_id <= 4) && item.raw.process_state_id != 3
-            && item.raw.process_state_id != 4)">
+          <template v-if="((item.raw.action_id == 2 || item.raw.action_id <= 4) && (item.raw.process_state_id != 3
+            && item.raw.process_state_id != 4 && item.raw.process_state_id != 1))">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
-              title="Terminar movimiento" />
+              title="Terminar movimiento" /> 
           </template>
 
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -333,9 +369,9 @@
                   </v-chip>
                 </v-col>
                 <template v-if="(currentProcess == 1) && userRol == 2" class="d-flex justify-content-center">
-                  <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">                  
+                  <v-col cols="4" sm="12" md="12" class="d-flex justify-content-center">
                     <base-button class="ms-1 bg-green-lighten-1" title="Cambiar el estado del proceso"
-                      @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />                  
+                      @click="processStanteChangeItem(this.editedItem)" prepend-icon="mdi-sync-circle" />
                   </v-col>
                 </template>
                 <v-col cols="12" sm="12" md="12">
@@ -391,8 +427,7 @@
           <!-- Form -->
           <v-row class="pt-3">
             <v-col cols="12" sm="12" md="12">
-              <template
-                v-if="currentAction == 4 || currentAction == 1">
+              <template v-if="currentAction == 4 || currentAction == 1">
                 <div>
                   <!-- Fecha de finalización de movimiento -->
                   <base-input label="Fecha de finalización del movimiento"
@@ -458,27 +493,24 @@
 
   <!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
   <v-dialog v-model="dialogFinishIncompleteActivity" max-width="45rem">
-      <v-card class="h-100">
-        <v-container>
-          <h2 class="black-secondary text-center mt-3 mb-3">
-            <b>Finalizar soporte u otro movimiento</b>
-          </h2>
-          <br />
-          
-          <v-row>
-            <v-col align="center">
-              <base-button type="primary" title="Confirmar" 
-                :loading="isLoading" @click="finishIncompleteActivityItemConfirm"/>
-              <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeFinishIncompleteActivity" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
-    </v-dialog>
-<!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
+    <v-card class="h-100">
+      <v-container>
+        <h2 class="black-secondary text-center mt-3 mb-3">
+          <b>Finalizar soporte u otro movimiento</b>
+        </h2>
+        <br />
 
-
-
+        <v-row>
+          <v-col align="center">
+            <base-button type="primary" title="Confirmar" :loading="isLoading"
+              @click="finishIncompleteActivityItemConfirm" />
+            <base-button class="ms-1" type="secondary" title="Cancelar" @click="closeFinishIncompleteActivity" />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-dialog>
+  <!-- Finalizar movimiento del equipo sin fecha de finalizacion -->
 
 </template>
 
@@ -515,7 +547,7 @@ export default {
       isLoading: false,
       headers: [
         { title: "Tipo de movimiento", key: "type_action_id" },
-        { title: 'Fecha', key: 'start_date'},
+        { title: 'Fecha', key: 'start_date' },
         { title: "Equipo", key: "type1" },
         { title: "# de activo", key: "number_active" },
         { title: "Ubicación", key: "location_id" },
@@ -534,6 +566,13 @@ export default {
       defaultItem: {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment_serial: "", state_id: "", start_date: "", end_date: ""
+      },
+
+      filterItem: {
+        typeMovement: '',
+        processStateFilter: '',
+        start_date: "",
+        end_date: "",
       },
 
       loading: false,
@@ -558,7 +597,15 @@ export default {
         id: "",
         state_id: "",
         serial_number: ""
-      }
+      },
+
+      processStatesFilter: [
+        { id: -1, name: "TODOS LOS ESTADOS" }
+      ],
+
+      typeMovements: [
+        { id: -1, name: 'TODOS LOS MOVIMIENTOS' }
+      ],
     };
   },
 
@@ -571,6 +618,21 @@ export default {
   // Validations
   validations() {
     return {
+
+      filterItem: {
+        typeMovement: { required, minLength: minLength(1),},
+        processStateFilter: { required, minLength: minLength(1),},
+        start_date: {
+          required,
+          minLength: minLength(1),
+        },
+        end_date: {
+          required,
+          minLength: minLength(1)
+        },
+      },
+
+
       editedItem: {
         location_id: {
           required,
@@ -653,7 +715,7 @@ export default {
     currentAction() {
       return this.getCurrentAction(this.editedItem.type_action_id);
     },
-    currentProcess() {   
+    currentProcess() {
       return this.getCurrentProcess(this.editedItem.state_id);
     }
   },
@@ -686,7 +748,7 @@ export default {
         }
       }
     },
-    getCurrentProcess(processName){
+    getCurrentProcess(processName) {
       for (let element of this.processState) {
         if (processName == element.name) {
           return element.id;
@@ -712,11 +774,11 @@ export default {
     finishIncompleteActivityItem(item) {
 
       this.finishActivity = item;
-      this.dialogFinishIncompleteActivity= true;
+      this.dialogFinishIncompleteActivity = true;
     },
 
     async finishIncompleteActivityItemConfirm() {
-      
+
       this.isLoading = true;
 
       try {
@@ -866,6 +928,9 @@ export default {
         backendApi.get('/dependency', {
           params: { itemsPerPage: -1 },
         }),
+        backendApi.get('/equipmentType', {
+          params: { itemsPerPage: -1 },
+        }),
       ];
 
       const responses = await Promise.all(requests).catch((error) => {
@@ -883,11 +948,34 @@ export default {
         for (let i = 0; i < this.users.length; i++) {
           if (this.users[i].role_id.toLowerCase() === "tecnico")
             uniqueTechNames.add(this.users[i].name);
-          }
-          this.userTech = Array.from(uniqueTechNames)
-      } 
+        }
+        this.userTech = Array.from(uniqueTechNames)
+
+        this.typeMovements = this.selectTypeMovements(responses[1].data.data);
+        this.processStatesFilter = this.selectProcessStates(responses[4].data.data);
+
+
+      }
       this.loading = false;
     },
+
+    selectProcessStates(data) {
+      let processStateList = this.processStatesFilter
+      data.forEach(function (item) {
+        processStateList.push(item)
+      })
+      return processStateList
+    },
+
+    selectTypeMovements(data) {
+      let typeMovementList = this.typeMovements
+      data.forEach(function (item) {
+        typeMovementList.push(item)
+      })
+      return typeMovementList
+    },
+
+
 
     infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
@@ -912,12 +1000,12 @@ export default {
     },
 
     async save() {
-      
-      if (this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==4)['name'] || this.editedItem.type_action_id == this.typeAction.find(item=>item.id ==1)['name']) {
-        this.editedItem.state_id = this.processState.find(item=>item.id ==2)['name'];
+
+      if (this.editedItem.type_action_id == this.typeAction.find(item => item.id == 4)['name'] || this.editedItem.type_action_id == this.typeAction.find(item => item.id == 1)['name']) {
+        this.editedItem.state_id = this.processState.find(item => item.id == 2)['name'];
       }
       else {
-        this.editedItem.state_id = this.processState.find(item=>item.id ==3)['name'];
+        this.editedItem.state_id = this.processState.find(item => item.id == 3)['name'];
       }
 
       this.v$.editedItem.$validate();
@@ -926,6 +1014,7 @@ export default {
         return;
       }
       this.isLoading = true;
+
 
       // Updating record
       if (this.editedIndex > -1) {
@@ -1003,10 +1092,10 @@ export default {
       this.debounce = setTimeout(async () => {
         try {
           const { data } = await backendApi.get('/historyChange', {
-            params: { ...options, search: this.search },
+            params: { ...options, search: this.search, filter: this.filterItem },
           });
 
-          this.records = data.data;          
+          this.records = data.data;
           this.total = data.total;
           this.loading = false;
         } catch (error) {
@@ -1023,11 +1112,37 @@ export default {
       this.getCurrentDateTime();
 
     },
+
+    async filterByMovement() {
+      this.isLoading = true;
+
+      this.records = [];
+      this.v$.filterItem.$validate();
+      if (this.v$.filterItem.$invalid) {
+        alert.error("Campos obligatorios");
+        this.isLoading = false;
+
+        return;
+      }
+
+      try {
+        const { data } = await backendApi.get('/historyChange', {
+          params: {  filter: this.filterItem},
+        });
+        this.records = data.data;
+
+      
+
+      } catch (error) {
+        alert.error("Ocurrió un error al generar el historial.");
+
+      }finally{
+        setTimeout(() => (this.isLoading = false), 800)
+      }
+    }
   },
 };
 </script>
-
-
 
 
 <style scoped>

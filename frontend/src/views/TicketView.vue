@@ -3,11 +3,46 @@
     <v-card class="p-3 mt-3">
       <v-container>
 
-        <h2>{{ title }} </h2>
-        <div class="options-table">
+        <h2>{{ title }} <base-button type="primary" title="Agregar" @click="addRecord()" /></h2>
+        <!-- <div class="options-table">
           <base-button type="primary" title="Agregar" @click="addRecord()" />
 
-        </div>
+        </div> -->
+
+        <v-row class="mt-2 mb-2">
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <BaseSelect label='Estados' :items="this.processStatesFilter" item-title='name' item-value="id"
+              v-model.trim="v$.filterItem.processStateFilter.$model" :rules="v$.filterItem.processStateFilter"
+              clearable>
+            </BaseSelect>
+          </v-col>
+
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <BaseSelect label='Tipo de movimiento' :items="this.typeMovements" item-title='name' item-value="id"
+              v-model.trim="v$.filterItem.typeMovement.$model" :rules="v$.filterItem.typeMovement" clearable>
+            </BaseSelect>
+          </v-col>
+
+          <!-- fecha del movimiento -->
+          <v-col cols="12" sm="6" md="6">
+            <base-input label="Rango inicial" v-model="v$.filterItem.start_date.$model"
+              :rules="v$.filterItem.start_date" type="datetime-local" clearable />
+          </v-col>
+          <!-- fecha del movimiento -->
+
+          <!-- fecha del movimiento -->
+          <v-col cols="12" sm="6" md="6">
+            <base-input label="Rango final" v-model="v$.filterItem.end_date.$model" :rules="v$.filterItem.end_date"
+              type="datetime-local" clearable />
+          </v-col>
+          <!-- fecha del movimiento -->
+
+          <v-col cols="12" lg="12" md="12" sm="12" class="d-flex flex-column align-center justify-center">
+            <base-button type="primary" title="Filtrar" @click="filterByMovement" :loading="isLoading" />
+          </v-col>
+        </v-row>
+
+
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
@@ -17,9 +52,10 @@
       <v-data-table :headers="headers" :items="records" item-key="name" class="elevation-1" :search="search">
         <template v-slot:[`item.actions`]="{ item }">
 
-          <v-icon v-if="item.raw.process_id == 1 || item.raw.process_id != 4 && item.raw.internal != 1" size="20"
-            class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel" title="Cancelar proceso" />
-
+          <v-icon
+            v-if="item.raw.process_id == 1 && item.raw.process_id != 4 && item.raw.process_id != 3 && item.raw.internal != 1"
+            size="20" class="mr-2" @click="movementCancelStatusItem(item.raw)" icon="mdi-cancel"
+            title="Cancelar proceso" />
           <v-icon size="20" class="mr-2" @click="infoItem(item.raw)" icon="mdi-information" title="Información" />
 
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -444,6 +480,12 @@ export default {
         location_id: "", dependency_id: "", technician: [], users: JSON.parse(window.localStorage.getItem("user")).name, description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment: "", state_id: "", start_date: "", end_date: ""
       },
+      filterItem: {
+        typeMovement: '',
+        processStateFilter: '',
+        start_date: "",
+        end_date: "",
+      },
       loading: false,
       debounce: 0,
       typeAction: [],
@@ -460,8 +502,16 @@ export default {
         id: "",
         equipment_id: "",
       },
+      processStatesFilter: [
+        { id: -1, name: "TODOS LOS ESTADOS" }
+      ],
+
+      typeMovements: [
+        { id: -1, name: 'TODOS LOS MOVIMIENTOS' }
+      ],
     };
   },
+
   watch: {
     dialogDelete(val) {
       val || this.closeDelete();
@@ -470,6 +520,18 @@ export default {
   // Validations
   validations() {
     return {
+      filterItem: {
+        typeMovement: { required, minLength: minLength(1), },
+        processStateFilter: { required, minLength: minLength(1), },
+        start_date: {
+          required,
+          minLength: minLength(1),
+        },
+        end_date: {
+          required,
+          minLength: minLength(1)
+        },
+      },
       editedItem: {
         location_id: {
           required,
@@ -531,13 +593,13 @@ export default {
         return this.equipment.filter(item => item.serial_number !== this.editedItem.equipment_id);
       }
     },
-    filterUserEquipment(){
+    filterUserEquipment() {
       return this.userEquipment = this.userEquipment.filter((item, index, self) =>
-      index === self.findIndex((t) => t.serial_number === item.serial_number)
-    );
+        index === self.findIndex((t) => t.serial_number === item.serial_number)
+      );
 
     },
-    
+
     filterTypeAction() {
       return this.typeAction.filter(action => action.is_internal.toLowerCase() === "personal externo")
     },
@@ -565,7 +627,7 @@ export default {
     currentAction(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.editedItem.equipment = "";
-        
+
         if (this.editedItem.equipment_id.length != 0 && typeof this.editedItem.equipment_id !== 'string') {
           this.editedItem.equipment_id.length = 0;
         }
@@ -595,6 +657,36 @@ export default {
   },
 
   methods: {
+
+    async filterByMovement() {
+      this.isLoading = true;
+
+      this.records = [];
+      this.v$.filterItem.$validate();
+      if (this.v$.filterItem.$invalid) {
+        alert.error("Campos obligatorios");
+        this.isLoading = false;
+
+        return;
+      }
+
+      try {
+
+          const { data } = await backendApi.get(`/historyUser/${JSON.parse(window.localStorage.getItem("user")).name}`, {
+          params: { filter: this.filterItem },
+        });
+        this.records = data.data;
+
+
+
+      } catch (error) {
+        alert.error("Ocurrió un error al generar el historial.");
+
+      } finally {
+        setTimeout(() => (this.isLoading = false), 800)
+      }
+    },
+
     infoItem(item) {
       this.editedIndex = this.records.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -639,7 +731,7 @@ export default {
         return;
       }
 
-      this.finishMovement.state_id = this.processState.find(item=>item.id ==4)['name'];
+      this.finishMovement.state_id = this.processState.find(item => item.id == 4)['name'];
       this.isLoading = true;
 
       try {
@@ -739,11 +831,11 @@ export default {
         this.location = responses[4].data.data;
         this.dependency = responses[5].data.data;
         this.userEquipment = responses[6].data.data;
+
+        this.typeMovements = this.selectTypeMovements(responses[1].data.data);
+        this.processStatesFilter = this.selectProcessStates(responses[3].data.data);
+
       }
-
-
-
-
       this.loading = false;
     },
 
@@ -762,11 +854,24 @@ export default {
       });
     },
 
+    selectProcessStates(data) {
+      let processStateList = this.processStatesFilter
+      data.forEach(function (item) {
+        processStateList.push(item)
+      })
+      return processStateList
+    },
+
+    selectTypeMovements(data) {
+      let typeMovementList = this.typeMovements
+      data.forEach(function (item) {
+        typeMovementList.push(item)
+      })
+      return typeMovementList
+    },
+
     async save() {
-
-
       this.editedItem.state_id = "Pendiente"
-
       this.v$.editedItem.$validate();
       if (this.v$.editedItem.$invalid) {
         alert.error("Campos obligatorios");
@@ -864,7 +969,7 @@ export default {
         try {
 
           const { data } = await backendApi.get(`/historyUser/${JSON.parse(window.localStorage.getItem("user")).name}`, {
-            params: { ...options, search: this.search },
+            params: { ...options, search: this.search, filter: this.filterItem },
           });
 
 
