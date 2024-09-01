@@ -167,14 +167,17 @@ router.beforeEach(async (to, from, next) => {
     if(!requiresRole){
       next();
     }
-    else{
-
+    else{      
       let rol =  JSON.parse(window.localStorage.getItem("user")).rol;
-
-      if(rol== 2  || rol== 3){
+      
+      if(rol==3 && (to.name==='users' || to.name==='typeAction') ){ // Técnico no accede a users, ni typeAction
+        next("/unauthorized")
+      }
+      
+      if(rol== 2  || rol== 3){ // Técnico y Jefe acceden a todo (con excepción anterior)
         next();
       }
-      else if(rol == 1){
+      else if(rol == 1){ // Usuario solo ve el ticket
         next("/ticket");
       }
       else{

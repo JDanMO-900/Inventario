@@ -125,11 +125,7 @@
 import { useVuelidate } from "@vuelidate/core";
 import { messages } from "@/utils/validators/i18n-validators";
 import { minLength, required, email, numeric, maxLength } from "@/lang/i18n";
-
-
 import backendApi from "@/services/backendApi";
-
-
 import BaseButton from "../components/base-components/BaseButton.vue";
 import BaseInput from "../components/base-components/BaseInput.vue";
 import BaseSelect from "../components/base-components/BaseSelect.vue";

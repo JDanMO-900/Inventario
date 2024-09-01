@@ -7,47 +7,54 @@
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
-        <RouterLink v-if="userRol != 1"  to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
-          <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
-          <span>Inventario</span>
-        </RouterLink>
+        <v-template v-if="rol!==1">        
+          <RouterLink to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+            <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
+            <span>Inventario</span>
+          </RouterLink>
 
-        <RouterLink v-if="userRol != 1" to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
-          <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
-          <span>Movimientos</span>
-        </RouterLink> 
-        
-        <v-menu v-if="userRol != 1" location="end" open-on-hover>
-          <template v-slot:activator="{ props }">
-            <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
-              <v-icon icon="mdi-file" size="20"></v-icon>
-              <span>Reportes</span>
-            </div>
-          </template>
+          <RouterLink to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+            <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
+            <span>Movimientos</span>
+          </RouterLink>               
 
-          <v-list v-if="userRol != 1" density="compact" variant="plain" class="my-list pt-2 pb-2">
-            <RouterLink v-if="userRol != 1" to="/availableEquipment">
-              <v-list-item> 
-                Equipos en bodega
-              </v-list-item>
-            </RouterLink>            
-            <RouterLink v-if="userRol != 1" to="/allProducts">
-              <v-list-item> 
-                Inventario general
-              </v-list-item>
-            </RouterLink>
-            <RouterLink to="/filterMovement">
-                <v-list-item>
-                Movimientos de inventario
-              </v-list-item>
-            </RouterLink>
-          </v-list>
-        </v-menu>
+          <RouterLink to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+            <v-icon icon="mdi-shield-home" size="20"></v-icon>
+            <span>Catálogos</span>
+          </RouterLink>        
+          
+          <v-menu location="end" open-on-hover>
+            <template v-slot:activator="{ props }">
+              <div class="d-flex flex-column align-center pt-2 pb-2 p-1" v-bind="props">
+                <v-icon icon="mdi-file" size="20"></v-icon>
+                <span>Reportes</span>
+              </div>
+            </template>
 
-        <RouterLink v-if="userRol != 1" to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
-          <v-icon icon="mdi-shield-home" size="20"></v-icon>
-          <span>Catálogos</span>
-        </RouterLink>   
+            <v-list density="compact" variant="plain" class="my-list pt-2 pb-2">
+              <RouterLink to="/availableEquipment">
+                <v-list-item> 
+                  Equipos en bodega
+                </v-list-item>
+              </RouterLink>            
+              <RouterLink to="/equipmentTypeReport">
+                <v-list-item> 
+                  Listado de equipos
+                </v-list-item>
+              </RouterLink>
+              <RouterLink to="/filterMovement">
+                  <v-list-item>
+                  Movimientos de inventario
+                </v-list-item>
+              </RouterLink>
+              <!-- <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">
+                <v-list-item> 
+                  Equipos por ubicación
+                </v-list-item>
+              </RouterLink> -->
+            </v-list>
+          </v-menu>
+        </v-template>
 
         <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
@@ -66,7 +73,10 @@
           <v-icon icon="mdi-login" size="20"></v-icon>
           <span>Iniciar sesión</span>
         </RouterLink>
-        
+        <!-- <RouterLink to="/register" class="d-flex flex-column align-center mb-4">
+          <v-icon icon="mdi-account-plus" size="25"></v-icon>
+          <span>Registrarse</span>
+        </RouterLink> -->
       </template>
     </div>
   </div>
@@ -74,22 +84,12 @@
 
 <script setup>
 
-import { RouterLink } from "vue-router";
-import useMenu from "@/composables/useMenu";
-import useAuth from "../composables/useAuth";
-import {ref} from "vue";
+  import { RouterLink } from "vue-router";
+  import useMenu from "@/composables/useMenu";
+  import useAuth from "../composables/useAuth";
 
-
-const { stateSideBar } = useMenu();
-const { isLoggedIn, logout } = useAuth();
-
-const props = defineProps({
-  userRol: 0,
-}  
-);
-
-
-
+  const { stateSideBar } = useMenu();
+  const { isLoggedIn, rol, logout } = useAuth();
 
 </script>
 

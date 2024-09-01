@@ -16,6 +16,7 @@ const useAuth = () => {
     refreshToken,
     user,
     isLoggedIn,
+    rol
   } = storeToRefs(authStore);
   const router = useRouter();
 
@@ -28,6 +29,7 @@ const useAuth = () => {
       });
 
     user.value = data.user;
+    rol.value = data.user.rol
     isLoggedIn.value = true;
   };
 
@@ -51,6 +53,7 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.clear();
+    rol.value = 0;
     isLoggedIn.value = false;
     router.push("/login");
   };
@@ -63,8 +66,10 @@ const useAuth = () => {
     localStorage.setItem('user', JSON.stringify(data.data.user))
 
     user.value = data.data.user;
+    rol.value = data.data.user.rol;
     isLoggedIn.value = true;
   }
+  
 
   return {
     // Variables
@@ -72,6 +77,7 @@ const useAuth = () => {
     refreshToken,
     user,
     isLoggedIn,
+    rol,
     // Functions
     login,
     getUserInfo,

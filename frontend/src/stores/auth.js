@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", () => {
   const refreshToken = ref(null);
   const user = ref(null);
   const isLoggedIn = ref(false);
+  const rol = ref(0);
 
   return {
     state,
@@ -18,5 +19,6 @@ export const useAuthStore = defineStore("auth", () => {
     refreshToken,
     user,
     isLoggedIn,
+    rol
   };
 });
