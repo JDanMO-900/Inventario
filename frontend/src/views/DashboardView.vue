@@ -93,7 +93,7 @@
       </v-row>
     </v-card>
 
-    <v-card class="p-3 mt-3">
+    <v-card class="p-3 mt-3" v-if="rolRetrieveUser == 'Jefe'">
       <v-container>
         <h1>Gestión de Procesos</h1>
       </v-container>

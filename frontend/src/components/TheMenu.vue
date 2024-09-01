@@ -15,12 +15,7 @@
         <RouterLink v-if="userRol != 1" to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
           <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
           <span>Movimientos</span>
-        </RouterLink>               
-
-        <RouterLink v-if="userRol != 1" to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
-          <v-icon icon="mdi-shield-home" size="20"></v-icon>
-          <span>Catálogos</span>
-        </RouterLink>        
+        </RouterLink> 
         
         <v-menu v-if="userRol != 1" location="end" open-on-hover>
           <template v-slot:activator="{ props }">
@@ -36,9 +31,9 @@
                 Equipos en bodega
               </v-list-item>
             </RouterLink>            
-            <RouterLink v-if="userRol != 1" to="/equipmentTypeReport">
+            <RouterLink v-if="userRol != 1" to="/allProducts">
               <v-list-item> 
-                Listado de equipos
+                Inventario general
               </v-list-item>
             </RouterLink>
             <RouterLink to="/filterMovement">
@@ -46,13 +41,13 @@
                 Movimientos de inventario
               </v-list-item>
             </RouterLink>
-            <!-- <RouterLink v-if="userRol != 'Usuario'" to="/locationReport">
-              <v-list-item> 
-                Equipos por ubicación
-              </v-list-item>
-            </RouterLink> -->
           </v-list>
         </v-menu>
+
+        <RouterLink v-if="userRol != 1" to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+          <v-icon icon="mdi-shield-home" size="20"></v-icon>
+          <span>Catálogos</span>
+        </RouterLink>   
 
         <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
@@ -71,10 +66,7 @@
           <v-icon icon="mdi-login" size="20"></v-icon>
           <span>Iniciar sesión</span>
         </RouterLink>
-        <!-- <RouterLink to="/register" class="d-flex flex-column align-center mb-4">
-          <v-icon icon="mdi-account-plus" size="25"></v-icon>
-          <span>Registrarse</span>
-        </RouterLink> -->
+        
       </template>
     </div>
   </div>

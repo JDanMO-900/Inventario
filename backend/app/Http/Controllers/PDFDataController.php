@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Encrypt;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\PDFData;
 use App\Models\Equipment;
@@ -36,7 +37,7 @@ class PDFDataController extends Controller
         return $pdf->stream('LocationReport.pdf');
     }
 
-    public function typeReport(Request $request)
+    public function allProducts(Request $request)
     {
         $search = [
             'brand' => ($request['brand'] == -1) ? -1 : (Encrypt::decryptValue($request['brand'])),
@@ -48,7 +49,7 @@ class PDFDataController extends Controller
         ];
   
         $data = [];
-        $equipments = PDFData::typeReport($search);
+        $equipments = PDFData::allProducts($search);
 
         foreach ($equipments as $key => $value) {
             $id = $value->id;
@@ -63,6 +64,7 @@ class PDFDataController extends Controller
                 'brand' => $value->brand,
                 'model' => $value->model,
                 'number_active' => $value->number_active,
+                'serial_number' => $value->serial_number,
                 'state' => $value->state,
                 'location' => $value->location,
                 'descriptions' => $text
@@ -72,7 +74,7 @@ class PDFDataController extends Controller
         }
 
         Log::info($data);
-        $pdf = PDF::loadView('TypeReport', compact('data'));
+        $pdf = PDF::loadView('AllProductsReport', compact('data'));
         $pdf->setPaper('A4', 'landscape');
 
         return $pdf->stream('Tipos de equipos.pdf');
@@ -132,7 +134,10 @@ class PDFDataController extends Controller
     }
 
     public function availableEquipment(Request $request){
-        $data = PDFData::getAvailableEquipment([$request->start_date, $request->end_date]);       
+        $data = PDFData::getAvailableEquipment([
+            Carbon::parse($request->start_date)->startOfDay(), 
+            Carbon::parse($request->end_date)->endOfDay()
+        ]);       
         // Log::info($data);
         $pdf = PDF::loadView('AvailableEquipmentReport', compact('data'));
         $pdf->setPaper('A4', 'landscape');

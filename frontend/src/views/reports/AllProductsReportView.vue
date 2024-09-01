@@ -135,7 +135,7 @@ export default {
 
             try {
                 this.btnLoading = true;
-                const reportData = await backendApi.post(`/typepdf`, this.editedItem, { responseType: 'blob' });
+                const reportData = await backendApi.post(`/allProducts`, this.editedItem, { responseType: 'blob' });
                 console.log(this.editedItem)
                 const report_data = new Blob([reportData.data], { type: 'application/pdf' })
                 const url_report = window.URL.createObjectURL(report_data);

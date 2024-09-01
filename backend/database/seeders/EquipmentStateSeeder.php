@@ -15,10 +15,10 @@ class EquipmentStateSeeder extends Seeder
     {
         EquipmentState::insert([
             [
-            "name" => "Fuera de uso",
+                "name" => "Fuera de uso",
             ],
             [
-            "name" => "Buen estado",
+                "name" => "Buen estado",
             ]  
         ]);
     }

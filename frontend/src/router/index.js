@@ -80,7 +80,7 @@ const router = createRouter({
       path: "/typeAction",
       name: "typeAction",
       component: () => import("../views/TypeActionView.vue"),
-      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
+      meta: { requiresAuth: true, roles: [2] }, // add meta field to specify the route requires authentication
     },
     {
       path: "/movements",
@@ -126,9 +126,9 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
     {
-      path: "/equipmentTypeReport",
-      name: "equipmentTypeReport",
-      component: () => import("../views/reports/EquipmentTypeReportView.vue"),
+      path: "/allProducts",
+      name: "allProducts",
+      component: () => import("../views/reports/AllProductsReportView.vue"),
       meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
     {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tipos de equipos</title>
+    <title>Inventario general</title>
     <style>
         body {
             margin: 0;
@@ -98,7 +98,7 @@
         <div class="title">
             <h1>Biblioteca Nacional de El Salvador</h1>
             <h2>Sección de informática</h2>
-            <h4>Reporte de inventario por tipo de equipo</h4>
+            <h4>Reporte de inventario general</h4>
         </div>
         <img class="right" src="{{ public_path('images/MCLogo.png') }}" alt="Logo">
     </div>
@@ -110,6 +110,7 @@
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Activo Fijo</th>
+                <th>No.Serie</th>
                 <th>Estado</th>
                 <th>Ubicación</th>
                 <th>Detalles técnicos</th>
@@ -121,6 +122,7 @@
                     <td>{{ $report['brand'] }}</td>
                     <td>{{ $report['model'] }}</td>
                     <td>{{ $report['number_active'] }}</td>
+                    <td>{{ $report['serial_number'] }}</td>
                     <td>{{ $report['state'] }}</td>
                     <td>
                         @if ($report['location'] != '')

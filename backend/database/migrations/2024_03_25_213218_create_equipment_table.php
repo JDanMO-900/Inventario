@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('number_internal_active')->nullable();
             $table->string('model');
             $table->string('serial_number');
+            $table->string('mac_address')->nullable();
             $table->date('adquisition_date')->nullable();
             $table->string('invoice_number')->nullable();
             $table->boolean('availability');

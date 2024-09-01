@@ -33,6 +33,9 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel 1: Monitoreo y Videovigilancia'
             ] ,
             [
+                'name' => 'Nivel 1: Sala de Consulta Digital'
+            ] ,
+            [
                 'name' => 'Nivel 1: Unidad de Fondos Antiguos'
             ] ,
             [
@@ -93,10 +96,10 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel 4: Recepción'
             ] ,
             [
-                'name' => 'Nivel 4: Centro de Computo Capacitaciones'
+                'name' => 'Nivel 4: Centro de Cómputo de Capacitaciones'
             ] ,
             [
-                'name' => 'Nivel 4: Centro de Computo Uso Público'
+                'name' => 'Nivel 4: Centro de Cómputo de Uso Público'
             ] ,
             [
                 'name' => 'Nivel 4: Pozo de Datos P5'
@@ -162,7 +165,7 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel 6: Recepción'
             ] ,
             [
-                'name' => 'Nivel 6: Centro de Computo'
+                'name' => 'Nivel 6: Centro de Cómputo'
             ] ,
             [
                 'name' => 'Nivel 6: Pozo de Datos P5'
@@ -174,7 +177,7 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel 6: Zona Gamer'
             ] ,
             [
-                'name' => 'Nivel 6: Area  Tecnológica'
+                'name' => 'Nivel 6: Area Tecnológica'
             ] ,
             [
                 'name' => 'Nivel 6: Sala de Reuniones VIP'
@@ -195,7 +198,7 @@ class LocationSeeder extends Seeder
                 'name' => 'Nivel 6: Oficina de Informática'
             ] ,
             [
-                'name' => 'Nivel 7: Pozo Datos P2'
+                'name' => 'Nivel 7: Pozo de Datos P2'
             ],
             [
                 'name' => 'Archivo General de la Nación: Dirección'
@@ -208,6 +211,9 @@ class LocationSeeder extends Seeder
             ] ,
             [
                 'name' => 'Ministerio de Cultura A5: Unidad de Talento Humano'
+            ] ,
+            [
+                'name' => 'Ministerio de Cultura A5: Despacho Ministerial'
             ]
         ]); 
     }

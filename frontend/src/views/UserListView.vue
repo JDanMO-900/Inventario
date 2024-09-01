@@ -3,9 +3,9 @@
     <v-card class="p-3 mt-3">
       <v-container>
         <h2>{{ title }}</h2>
-        <!-- <div class="options-table">
-          <base-button type="primary" title="Agregar" @click="addRecord()" />zc
-        </div> -->
+        <div class="options-table">
+          <base-button type="primary" title="Agregar" @click="addRecord()" />
+        </div>
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
           <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
         </v-col>
@@ -169,6 +169,7 @@ export default {
         },
         email: {
           required,
+          email,
           minLength: minLength(1),
         },
         role_id: {
@@ -225,10 +226,7 @@ export default {
 
       if (responses) {
         this.role = responses[1].data.data;
-
       }
-      console.log(this.role)
-
       this.loading = false;
     },
 

@@ -13,7 +13,7 @@ class PDFData extends Model
 {
     use HasFactory;
 
-    public static function typeReport($search)
+    public static function allProducts($search)
     {
         $lastestHistoryChange = HistoryChange::select('equipment_id', DB::raw('MAX(id) as latest_id'))
             ->groupBy('equipment_id');
@@ -24,6 +24,7 @@ class PDFData extends Model
             'brand.name as brand',
             'equipment.model',
             'equipment.number_active',
+            'equipment.serial_number',
             'equipment_state.name as state',
             DB::raw("CASE WHEN history_change.end_date IS NULL THEN location.name ELSE '' END as location")
         )

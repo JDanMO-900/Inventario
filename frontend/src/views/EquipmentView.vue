@@ -8,7 +8,7 @@
         </div>
 
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search" clearable></v-text-field>
         </v-col>
       </v-container>
 
@@ -106,6 +106,14 @@
                         v-model.trim="v$.editedItem.state.$model" :rules="v$.editedItem.state" clearable />
                     </v-col>
                     <!-- equipment state -->
+
+                    <!-- mac_address -->
+                    <v-col cols="12" sm="12" md="12" lg="12">
+                      <base-select label="Dirección MAC" v-model.trim="v$.editedItem.mac_address.$model"
+                        :items="this.mac_address" item-title="name" item-value="name"
+                        :rules="v$.editedItem.mac_address" clearable />
+                    </v-col>
+                    <!-- mac_address -->
 
                     <!-- tipo de equipo -->
                     <v-col cols="12" sm="12" md="12" lg="12">
@@ -404,21 +412,19 @@
                           <tr>
                             <th style="width: 25% !important;">Tipo de movimiento</th>
                             <th style="width: 25% !important;">Responsable</th>
+                            <th style="width: 25% !important;">Ubicación</th>
                             <th style="width: 25% !important;">Fecha de inicio del movimiento</th>
                             <th style="width: 25% !important;">Fecha de retorno del equipo</th>
-
                           </tr>
                         </thead>
                         <tbody>
                           <tr v-for="(data, index) in this.historyData" :key="index">
                             <td>{{ data.type_action }}</td>
                             <td>{{ data.users }}</td>
+                            <td>{{ data.location }}</td>
                             <td>{{ data.start_date }}</td>
-
                             <td v-if="data.end_date != null">{{ data.end_date }}</td>
-                            <td v-else>Actividad sin terminar</td>
-
-                            
+                            <td v-else>Actividad sin terminar</td>                            
                           </tr>
                           <tr v-if="this.historyData == 0">
                             <td colspan="6">
@@ -621,10 +627,9 @@ export default {
       userRol: JSON.parse(window.localStorage.getItem("user")).rol,
       headers: [
         { title: "Equipo", key: "equipment_type_id" },
-        // { title: "Modelo", key: "model" },
         { title: "# de serie", key: "serial_number" },
         { title: "# de activo fijo", key: "number_active" },
-        // { title: "# de registro interno", key: "number_internal_active" },
+        { title: "MAC", key: "mac_address" },
         { title: "Disponibilidad", key: "availability" },
         { title: "Estado", key: "state" },
         { title: "Acciones", key: "actions", sortable: false },
@@ -635,11 +640,11 @@ export default {
       total: 0,
       options: {},
       editedItem: {
-        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "", license: "",
+        number_active: "", number_internal_active: "", model: "", serial_number: "", mac_address: "", adquisition_date: "", invoice_number: "", license: "",
         state: "", equipment_type_id: "", brand: "", provider: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
       },
       defaultItem: {
-        number_active: "", number_internal_active: "", model: "", serial_number: "", adquisition_date: "", invoice_number: "", license: "",
+        number_active: "", number_internal_active: "", model: "", serial_number: "", mac_address: "", adquisition_date: "", invoice_number: "", license: "",
         state: "", equipment_type_id: "", brand: "", provider: "", license: "", licenses: [], technicalDescription: "", attribute: "", technicalAttributes: [], availability: true
       },
       loading: false,
@@ -683,6 +688,8 @@ export default {
         }, serial_number: {
           required,
           minLength: minLength(1),
+        }, mac_address: {
+
         }, adquisition_date: {
           minLength: minLength(1),
         }, invoice_number: {
@@ -841,6 +848,7 @@ export default {
       this.editedIndex = this.records.indexOf(item);
       this.equipmentData = Object.assign({}, item);
       const equipment_history = await backendApi.get(`/equipment/${item.serial_number}`);
+      console.log(equipment_history)
       this.historyData = equipment_history.data;
       this.allowable = item.availability;
       this.dialogInfo = true;

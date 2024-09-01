@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Equipos disponibles</title>
+    <title>Equipos en bodega</title>
     <style>
         body {
             margin: 0;

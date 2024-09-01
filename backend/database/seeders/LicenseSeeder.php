@@ -21,7 +21,7 @@ class LicenseSeeder extends Seeder
                 "name" => "Eset Endpoint Security",
             ],
             [
-                "name" => "Adobe",
+                "name" => "Adobe Creative Cloud",
             ],
             [
                 "name" => "AutoDesk",

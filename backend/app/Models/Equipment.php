@@ -70,6 +70,7 @@ class Equipment extends Model
             ->orWhere('equipment.number_active', 'like', $search)
             ->orWhere('equipment.model', 'like', $search)
             ->orWhere('equipment.serial_number', 'like', $search)
+            ->orWhere('equipment.mac_address', 'like', $search)
             ->orWhere('equipment.adquisition_date', 'like', $search)
             ->orWhere('equipment.invoice_number', 'like', $search)
             ->orWhere('equipment.equipment_type_id', 'like', $search)
@@ -143,12 +144,14 @@ class Equipment extends Model
             "history_change.start_date as start_date",
             "history_change.end_date as end_date",
             "history_change.id as id_change",
+            "lc.name as location"
         )
             ->join('equipment_state', 'equipment.equipment_state_id', '=', 'equipment_state.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->leftJoin('provider', 'equipment.provider_id', '=', 'provider.id')
             ->leftJoin('history_change', 'history_change.equipment_id', '=', 'equipment.id')
+            ->leftJoin('location as lc', 'history_change.location_id', '=', 'lc.id')
             ->join('history_user_detail', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('users', 'users.id', '=', 'history_user_detail.user_id')
             ->join('type_action', 'type_action.id', '=', 'history_change.type_action_id')

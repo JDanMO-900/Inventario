@@ -17,16 +17,12 @@ class EquipmentLicenseDetailSeeder extends Seeder
         [
             "id" => 1,
             "equipment_id" => 1,
-            "license_id" => 1,
-            
-            
+            "license_id" => 1 
         ],
         [
             "id" => 2,
             "equipment_id" => 2,
-            "license_id" => 2,
-            
-            
+            "license_id" => 2
         ]
         ]);
     }

@@ -76,7 +76,6 @@ class EquipmentController extends Controller
 
     public function index(Request $request)
     {
-
         $itemsPerPage = $request->itemsPerPage ?? 10;
         $skip = ($request->page - 1) * $request->itemsPerPage;
 
@@ -114,7 +113,6 @@ class EquipmentController extends Controller
             ->first();
 
 
-
         if ($existingEquipment) {
             return response()->json(
                 [
@@ -129,6 +127,7 @@ class EquipmentController extends Controller
             $equipment->number_internal_active = $request->number_internal_active;
             $equipment->model = $request->model;
             $equipment->serial_number = $request->serial_number;
+            $equipment->mac_address = $request->mac_address;
             $equipment->adquisition_date = $request->adquisition_date;
             $equipment->invoice_number = $request->invoice_number;
             $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;
@@ -204,6 +203,7 @@ class EquipmentController extends Controller
             $equipment->number_internal_active = $request->number_internal_active;
             $equipment->model = $request->model;
             $equipment->serial_number = $request->serial_number;
+            $equipment->mac_address = $request->mac_address;
             $equipment->adquisition_date = $request->adquisition_date;
             $equipment->invoice_number = $request->invoice_number;
             $equipment->equipment_state_id = EquipmentState::where('name', $request->state)->first()->id;

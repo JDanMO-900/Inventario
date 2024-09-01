@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Role;
 use Encrypt;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -51,12 +52,35 @@ class UserController extends Controller
         $userData->email = $request->email;
         $userData->role_id = Role::where('name', $request->role_id)->first()->id;
 
-
         $userData->save();
 
         return response()->json([
             "message"=>"Registro modificado correctamente.",
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        Log::info($user);
+        if (is_null($user)) {
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make('Binaes123!');
+            $user->role_id = Role::where('name', $request->role_id)->first()->id;
+
+            $user->save();
+
+            return response()->json([
+                "message"=>"Registro insertado correctamente.",
+            ]);
+        }
+
+        return response()->json([
+            "message"=> "No fue posible crear el usuario.",
+        ]);       
     }
 
 }

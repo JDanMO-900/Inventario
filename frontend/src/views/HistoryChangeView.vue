@@ -45,7 +45,7 @@
 
 
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search" clearable></v-text-field>
         </v-col>
       </v-container>
 
