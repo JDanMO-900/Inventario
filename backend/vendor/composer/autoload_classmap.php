@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\ClearAndRebuildCache' => $baseDir . '/app/Console/Commands/ClearAndRebuildCache.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
@@ -51,6 +52,7 @@ return array(
     'App\\Models\\HistoryUserDetail' => $baseDir . '/app/Models/HistoryUserDetail.php',
     'App\\Models\\License' => $baseDir . '/app/Models/License.php',
     'App\\Models\\Location' => $baseDir . '/app/Models/Location.php',
+    'App\\Models\\PDFData' => $baseDir . '/app/Models/PDFData.php',
     'App\\Models\\ProcessState' => $baseDir . '/app/Models/ProcessState.php',
     'App\\Models\\Provider' => $baseDir . '/app/Models/Provider.php',
     'App\\Models\\Role' => $baseDir . '/app/Models/Role.php',

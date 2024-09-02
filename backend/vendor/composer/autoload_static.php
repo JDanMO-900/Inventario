@@ -589,6 +589,7 @@ class ComposerStaticInit38886b618cf65f3c0f5f2064e9d3d686
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\ClearAndRebuildCache' => __DIR__ . '/../..' . '/app/Console/Commands/ClearAndRebuildCache.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
@@ -634,6 +635,7 @@ class ComposerStaticInit38886b618cf65f3c0f5f2064e9d3d686
         'App\\Models\\HistoryUserDetail' => __DIR__ . '/../..' . '/app/Models/HistoryUserDetail.php',
         'App\\Models\\License' => __DIR__ . '/../..' . '/app/Models/License.php',
         'App\\Models\\Location' => __DIR__ . '/../..' . '/app/Models/Location.php',
+        'App\\Models\\PDFData' => __DIR__ . '/../..' . '/app/Models/PDFData.php',
         'App\\Models\\ProcessState' => __DIR__ . '/../..' . '/app/Models/ProcessState.php',
         'App\\Models\\Provider' => __DIR__ . '/../..' . '/app/Models/Provider.php',
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',

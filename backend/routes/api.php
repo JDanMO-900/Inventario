@@ -51,7 +51,7 @@ Route::group(
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('userInfo', [AuthController::class, 'me']);
         Route::post('refresh', [AuthController::class, 'refresh']);
-       
+
     }
 );
 
@@ -88,6 +88,7 @@ Route::group(
     Route::resource('/location', LocationController::class);
     Route::resource('/historyUserDetail', HistoryUserDetailController::class);
     Route::get('/historyUser/{username}', [HistoryUserDetailController::class, 'userFilter']);
+    Route::get('/userEquipment/{username}', [HistoryUserDetailController::class, 'asignedEquipment']);
     Route::post('/reportpdf', [PDFDataController::class, 'locationReport']);
     Route::post('/allProducts', [PDFDataController::class, 'allProducts']);
     Route::post('/availableEquipment', [PDFDataController::class, 'availableEquipment']);

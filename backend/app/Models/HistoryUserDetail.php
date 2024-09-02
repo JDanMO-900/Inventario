@@ -58,14 +58,14 @@ class HistoryUserDetail extends Model
             'type_action.id as action_id',
             'process_state.id as process_id',
             'location.name as location'
-            
+
         )
 
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('location', 'location.id', '=', 'history_change.location_id')
             ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
-            ->join('equipment_type', 'equipment.equipment_type_id', '=','equipment_type.id')
-            ->join('brand', 'equipment.brand_id', '=','brand.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
@@ -75,19 +75,45 @@ class HistoryUserDetail extends Model
             ->orderBy("history_user_detail.$sortBy", $sort)
             ->get();
 
-            $data->each(function ($item) {
+        $data->each(function ($item) {
 
-                $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
-                    ->where('history_tech.history_change_id', $item->history_change_id)
-                    ->pluck('users.name')
-                    ->toArray();
-                $item->technician = $technician;
-            });
+            $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
+                ->where('history_tech.history_change_id', $item->history_change_id)
+                ->pluck('users.name')
+                ->toArray();
+            $item->technician = $technician;
+        });
 
         return $data;
     }
 
-    public static function filterUserHistoryChange($username, $search, $sortBy, $sort){
+    public static function equipmentUsers($username)
+    {
+        $data = HistoryUserDetail::query()
+            ->join('users', 'history_user_detail.user_id', '=', 'users.id')
+            ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
+            ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
+            ->where('users.name', 'Jose Daniel')
+            ->where('type_action.id', 2)
+            ->select([
+                'users.name as usuario',
+                'equipment.number_active',
+                'equipment.number_internal_active',
+                'equipment.model',
+                'equipment.serial_number',
+                'brand.name as marca',
+                'equipment_type.name as tipo',
+            ])
+            ->get();
+
+        return $data;
+    }
+
+    public static function filterUserHistoryChange($username, $search, $sortBy, $sort)
+    {
         $data = HistoryUserDetail::select(
             'history_user_detail.*',
             'history_change.*',
@@ -109,14 +135,14 @@ class HistoryUserDetail extends Model
             'type_action.id as action_id',
             'process_state.id as process_id',
             'location.name as location'
-            
+
         )
 
             ->join('history_change', 'history_user_detail.history_change_id', '=', 'history_change.id')
             ->join('location', 'location.id', '=', 'history_change.location_id')
             ->join('equipment', 'history_change.equipment_id', '=', 'equipment.id')
-            ->join('equipment_type', 'equipment.equipment_type_id', '=','equipment_type.id')
-            ->join('brand', 'equipment.brand_id', '=','brand.id')
+            ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
+            ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('users', 'history_user_detail.user_id', '=', 'users.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
             ->join('process_state', 'history_change.state_id', '=', 'process_state.id')
@@ -129,14 +155,14 @@ class HistoryUserDetail extends Model
             ->orderBy("history_user_detail.$sortBy", $sort)
             ->get();
 
-            $data->each(function ($item) {
+        $data->each(function ($item) {
 
-                $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
-                    ->where('history_tech.history_change_id', $item->history_change_id)
-                    ->pluck('users.name')
-                    ->toArray();
-                $item->technician = $technician;
-            });
+            $technician = User::leftJoin('history_tech', 'users.id', '=', 'history_tech.user_tech_id')
+                ->where('history_tech.history_change_id', $item->history_change_id)
+                ->pluck('users.name')
+                ->toArray();
+            $item->technician = $technician;
+        });
 
         return $data;
     }

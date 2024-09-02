@@ -48,8 +48,7 @@ class HistoryUserDetailController extends Controller
                 "data" => $historyuserdetail,
                 "total" => $total,
             ]);
-        }
-        else{
+        } else {
             $search = [
                 'typeMovement' => ($request->filter['typeMovement']),
                 'typeMovement_condition' => ($request->filter['typeMovement'] == -1) ? '>' : '=',
@@ -62,17 +61,33 @@ class HistoryUserDetailController extends Controller
 
             $sortBy = (isset($request->sortBy[0]['key'])) ? $request->sortBy[0]['key'] : 'id';
             $sort = (isset($request->sortBy[0]['order'])) ? "asc" : 'desc';
-    
+
             $historyuserdetail = HistoryUserDetail::filterUserHistoryChange($username, $search, $sortBy, $sort);
             $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
-    
+
             return response()->json([
                 "message" => "Registros obtenidos correctamente.",
                 "data" => $historyuserdetail,
             ]);
-
         }
+    }
 
+    public function asignedEquipment(Request $request)
+    {
+
+        if ($request) {
+
+            $historyuserdetail = HistoryUserDetail::equipmentUsers($request->username);
+
+            return response()->json([
+                "message" => "Registros obtenidos correctamente.",
+                "data" => $historyuserdetail,
+            ]);
+        } else {
+            return response()->json([
+                "message" => "No se encontraron registros.",
+            ]);
+        }
     }
 
     public function index(Request $request)
