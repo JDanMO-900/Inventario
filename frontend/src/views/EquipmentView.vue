@@ -109,9 +109,8 @@
 
                     <!-- mac_address -->
                     <v-col cols="12" sm="12" md="12" lg="12">
-                      <base-select label="Dirección MAC" v-model.trim="v$.editedItem.mac_address.$model"
-                        :items="this.mac_address" item-title="name" item-value="name"
-                        :rules="v$.editedItem.mac_address" clearable />
+                      <base-input label="Dirección MAC" v-model="v$.editedItem.mac_address.$model"
+                      :rules="v$.editedItem.mac_address" clearable />
                     </v-col>
                     <!-- mac_address -->
 
