@@ -49,6 +49,15 @@
             </template>
           </v-card>
         </v-col>
+
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pl-2 pb-0 pr-2">
+          <v-card class="mx-auto" @click="$router.push('/locationequipment')" max-width="23.5rem" rel="noopener"
+            subtitle="Asignaciones Personales" title="Equipos asignados" color="grey-lighten-5">
+            <template v-slot:prepend>
+              <v-icon icon="mdi-map-marker" color="primary" size="small"></v-icon>
+            </template>
+          </v-card>
+        </v-col>
       </v-row>
     </v-card>
 
