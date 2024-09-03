@@ -14,7 +14,7 @@
                                 <v-card-title><v-icon icon="mdi-desktop-classic" color="primary"
                                         size="small"></v-icon>{{ equipments.tipo }}</v-card-title>
                                 <v-card-subtitle>{{ equipments.marca + ' ' + equipments.model }}</v-card-subtitle>
-                                <v-card-text>{{ equipments.number_active }}</v-card-text>
+                                <v-card-subtitle>{{ equipments.number_active }}</v-card-subtitle>
                             </v-card>
                         </v-col>
                     </template>
