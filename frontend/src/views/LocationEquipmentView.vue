@@ -3,7 +3,7 @@
         <v-card class="p-3 mt-3">
             <v-container>
                 <h2>{{ title }}</h2>
-
+                <!--  -->
                 <v-row class="p-2 mt-2">
                     <h2 v-if="this.message != ''">{{ this.message }}</h2>
 
@@ -14,7 +14,7 @@
                                 <v-card-title><v-icon icon="mdi-desktop-classic" color="primary"
                                         size="small"></v-icon>{{ equipments.tipo }}</v-card-title>
                                 <v-card-subtitle>{{ equipments.marca + ' ' + equipments.model }}</v-card-subtitle>
-                                <v-card-subtitle>{{ equipments.number_active }}</v-card-subtitle>
+                                <v-card-text>{{ equipments.number_active }}</v-card-text>
                             </v-card>
                         </v-col>
                     </template>
