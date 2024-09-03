@@ -75,19 +75,13 @@ class HistoryUserDetailController extends Controller
     public function asignedEquipment(Request $request)
     {
 
-        if ($request) {
+        $historyuserdetail = HistoryUserDetail::equipmentUsers($request->username);
+        $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
 
-            $historyuserdetail = HistoryUserDetail::equipmentUsers($request->username);
-
-            return response()->json([
-                "message" => "Registros obtenidos correctamente.",
-                "data" => $historyuserdetail,
-            ]);
-        } else {
-            return response()->json([
-                "message" => "No se encontraron registros.",
-            ]);
-        }
+        return response()->json([
+            "message" => "Registros obtenidos correctamente.",
+            "data" => $historyuserdetail,
+        ]);
     }
 
     public function index(Request $request)

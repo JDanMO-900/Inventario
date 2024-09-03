@@ -96,10 +96,11 @@ class HistoryUserDetail extends Model
             ->join('brand', 'equipment.brand_id', '=', 'brand.id')
             ->join('equipment_type', 'equipment.equipment_type_id', '=', 'equipment_type.id')
             ->join('type_action', 'history_change.type_action_id', '=', 'type_action.id')
-            ->where('users.name', 'Jose Daniel')
+            ->where('users.name', $username)
             ->where('type_action.id', 2)
             ->select([
                 'users.name as usuario',
+                'equipment.id',
                 'equipment.number_active',
                 'equipment.number_internal_active',
                 'equipment.model',
