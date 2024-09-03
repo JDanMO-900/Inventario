@@ -13,8 +13,8 @@
                                 @click="infoItem(equipments)">
                                 <v-card-title><v-icon icon="mdi-desktop-classic" color="primary"
                                         size="small"></v-icon>{{ equipments.tipo }}</v-card-title>
-                                <v-card-subtitle>{{ equipments.marca + ' ' + equipments.model}}</v-card-subtitle>
-                            <v-card-text>{{ equipments.number_active }}</v-card-text>
+                                <v-card-subtitle>{{ equipments.marca + ' ' + equipments.model }}</v-card-subtitle>
+                                <v-card-text>{{ equipments.number_active }}</v-card-text>
                             </v-card>
                         </v-col>
                     </template>
@@ -22,7 +22,7 @@
                 </v-row>
             </v-container>
         </v-card>
-
+        <!--  -->
         <v-row justify="center">
             <v-dialog v-model="dialogInfo" width="1024">
                 <v-card>

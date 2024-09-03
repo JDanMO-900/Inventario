@@ -77,7 +77,7 @@ class HistoryUserDetailController extends Controller
 
         $historyuserdetail = HistoryUserDetail::equipmentUsers($request->username);
         $historyuserdetail = Encrypt::encryptObject($historyuserdetail, "id");
-
+        /** */
         return response()->json([
             "message" => "Registros obtenidos correctamente.",
             "data" => $historyuserdetail,
