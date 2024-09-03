@@ -16,7 +16,9 @@
           <RouterLink to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
             <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
             <span>Movimientos</span>
-          </RouterLink>               
+          </RouterLink>  
+
+                       
 
           <RouterLink to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
             <v-icon icon="mdi-shield-home" size="20"></v-icon>
@@ -60,6 +62,11 @@
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
         </RouterLink>  
+
+        <RouterLink to="/asignements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+            <v-icon icon="mdi-account-check" size="20"></v-icon>
+            <span>Mis Equipos</span>
+          </RouterLink> 
 
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center pt-2 pb-2 p-1" @click="logout()">

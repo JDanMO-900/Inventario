@@ -105,7 +105,14 @@ const router = createRouter({
       name: "ticket",
       component: () => import("../views/TicketView.vue"),
       meta: { requiresAuth: true}, 
+      
       // add meta field to specify the route requires authentication
+    },
+    {
+      path: "/asignements",
+      name: "asignements",
+      component: () => import("../views/LocationEquipmentView.vue"),
+      meta: { requiresAuth: true }, // add meta field to specify the route requires authentication
     },
     {
       path: "/dashboard",
@@ -149,12 +156,7 @@ const router = createRouter({
       component: () => import("../views/reports/AvailableEquipmentReportView.vue"),
       meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
     }, 
-    {
-      path: "/locationequipment",
-      name: "locationequipment",
-      component: () => import("../views/LocationEquipmentView.vue"),
-      meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
-    }, 
+     
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
