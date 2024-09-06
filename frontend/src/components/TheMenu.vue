@@ -7,6 +7,10 @@
     </div>
     <div class="menu-options mt-3 text-center">
       <template v-if="isLoggedIn">
+        <RouterLink to="/asignements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
+          <v-icon icon="mdi-account-check" size="20"></v-icon>
+          <span>Mis Equipos</span>
+        </RouterLink> 
         <v-template v-if="rol!==1">        
           <RouterLink to="/equipment" class="d-flex flex-column align-center pt-2 pb-2 p-1">
             <v-icon icon="mdi-remote-desktop" size="20"></v-icon>
@@ -16,9 +20,7 @@
           <RouterLink to="/movements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
             <v-icon icon="mdi-archive-sync-outline" size="20"></v-icon>
             <span>Movimientos</span>
-          </RouterLink>  
-
-                       
+          </RouterLink>                         
 
           <RouterLink to="/dashboard" class="d-flex flex-column align-center pt-2 pb-2 p-1">
             <v-icon icon="mdi-shield-home" size="20"></v-icon>
@@ -56,17 +58,12 @@
               </RouterLink> -->
             </v-list>
           </v-menu>
-        </v-template>
+        </v-template>        
 
         <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
-        </RouterLink>  
-
-        <RouterLink to="/asignements" class="d-flex flex-column align-center pt-2 pb-2 p-1">
-            <v-icon icon="mdi-account-check" size="20"></v-icon>
-            <span>Mis Equipos</span>
-          </RouterLink> 
+        </RouterLink>          
 
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center pt-2 pb-2 p-1" @click="logout()">
