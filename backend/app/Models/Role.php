@@ -31,8 +31,8 @@ class Role extends Model
         return Role::select('role.*', 'role.id as id')
 
             ->where('role.name', 'like', $search)
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("role.$sortBy", $sort)
             ->get();
     }

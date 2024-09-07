@@ -39,8 +39,8 @@ class Location extends Model
 
             ->where('location.name', 'like', $search)
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("location.$sortBy", $sort)
             ->get();
     }

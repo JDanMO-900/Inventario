@@ -32,8 +32,8 @@ class License extends Model
         
 		->where('license.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("license.$sortBy", $sort)
         ->get();
     }

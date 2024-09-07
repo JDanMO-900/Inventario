@@ -32,8 +32,8 @@ class Dependency extends Model
 
 		->where('dependency.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("dependency.$sortBy", $sort)
         ->get();
     }

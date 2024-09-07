@@ -83,8 +83,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         ->where('users.name','like', $search)
         ->orWhere('users.email','like', $search)
         ->orWhere('role.name','like', $search)
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("users.$sortBy", $sort)
         ->get();
     }

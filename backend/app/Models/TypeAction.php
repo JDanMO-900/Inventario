@@ -32,8 +32,8 @@ class TypeAction extends Model
 
             ->where('type_action.name', 'like', $search)
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("type_action.$sortBy", $sort)
             ->get();
 

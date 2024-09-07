@@ -69,8 +69,8 @@ class EquipmentDetail extends Model
             ->join('equipment', 'equipment_detail.equipment_id', '=', 'equipment.id')
             ->join('technical_description', 'equipment_detail.technical_description_id', '=', 'technical_description.id')
             ->where('equipment_detail.attribute', 'like', $search)
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("equipment_detail.$sortBy", $sort)
             ->get()
             ->map(fn($equipDetail) => $equipDetail->format());

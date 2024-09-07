@@ -228,8 +228,8 @@ class HistoryUserDetail extends Model
             ->orWhere('equipment_type.name', 'like', $search)
             ->orWhere('equipment.model', 'like', $search)
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("history_user_detail.$sortBy", $sort)
 
 

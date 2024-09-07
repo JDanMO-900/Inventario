@@ -33,8 +33,8 @@ class Brand extends Model
 
             ->where('brand.name', 'like', $search)
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("brand.$sortBy", $sort)
             ->get();
     }

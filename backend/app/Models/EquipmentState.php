@@ -32,8 +32,8 @@ class EquipmentState extends Model
 
 		->where('equipment_state.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("equipment_state.$sortBy", $sort)
         ->get();
     }

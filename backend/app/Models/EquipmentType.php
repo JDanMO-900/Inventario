@@ -32,8 +32,8 @@ class EquipmentType extends Model
 
 		->where('equipment_type.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("equipment_type.$sortBy", $sort)
         ->get();
     }

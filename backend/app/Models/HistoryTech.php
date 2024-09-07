@@ -38,8 +38,8 @@ class HistoryTech extends Model
 
             ->where('history_tech.id', 'like', $search)
 
-            ->skip($skip)
-            ->take($itemsPerPage)
+            // ->skip($skip)
+            // ->take($itemsPerPage)
             ->orderBy("history_tech.$sortBy", $sort)
             ->get();
     }

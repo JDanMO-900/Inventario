@@ -38,8 +38,8 @@ class TechnicalDescription extends Model
         return TechnicalDescription::select('technical_description.*', 'technical_description.id as id')
 
 		->where('technical_description.name', 'like', $search)
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("technical_description.$sortBy", $sort)
         ->get();
     }

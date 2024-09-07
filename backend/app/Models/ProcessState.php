@@ -32,8 +32,8 @@ class ProcessState extends Model
         
 		->where('process_state.name', 'like', $search)
 
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("process_state.$sortBy", $sort)
         ->get();
     }

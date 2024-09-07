@@ -36,8 +36,8 @@ class Provider extends Model
         ->orWhere('provider.contact_name', 'like', $search)
         ->orWhere('provider.contact_phone', 'like', $search)
         ->orWhere('provider.address', 'like', $search)
-        ->skip($skip)
-        ->take($itemsPerPage)
+        // ->skip($skip)
+        // ->take($itemsPerPage)
         ->orderBy("provider.$sortBy", $sort)
         ->get();
     }
