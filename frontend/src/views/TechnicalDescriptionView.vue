@@ -17,7 +17,7 @@
         </v-col>
       </v-container>
       
-      <v-data-table-server
+      <v-data-table
         :headers="headers"
         :items-length="total"
         :items="records"
@@ -45,7 +45,7 @@
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-      </v-data-table-server>
+      </v-data-table>
     </v-card>
 
     <v-dialog v-model="dialog" max-width="800px" persistent>

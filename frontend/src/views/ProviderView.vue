@@ -11,7 +11,7 @@
         </v-col>
       </v-container>
       
-      <v-data-table-server :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
+      <v-data-table :headers="headers" :items-length="total" :items="records" :loading="loading" item-title="id"
         item-value="id" @update:options="getDataFromApi">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon size="20" class="mr-2" @click="editItem(item.raw)" icon="mdi-pencil" title="Editar"/>
@@ -20,7 +20,7 @@
         <template v-slot:no-data>
           <v-icon @click="initialize" icon="mdi-refresh" />
         </template>
-      </v-data-table-server>
+      </v-data-table>
     </v-card>
 
     <v-dialog v-model="dialog" max-width="800px">
