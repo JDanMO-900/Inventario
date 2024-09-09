@@ -60,10 +60,10 @@
           </v-menu>
         </v-template>        
 
-        <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
+        <!-- <RouterLink to="/ticket" class="d-flex flex-column align-center pt-2 pb-2  p-1">
           <v-icon icon="mdi-ticket" size="20"></v-icon>
           <span>Ticket</span>
-        </RouterLink>          
+        </RouterLink>           -->
 
         <!-- Cerrar sesion -->
         <RouterLink to="/" class="d-flex flex-column align-center pt-2 pb-2 p-1" @click="logout()">
