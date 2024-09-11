@@ -1,0 +1,43 @@
+default:
+  tags:
+    - shell
+
+stages:
+  - git
+  - build-backend
+  - build-frontend
+  - deploy
+
+git:
+  stage: git
+  script:
+    - cd $CI_PROJECT_DIR
+    - echo git pull https://$CI_GIT_USER:$CI_GIT_PASS@$CI_GIT_REPO_URL
+    - git pull https://$CI_GIT_USER:$CI_GIT_PASS@$CI_GIT_REPO_URL
+
+backend:
+  stage: build-backend
+  script:
+    - cd $CI_PROJECT_DIR/backend
+    - docker compose run composer i
+    - echo $CI_DOCKER_REGISTRY_PASSWORD | docker login $CI_DOCKER_REGISTRY_HOST -u $CI_DOCKER_REGISTRY_USER --password-stdin
+    - docker build . -t $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-back:$(date +%Y%m%d)-$CI_COMMIT_BRANCH
+    - docker push $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-back:$(date +%Y%m%d)-$CI_COMMIT_BRANCH
+
+frontend:
+  stage: build-frontend
+  script:
+    - cd $CI_PROJECT_DIR/frontend
+    - docker compose run npm i
+    - docker compose run npm run build
+    - echo $CI_DOCKER_REGISTRY_PASSWORD | docker login $CI_DOCKER_REGISTRY_HOST -u $CI_DOCKER_REGISTRY_USER --password-stdin
+    - docker build . -t $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-front:$(date +%Y%m%d)-$CI_COMMIT_BRANCH
+    - docker push $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-front:$(date +%Y%m%d)-$CI_COMMIT_BRANCH
+
+deploy:
+  stage: deploy
+  script:
+    - docker stop $CI_PROJECT_NAME-back || true && docker rm $CI_PROJECT_NAME-back || true
+    - docker run --name $CI_PROJECT_NAME-back --restart=always --expose 8080 --network=nginx --detach $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-back:$(date +%Y%m%d)-$CI_COMMIT_BRANCH
+    - docker stop $CI_PROJECT_NAME-front || true && docker rm $CI_PROJECT_NAME-front || true
+    - docker run --name $CI_PROJECT_NAME-front --restart=always --expose 80 --network=nginx --detach $CI_DOCKER_REGISTRY_HOST/$CI_PROJECT_NAME-front:$(date +%Y%m%d)-$CI_COMMIT_BRANCH 
