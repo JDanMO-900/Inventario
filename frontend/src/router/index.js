@@ -19,14 +19,8 @@ const router = createRouter({
       path: "/",
       name: "home",
       // component: () => import("../views/HomeView.vue"),
-      redirect: '/equipment',
+      redirect: '/asignements',
       meta: { requiresAuth: true, roles: [2, 3] }, // add meta field to specify the route requires authentication
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: () => import("../views/TestView.vue"),
-      meta: { requiresAuth: true,  }, // add meta field to specify the route requires authentication
     },
     {
       path: "/equipmentState",
@@ -186,7 +180,7 @@ router.beforeEach(async (to, from, next) => {
         next();
       }
       else if(rol == 1){ // Usuario solo ve el ticket
-        next("/ticket");
+        next("/asignements");
       }
       else{
         next("/unauthorized")
