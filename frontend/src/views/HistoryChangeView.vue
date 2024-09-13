@@ -14,7 +14,8 @@
         <v-row class="mt-2 mb-2">
           <v-col cols="12" lg="6" md="6" sm="12">
             <BaseSelect label='Estados' :items="this.processStatesFilter" item-title='name' item-value="id"
-              v-model.trim="v$.filterItem.processStateFilter.$model" :rules="v$.filterItem.processStateFilter" clearable>
+              v-model.trim="v$.filterItem.processStateFilter.$model" :rules="v$.filterItem.processStateFilter"
+              clearable>
             </BaseSelect>
           </v-col>
 
@@ -45,7 +46,8 @@
 
 
         <v-col cols="12" sm="12" md="12" lg="12" xl="12" class="pl-0 pb-0 pr-0">
-          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search" clearable></v-text-field>
+          <v-text-field class="mt-3" variant="outlined" label="Buscar" type="text" v-model="search"
+            clearable></v-text-field>
         </v-col>
       </v-container>
 
@@ -68,7 +70,7 @@
           <template v-if="((item.raw.action_id == 2 || item.raw.action_id <= 4) && (item.raw.process_state_id != 3
             && item.raw.process_state_id != 4 && item.raw.process_state_id != 1))">
             <v-icon size="20" class="mr-2" @click="movementFinishDateItem(item.raw)" icon="mdi-swap-horizontal"
-              title="Terminar movimiento" /> 
+              title="Terminar movimiento" />
           </template>
 
           <v-icon icon="fa:fas fa-search"></v-icon>
@@ -102,9 +104,9 @@
               </v-col>
               <!-- name -->
               <v-col cols="6" sm="12" md="12">
-                <base-multi-select label="Usuarios" :items="this.users" item-title="name"
-                  v-model="v$.editedItem.users.$model" :rules="v$.editedItem.users" clearable>
-                </base-multi-select>
+                <base-multi-select label="Usuarios" :items="users" item-title="name" v-model="selectedUsers"
+                  :rules="v$.editedItem.users" clearable @input="handleSearchInputUsers"
+                  @change="handleSelectionChangeUsers" />
               </v-col>
               <!-- name -->
 
@@ -222,7 +224,8 @@
               <!-- técnico responsable -->
               <v-col cols="6" sm="12" md="12">
                 <base-multi-select label="Técnico(s)" :items="this.userTech" item-title="name"
-                  v-model.trim="v$.editedItem.technician.$model" :rules="v$.editedItem.technician" clearable>
+                  v-model.trim="selectedTechs" :rules="v$.editedItem.technician" clearable
+                  @input="handleSearchInputTechs" @change="handleSelectionChangeTechs">
                 </base-multi-select>
               </v-col>
               <!-- técnico responsable -->
@@ -567,6 +570,9 @@ export default {
         location_id: "", dependency_id: "", technician: [], users: [], description: "", quantity_out: 0,
         quantity_in: 1, type_action_id: "", equipment_id: [], equipment_serial: "", state_id: "", start_date: "", end_date: ""
       },
+      selectedUsers: [],
+      selectedTechs: [],
+      searchText: '',
 
       filterItem: {
         typeMovement: '',
@@ -613,6 +619,15 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    selectedUsers(newSelections) {
+
+      this.v$.editedItem.users.$model = newSelections;
+    },
+    selectedTechs(newSelections) {
+      this.v$.editedItem.technician.$model = newSelections;
+    },
+  
+
   },
 
   // Validations
@@ -620,8 +635,8 @@ export default {
     return {
 
       filterItem: {
-        typeMovement: { required, minLength: minLength(1),},
-        processStateFilter: { required, minLength: minLength(1),},
+        typeMovement: { required, minLength: minLength(1), },
+        processStateFilter: { required, minLength: minLength(1), },
         start_date: {
           required,
           minLength: minLength(1),
@@ -734,6 +749,7 @@ export default {
 
   created() {
     this.initialize();
+    this.selectedUsers = [...this.editedItem.users];
   },
 
   beforeMount() {
@@ -741,6 +757,30 @@ export default {
   },
 
   methods: {
+
+
+
+    handleSelectionChangeTechs(newSelections) {
+      this.selectedTechs = newSelections;
+      this.v$.editedItem.technician.$model = newSelections;
+      this.searchText = '';
+    },
+    handleSearchInputTechs(newSearchText) {
+
+      this.searchText = newSearchText;
+    },
+
+
+    handleSelectionChangeUsers(newSelections) {
+
+      this.selectedUsers = newSelections;
+      this.v$.editedItem.users.$model = newSelections;
+      this.searchText = '';
+    },
+    handleSearchInputUsers(newSearchText) {
+
+      this.searchText = newSearchText;
+    },
     getCurrentAction(actionName) {
       for (let element of this.typeAction) {
         if (actionName == element.name) {
@@ -1127,16 +1167,16 @@ export default {
 
       try {
         const { data } = await backendApi.get('/historyChange', {
-          params: {  filter: this.filterItem},
+          params: { filter: this.filterItem },
         });
         this.records = data.data;
 
-      
+
 
       } catch (error) {
         alert.error("Ocurrió un error al generar el historial.");
 
-      }finally{
+      } finally {
         setTimeout(() => (this.isLoading = false), 800)
       }
     }
